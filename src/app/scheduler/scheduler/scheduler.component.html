@@ -1,12 +1,13 @@
 <div class="flex">
   <div class="scheduler-container">
     <dx-scheduler
+         timeZone="Europe/Berlin"
         [dataSource]="appointments"
         [views]="['day', 'week', 'workWeek', 'month']"
         [currentView]="currentView"
         [currentDate]="currentDate"
         [firstDayOfWeek]="1"
-        [startDayHour]="9"
+        [startDayHour]="8"
         [endDayHour]="20"
         [showAllDayPanel]="true"
         [height]="850"
@@ -16,7 +17,7 @@
             allowUpdating: true,
             allowDragging: true
         }"
-        dateSerializationFormat="yyyy-MM-ddTHH:mm:ssZ"
+        dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
         (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
         (onAppointmentAdded)="onAppointmentAdded($event)"
         (onAppointmentUpdated)="onAppointmentUpdated($event)"

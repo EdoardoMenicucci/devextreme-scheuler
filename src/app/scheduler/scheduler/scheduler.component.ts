@@ -33,13 +33,23 @@ export class SchedulerComponent {
     });
   }
 
-  onAppointmentAdded(e: any) {
+  async onAppointmentAdded(e: any) {
+    // debug
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1000);
+    });
+
     this.appointmentService
       .createAppointment(e.appointmentData)
-      .subscribe(() => this.loadAppointments());
+      .subscribe((s) => this.loadAppointments()) ;
   }
 
-  onAppointmentUpdated(e: any) {
+  async  onAppointmentUpdated(e: any) {
+    // debug
+    await new Promise((resolve) => {  setTimeout(resolve, 1000); });
+
+    console.log(e.appointmentData);
+
     this.appointmentService
       .updateAppointment(e.appointmentData.id, e.appointmentData)
       .subscribe(() => this.loadAppointments());

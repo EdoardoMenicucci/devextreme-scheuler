@@ -80,6 +80,13 @@ export class ChatService {
     return this.http.post(this.apiUrl, payload).pipe(
       tap((response: any) => {
         console.log('Response:', response);
+        this.messages.push({
+          author: response.aiResponse.author,
+          text: response.aiResponse.text,
+          timestamp: this.getTimestamp(this.date),
+        });
+
+        this.appointmentService.getAppointments().subscribe();
 
       }),
       catchError((error: any) => {
