@@ -21,7 +21,7 @@ export class ChatService {
 
   supportAgent: User = {
     id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
-    name: 'Support Agent',
+    name: 'Scheduler Support Agent',
     avatarUrl: 'images/petersmith.png',
   };
 
@@ -42,7 +42,7 @@ export class ChatService {
       {
         timestamp: this.getTimestamp(this.date, -9),
         author: this.supportAgent,
-        text: 'Hello, John!\nHow can I assist you today?',
+        text: 'Hello, John!\nIm here to help you whit the scheduling!',
       },
     ];
 
@@ -86,7 +86,7 @@ export class ChatService {
           timestamp: this.getTimestamp(this.date),
         });
 
-        this.appointmentService.getAppointments().subscribe();
+        this.appointmentService.loadAppointments();
 
       }),
       catchError((error: any) => {

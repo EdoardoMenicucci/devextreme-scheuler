@@ -14,52 +14,28 @@ import { SidebarComponent } from "../../sidebar/sidebar/sidebar.component";
 export class SchedulerComponent {
   currentView = 'week';
   currentDate = new Date();
-  appointments = [
-    {
-      text: 'Riunione',
-      startDate: new Date(2023, 9, 16, 10, 0),
-      endDate: new Date(2023, 9, 16, 11, 0),
-    },
-  ];
+  appointments: any[] = [];
 
-  constructor(private appointmentService: AppointmentService) {}
-
-  ngOnInit() {
-    this.loadAppointments();
-  }
-
-  loadAppointments() {
-    this.appointmentService.getAppointments().subscribe((data) => {
+  constructor(private appointmentService: AppointmentService) {
+    this.appointmentService.appointments$.subscribe((data) => {
       this.appointments = data;
     });
   }
 
   async onAppointmentAdded(e: any) {
-    // debug
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-    });
-
-    this.appointmentService
-      .createAppointment(e.appointmentData)
-      .subscribe((s) => this.loadAppointments()) ;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    this.appointmentService.createAppointment(e.appointmentData).subscribe();
   }
 
-  async  onAppointmentUpdated(e: any) {
-    // debug
-    await new Promise((resolve) => {  setTimeout(resolve, 1000); });
-
-    console.log(e.appointmentData);
-
+  async onAppointmentUpdated(e: any) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     this.appointmentService
       .updateAppointment(e.appointmentData.id, e.appointmentData)
-      .subscribe(() => this.loadAppointments());
+      .subscribe();
   }
 
   onAppointmentDeleted(e: any) {
-    this.appointmentService
-      .deleteAppointment(e.appointmentData.id)
-      .subscribe(() => this.loadAppointments());
+    this.appointmentService.deleteAppointment(e.appointmentData.id).subscribe();
   }
 
   onAppointmentFormOpening(e: any) {
