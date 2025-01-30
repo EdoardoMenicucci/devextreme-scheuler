@@ -12,6 +12,7 @@ export class SidebarComponent {
   navigation = [
     { id: 1, text: 'Home', icon: 'home', path: '/home' },
     { id: 2, text: 'Scheduler', icon: 'event', path: '/scheduler' },
+    { id: 3, text: 'Login', icon: 'login', path: '/login' },
   ];
 
   selectedRoute: string = '';

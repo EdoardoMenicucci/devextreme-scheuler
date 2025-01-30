@@ -106,15 +106,6 @@ export class ChatService {
     );
   }
 
-  // processAIResponse(response: any) {
-  //   if (response.appointment) {
-  //     // Handle appointment modification based on AI response
-  //     this.appointmentService
-  //       .updateAppointment(response.appointment.id, response.appointment)
-  //       .subscribe();
-  //   }
-  // }
-
   async onMessageEntered(event: MessageEnteredEvent) {
     // this.sendMessageToAI(event.message!.text || '');
 

@@ -1,4 +1,4 @@
-<dx-drawer
+<dx-drawer class="bg-gray-200 h-screen"
   [opened]="true"
   [closeOnOutsideClick]="false"
   openedStateMode="shrink"
@@ -13,7 +13,7 @@
       [width]="200">
       <div *dxTemplate="let item of 'item'">
         <i class="dx-icon dx-icon-{{item.icon}}"></i>
-        <span>{{item.text}}</span>
+        <span class="ms-1">{{item.text}}</span>
       </div>
     </dx-list>
   </div>
