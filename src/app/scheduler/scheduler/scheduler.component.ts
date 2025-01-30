@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { ChatComponent } from "../../chat/chat.component";
 import { AppointmentService } from './appointment.service';
+import { SidebarComponent } from "../../sidebar/sidebar/sidebar.component";
 
 @Component({
   standalone: true,
-  imports: [DxSchedulerModule, ChatComponent],
+  imports: [DxSchedulerModule, ChatComponent, SidebarComponent],
   selector: 'app-scheduler',
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.css'],
