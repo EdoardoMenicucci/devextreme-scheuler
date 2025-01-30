@@ -1,0 +1,30 @@
+<div class="flex">
+  <div class="scheduler-container">
+    <dx-scheduler
+        [dataSource]="appointments"
+        [views]="['day', 'week', 'workWeek', 'month']"
+        [currentView]="currentView"
+        [currentDate]="currentDate"
+        [firstDayOfWeek]="1"
+        [startDayHour]="9"
+        [endDayHour]="20"
+        [showAllDayPanel]="true"
+        [height]="850"
+        [editing]="{
+            allowAdding: true,
+            allowDeleting: true,
+            allowUpdating: true,
+            allowDragging: true
+        }"
+        dateSerializationFormat="yyyy-MM-ddTHH:mm:ssZ"
+        (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+        (onAppointmentAdded)="onAppointmentAdded($event)"
+        (onAppointmentUpdated)="onAppointmentUpdated($event)"
+        (onAppointmentDeleted)="onAppointmentDeleted($event)">
+    </dx-scheduler>
+</div>
+<div>
+  <app-chat></app-chat>
+</div>
+</div>
+

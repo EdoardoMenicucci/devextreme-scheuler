@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.dx-drawer {
+  height: 100vh;
+  display: flex;
+}
+
+.dx-drawer-content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+::ng-deep .dx-list-item-icon {
+  margin-right: 10px;
+}

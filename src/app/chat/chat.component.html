@@ -1,0 +1,12 @@
+<div class="chat-container">
+    <dx-chat
+    [height]="850"
+    [user]="currentUser"
+    [items]="(messages$ | async) || []"
+    [typingUsers]="(userChatTypingUsers$ | async) || []"
+    (onMessageEntered)="onMessageEntered($event)"
+    (onTypingStart)="userChatOnTypingStart()"
+    (onTypingEnd)="userChatOnTypingEnd()"
+  >
+  </dx-chat>
+</div>

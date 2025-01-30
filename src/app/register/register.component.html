@@ -1,0 +1,153 @@
+<div
+  class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center px-4"
+>
+  <div class="max-w-md w-full bg-gray-800 rounded-xl p-8 shadow-2xl">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-white mb-2">Create Account</h2>
+      <p class="text-gray-400">Join the AI Chat community</p>
+    </div>
+
+    <!-- Registration Form -->
+    <form
+      class="space-y-6"
+      #registrationForm="ngForm"
+      (ngSubmit)="handleRegister()"
+    >
+      <!-- Username -->
+
+      <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2"
+          >Username</label
+        >
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="John"
+          [(ngModel)]="registerForm.username"
+          required
+        />
+      </div>
+
+      <!-- Email Input -->
+      <div class="mb-6">
+        <label for="email" class="block text-gray-300 text-sm font-medium mb-2"
+          >email</label
+        >
+        <input
+          type="text"
+          id="email"
+          name="email"
+          [(ngModel)]="registerForm.email"
+          required
+          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="mario.rossi@example.com"
+        />
+      </div>
+
+      <!-- Password Input -->
+      <div class="mb-6">
+        <label
+          for="password"
+          class="block text-gray-300 text-sm font-medium mb-2"
+          >Password</label
+        >
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="registerForm.password"
+          required
+          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="••••••••"
+        />
+        <p class="mt-1 text-sm text-gray-400">Must be at least 8 characters</p>
+      </div>
+
+      <!-- Confirm Password -->
+      <!-- <div>
+        <label class="block text-gray-300 text-sm font-medium mb-2"
+          >Confirm Password</label
+        >
+        <input
+          type="password"
+          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="••••••••"
+        />
+      </div> -->
+
+      <!-- Terms -->
+      <!-- <div class="flex items-start">
+        <input
+          type="checkbox"
+          class="mt-1 h-4 w-4 text-blue-500 rounded border-gray-600 bg-gray-700"
+        />
+        <label class="ml-2 text-sm text-gray-400">
+          I agree to the
+          <a href="#" class="text-blue-500 hover:text-blue-400"
+            >Terms of Service</a
+          >
+          and
+          <a href="#" class="text-blue-500 hover:text-blue-400"
+            >Privacy Policy</a
+          >
+        </label>
+      </div> -->
+
+      <!-- Color Selection -->
+      <!-- <div class="mb-6">
+        <label class="block text-gray-300 text-sm font-medium mb-2"
+          >Choose your color</label
+        >
+        <div class="flex justify-center space-x-2">
+          <div
+            *ngFor="let color of availableColors"
+            [style.background-color]="color"
+            [class.ring-2]="registerForm.color === color"
+            class="w-8 h-8 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+            (click)="selectColor(color)"
+          ></div>
+        </div>
+      </div> -->
+
+      <!-- Register Button -->
+      <button
+        type="submit"
+        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+      >
+        Create Account
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <!-- <div class="my-6 flex items-center">
+      <div class="flex-1 border-t border-gray-600"></div>
+      <span class="px-4 text-sm text-gray-400">Or register with</span>
+      <div class="flex-1 border-t border-gray-600"></div>
+    </div> -->
+
+    <!-- Social Registration -->
+    <!-- <div class="grid grid-cols-2 gap-4">
+      <button
+        class="flex items-center justify-center px-4 py-2 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+      >
+        <img src="assets/google-icon.svg" alt="Google" class="w-5 h-5 mr-2" />
+        <span class="text-gray-300">Google</span>
+      </button>
+      <button
+        class="flex items-center justify-center px-4 py-2 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+      >
+        <img src="assets/github-icon.svg" alt="GitHub" class="w-5 h-5 mr-2" />
+        <span class="text-gray-300">GitHub</span>
+      </button>
+    </div> -->
+
+    <!-- Login Link -->
+    <p class="mt-8 text-center text-gray-400">
+      Already have an account?
+      <a href="/login" class="text-blue-500 hover:text-blue-400">Login here</a>
+    </p>
+  </div>
+</div>

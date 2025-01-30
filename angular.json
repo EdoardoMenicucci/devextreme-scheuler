@@ -24,7 +24,12 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              {
+                 "glob": "**/*",
+                 "input": "public/icons",
+                 "output": "icons"
+               }
             ],
             "styles": [
               "src/styles.css"

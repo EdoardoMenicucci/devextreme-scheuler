@@ -1,0 +1,20 @@
+<dx-drawer
+  [opened]="true"
+  [closeOnOutsideClick]="false"
+  openedStateMode="shrink"
+  revealMode="slide"
+  template="menu">
+  <div *dxTemplate="let data of 'menu'">
+    <dx-list
+      [items]="navigation"
+      [focusStateEnabled]="false"
+      [selectedItems]="[selectedRoute]"
+      (onItemClick)="itemClick($event)"
+      [width]="200">
+      <div *dxTemplate="let item of 'item'">
+        <i class="dx-icon dx-icon-{{item.icon}}"></i>
+        <span>{{item.text}}</span>
+      </div>
+    </dx-list>
+  </div>
+</dx-drawer>

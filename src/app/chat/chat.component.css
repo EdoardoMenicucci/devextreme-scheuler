@@ -1,0 +1,30 @@
+.chat-container {
+  max-width: 600px;
+}
+
+.message {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+}
+
+.message.in {
+  background-color: #f0f0f0;
+  margin-right: 20%;
+}
+
+.message.out {
+  background-color: #e3f2fd;
+  margin-left: 20%;
+}
+
+.user {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.date {
+  font-size: 0.8em;
+  color: #666;
+  text-align: right;
+}
