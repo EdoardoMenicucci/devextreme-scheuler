@@ -1,8 +1,8 @@
-<div class="flex">
+<div class="flex w-screen h-screen">
   <app-sidebar></app-sidebar>
   <div class="scheduler-container">
     <dx-scheduler
-         timeZone="Europe/Berlin"
+        timeZone="Europe/Berlin"
         [dataSource]="appointments"
         [views]="['day', 'week', 'workWeek', 'month']"
         [currentView]="currentView"
@@ -25,7 +25,7 @@
         (onAppointmentDeleted)="onAppointmentDeleted($event)">
     </dx-scheduler>
   </div>
-  <div>
+  <div class="w-full">
   <app-chat></app-chat>
   </div>
 </div>

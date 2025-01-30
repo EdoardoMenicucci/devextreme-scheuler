@@ -1,6 +1,7 @@
 <div class="chat-container">
     <dx-chat
     [height]="'100vh'"
+    [width]="'100%'"
     [user]="currentUser"
     [items]="(messages$ | async) || []"
     [typingUsers]="(userChatTypingUsers$ | async) || []"
