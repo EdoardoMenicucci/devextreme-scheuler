@@ -16,5 +16,15 @@
         <span class="ms-1">{{item.text}}</span>
       </div>
     </dx-list>
+    <dx-list
+      [items]="previousChats"
+      [focusStateEnabled]="false"
+      [selectedItems]="[selectedRoute]"
+      (onItemClick)="loadChat($event)"
+      [width]="200">
+      <div *dxTemplate="let item of 'item'">
+        <span class="ms-1">{{formatDate(item.createdAt)}}</span>
+      </div>
+    </dx-list>
   </div>
 </dx-drawer>

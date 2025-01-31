@@ -14,11 +14,13 @@ export class AuthService {
   private readonly TOKEN_KEY = 'chat_token';
   private readonly USER_ID = 'user_id';
   private readonly USER_NAME = 'user_name';
+  private readonly CHATS_ID = 'chats_id';
 
   private token: string = '';
   public username: string | null = null;
   private authError = new Subject<boolean>();
   public userId: number | null = null;
+  public chatsId: number[] | null = null;
 
   constructor(private http: HttpClient) {
     this.initializeFromStorage();
@@ -42,6 +44,11 @@ export class AuthService {
       console.log('Username:', savedUsername);
       this.username = savedUsername;
     }
+    const savedChatsId = localStorage.getItem(this.CHATS_ID);
+    if (savedChatsId) {
+      console.log('Chats ID:', savedChatsId);
+      this.chatsId = JSON.parse(savedChatsId);
+    }
   }
 
   getToken(): string {
@@ -51,6 +58,11 @@ export class AuthService {
   setToken(token: string): void {
     this.token = token;
     localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  private setChatsId(chatsId: number[]) {
+    this.chatsId = chatsId;
+    localStorage.setItem(this.CHATS_ID, JSON.stringify(chatsId));
   }
 
   setUserId(userId: number): void {
@@ -71,6 +83,7 @@ export class AuthService {
         if (response.token) this.setToken(response.token);
         if (response.userId) this.setUserId(response.userId);
         if (response.username) this.setUsername(response.username);
+        if (response.chatIds) this.setChatsId(response.chatIds);
       })
     );
   }
@@ -102,6 +115,8 @@ export class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_ID);
     localStorage.removeItem(this.USER_NAME);
+    localStorage.removeItem(this.CHATS_ID);
+    this.chatsId = null;
     this.username = null;
     this.userId = null;
     this.token = '';

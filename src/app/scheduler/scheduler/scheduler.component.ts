@@ -23,11 +23,15 @@ export class SchedulerComponent {
   }
 
   async onAppointmentAdded(e: any) {
+    console.log('onAppointmentUpdated', e.appointmentData);
+
     await new Promise((resolve) => setTimeout(resolve, 1000));
     this.appointmentService.createAppointment(e.appointmentData).subscribe();
   }
 
   async onAppointmentUpdated(e: any) {
+    console.log('onAppointmentUpdated', e.appointmentData);
+
     await new Promise((resolve) => setTimeout(resolve, 1000));
     this.appointmentService
       .updateAppointment(e.appointmentData.id, e.appointmentData)
@@ -35,6 +39,8 @@ export class SchedulerComponent {
   }
 
   onAppointmentDeleted(e: any) {
+    console.log('onAppointmentUpdated', e.appointmentData);
+
     this.appointmentService.deleteAppointment(e.appointmentData.id).subscribe();
   }
 
