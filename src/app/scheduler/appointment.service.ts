@@ -16,6 +16,7 @@ export class AppointmentService {
 
   loadAppointments(): void {
     this.http.get<any[]>(`${this.apiUrl}/appointment`).subscribe((data) => {
+      console.log('Appointment recived:',data);
       this.appointmentsSubject.next(data);
     });
   }

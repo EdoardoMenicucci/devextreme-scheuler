@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, tap, catchError, lastValueFrom, firstValueFrom } from 'rxjs';
+import { Observable, BehaviorSubject, tap, catchError, lastValueFrom, firstValueFrom, Subscription } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
-import { AppointmentService } from '../scheduler/scheduler/appointment.service';
+import { AppointmentService } from '../scheduler/appointment.service';
 import { messageResponse } from '../interfaces/d.interface';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 
 
@@ -30,6 +31,7 @@ export class ChatService {
   private userChatTypingUsersSubject = new BehaviorSubject<User[]>([]);
   private supportChatTypingUsersSubject = new BehaviorSubject<Message[]>([]);
   public messages: Message[] = [];
+  private authErrorSubscription!: Subscription;
   private chats: any[] = [];
   private date: Date;
 
@@ -43,32 +45,34 @@ export class ChatService {
     this.date = new Date();
     this.date.setHours(0, 0, 0, 0);
 
-   this.onInit();
+    this.onInit();
   }
 
-
   onInit() {
-     this.messages = [
-       {
-         timestamp: this.getTimestamp(this.date, -9),
-         author: this.supportAgent,
-         text: 'Hello, John!\nIm here to help you whit the scheduling!',
-       },
-     ];
+    //first assistant message
+    this.messages = [
+      {
+        timestamp: this.getTimestamp(this.date, -9),
+        author: this.supportAgent,
+        text: 'Hello, John!\nIm here to help you whit the scheduling!',
+      },
+    ];
 
-     this.messagesSubject.next(this.messages);
-     this.userChatTypingUsersSubject.next([]);
-     this.supportChatTypingUsersSubject.next([]);
+    this.messagesSubject.next(this.messages);
+    this.userChatTypingUsersSubject.next([]);
+    this.supportChatTypingUsersSubject.next([]);
   }
 
   //Main functions
   sendMessageToAI(message: string): Observable<any> {
     const payload = {
-      text: message
+      text: message,
     };
     return this.http.post(`${this.apiUrl}/api/message`, payload).pipe(
       tap((response: any) => {
+        // debug
         console.log('Response:', response);
+        //
         this.messages.push({
           author: response.aiResponse.author,
           text: response.aiResponse.text,
@@ -99,7 +103,9 @@ export class ChatService {
       .get(`${this.apiUrl}/chat/user/${this.authService.userId}/chats`)
       .pipe(
         tap((response: any) => {
+          // debug
           console.log('Response:', response);
+          //
           this.chats = response;
         }),
         catchError((error: any) => {
@@ -144,22 +150,30 @@ export class ChatService {
 
   async loadChatMessages(chatId: number): Promise<void> {
     try {
-     const response = await firstValueFrom(
-       this.http.get(`${this.apiUrl}/chat/chat/${chatId}/messages`)
-     ) as any[];
+      const response = (await firstValueFrom(
+        this.http.get(`${this.apiUrl}/chat/chat/${chatId}/messages`)
+      )) as any[];
       this.onInit();
-      response.forEach(element => {
-        if(element.author == 'model') {
+      response.forEach((element) => {
+        if (element.author == 'model') {
           element.author = this.supportAgent;
-          this.messages.push({ author: element.author, text: element.text, timestamp: element.timestamp });
+          this.messages.push({
+            author: element.author,
+            text: element.text,
+            timestamp: element.timestamp,
+          });
         } else {
           element.author = this.currentUser;
-          this.messages.push({ author: element.author, text: element.text, timestamp: element.timestamp });
+          this.messages.push({
+            author: element.author,
+            text: element.text,
+            timestamp: element.timestamp,
+          });
         }
-     });
-      // = response as Message[];
-    //  console.log('Messages loaded:', this.messages);
+      });
+      //debug
       console.log('Messages loaded:', this.messages);
+      //
     } catch (error: any) {
       console.error('Error loading messages:', error);
       if (error.status === 401) {

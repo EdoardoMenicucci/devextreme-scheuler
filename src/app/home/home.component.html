@@ -1,0 +1,94 @@
+<div class="min-h-screen w-full bg-gradient-to-br from-gray-900 to-indigo-900">
+  <!-- Navigation -->
+  <nav class="px-6 py-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-white">AI Scheduler</h1>
+      <div class="space-x-4">
+        <button (click)="navigateTo('/login')" class="text-gray-300 hover:text-white transition-colors">Login</button>
+        <button (click)="navigateTo('/signin')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">Sign Up</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="container mx-auto px-6 py-20 text-center">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-8">
+      Intelligent Scheduling<br/>
+      <span class="text-indigo-400">Powered by AI</span>
+    </h1>
+    <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-12">
+      A showcase application demonstrating full-stack development skills with Angular, C#, and AI integration.
+    </p>
+    <button (click)="navigateTo('/signin')" class="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors">
+      Start Scheduling
+    </button>
+  </div>
+
+  <!-- TODO: ICONS -->
+  <!-- Features Grid -->
+  <div class="container mx-auto px-6 py-20">
+    <div class="grid md:grid-cols-3 gap-12">
+      <!-- Frontend -->
+      <div class="bg-gray-800 p-8 rounded-xl">
+        <div class="text-indigo-400 text-4xl mb-4">
+          <i class="dx-icon dx-icon-desktop"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-4">Modern Frontend</h3>
+        <p class="text-gray-400">Built with Angular 19, DevExtreme, and Tailwind CSS for a responsive and intuitive user experience.</p>
+      </div>
+
+      <!-- Backend -->
+      <div class="bg-gray-800 p-8 rounded-xl">
+        <div class="text-indigo-400 text-4xl mb-4">
+          <i class="dx-icon dx-icon-server"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-4">Secure Backend</h3>
+        <p class="text-gray-400">C# backend with JWT authentication, claims-based authorization, and REST API architecture.</p>
+      </div>
+
+      <!-- AI Integration -->
+      <div class="bg-gray-800 p-8 rounded-xl">
+        <div class="text-indigo-400 text-4xl mb-4">
+          <i class="dx-icon dx-icon-robot"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-4">AI Assistant</h3>
+        <p class="text-gray-400">Intelligent scheduling suggestions and natural language processing for effortless planning.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="container mx-auto px-6 py-20 text-center">
+    <h2 class="text-3xl font-bold text-white mb-12">Technology Stack</h2>
+    <div class="flex flex-wrap justify-center gap-8 text-white">
+      <div class="tech-badge">Angular 19</div>
+      <div class="tech-badge">DevExtreme</div>
+      <div class="tech-badge">Tailwind CSS</div>
+      <div class="tech-badge">C# .NET</div>
+      <div class="tech-badge">JWT Auth</div>
+      <div class="tech-badge">REST API</div>
+      <div class="tech-badge">AI Integration</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 py-8">
+    <div class="container mx-auto px-6 text-center text-gray-400">
+      <p>Portfolio Project by EdoardoMenicucci</p>
+      <div class="flex justify-center space-x-6 mt-4">
+        <!-- <a href="https://github.com/EdoardoMenicucci" class="hover:text-white transition-colors">
+          <i class="dx-icon-github"></i>
+        </a> -->
+        <!-- <a href="https://linkedin.com/in/yourusername" class="hover:text-white transition-colors">
+          <i class="dx-icon-email dx-icon-custom-style"></i>
+        </a> -->
+      </div>
+    </div>
+  </footer>
+</div>
+
+<style>
+  .tech-badge {
+    @apply bg-gray-900 text-white px-6 py-2 rounded-full text-sm font-medium;
+  }
+</style>

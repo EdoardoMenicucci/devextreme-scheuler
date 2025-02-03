@@ -16,6 +16,7 @@ import { AuthService } from '../auth/auth.service';
 export class LoginComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
   private authErrorSubscription!: Subscription;
+  errorMessage: string = '';
 
   public loginForm: loginForm = {
     email: '',
@@ -33,10 +34,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Sottoscrizione agli errori di autenticazione
     this.authErrorSubscription = this.authService
       .getAuthErrors()
-      .subscribe(() => {
-        this.isAuthenticated = false;
-        // Opzionale: mostra messaggio all'utente
-        console.log('Sessione scaduta, effettua nuovamente il login');
+      .subscribe((error) => {
+        if (error) {
+          this.isAuthenticated = false;
+          this.errorMessage = error.message;
+
+          switch (error.type) {
+            case 'TOKEN_EXPIRED':
+              this.router.navigate(['/login']);
+              break;
+            case 'UNAUTHORIZED':
+              this.router.navigate(['/signin']);
+              break;
+            case 'NETWORK_ERROR':
+              alert('Errore di rete');
+              this.router.navigate(['/home']);
+              break;
+          }
+        } else {
+          this.errorMessage = '';
+        }
       });
   }
 

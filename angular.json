@@ -31,9 +31,7 @@
                  "output": "icons"
                }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css", "node_modules/devextreme/dist/css/dx.light.css"],
             "scripts": []
           },
           "configurations": {
@@ -89,9 +87,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css", "node_modules/devextreme/dist/css/dx.light.css"],
             "scripts": []
           }
         }

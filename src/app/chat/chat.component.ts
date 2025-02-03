@@ -34,7 +34,6 @@ export class ChatComponent implements OnInit {
     this.supportChatTypingUsers$ = this.chatService.supportChatTypingUsers$;
   }
 
-  //debug
   async ngOnInit(): Promise<void> {
     this.isAuthenticated = await this.authService.isAuthenticated();
   }
