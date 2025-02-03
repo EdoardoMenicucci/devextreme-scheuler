@@ -16,7 +16,7 @@ export class SidebarComponent implements OnInit {
 
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
-    { id: 2, text: 'Logout', icon: 'login', path: '/login' },
+    { id: 2, text: 'Logout', icon: 'login', action: 'logout' },
   ];
 
   previousChats = [];
@@ -102,7 +102,12 @@ export class SidebarComponent implements OnInit {
 
   itemClick(e: any) {
     //router navigation
-    this.selectedRoute = e.itemData.path;
-    this.router.navigate([e.itemData.path]);
+    if (e.itemData.path) {
+      this.selectedRoute = e.itemData.path;
+      this.router.navigate([e.itemData.path]);
+    } else if (e.itemData.action === 'logout') {
+      this.authService.logout();
+    }
+
   }
 }
