@@ -21,9 +21,8 @@ export class ChatService {
   };
 
   supportAgent: User = {
-    id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
+    id: 'gemini-api',
     name: 'Scheduler Support Agent',
-    avatarUrl: 'images/petersmith.png',
   };
 
   private apiUrl = 'http://localhost:5000';
@@ -72,6 +71,13 @@ export class ChatService {
         // debug
         console.log('Response:', response);
         //
+
+        if (response.aiResponse.author === 'model') {
+          response.aiResponse.author = this.supportAgent;
+        } else {
+          response.aiResponse.author = this.currentUser;
+        }
+
         this.messages.push({
           author: response.aiResponse.author,
           text: response.aiResponse.text,

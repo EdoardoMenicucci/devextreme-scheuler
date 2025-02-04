@@ -9,6 +9,7 @@
             [width]="'100%'"
             [user]="currentUser"
             [items]="(messages$ | async) || []"
+            [showAvatar]="false"
             [typingUsers]="(userChatTypingUsers$ | async) || []"
             (onMessageEntered)="onMessageEntered($event)"
             (onTypingStart)="userChatOnTypingStart()"
