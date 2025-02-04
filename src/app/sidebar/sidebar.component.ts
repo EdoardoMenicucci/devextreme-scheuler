@@ -55,7 +55,7 @@ export class SidebarComponent implements OnInit {
               this.router.navigate(['/signin']);
               break;
             case 'NETWORK_ERROR':
-              alert('Network error occurred');
+              // alert('Network error occurred');
               this.router.navigate(['/home']);
               break;
           }

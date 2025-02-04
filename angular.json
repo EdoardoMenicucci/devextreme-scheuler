@@ -29,9 +29,13 @@
                  "glob": "**/*",
                  "input": "public/icons",
                  "output": "icons"
-               }
+               },
+               "src/assets"
             ],
-            "styles": ["src/styles.css", "node_modules/devextreme/dist/css/dx.light.css"],
+            "styles": ["src/styles.css",
+            "node_modules/devextreme/dist/css/dx.light.css",
+            "src/dx.generic.eddy-scheme-3.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -87,7 +91,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css", "node_modules/devextreme/dist/css/dx.light.css"],
+            "styles": [
+              "src/styles.css",
+              "node_modules/devextreme/dist/css/dx.light.css",
+              "node_modules/devextreme/dist/css/dx.dark.css"
+            ],
             "scripts": []
           }
         }

@@ -31,7 +31,6 @@ export class ChatService {
   private userChatTypingUsersSubject = new BehaviorSubject<User[]>([]);
   private supportChatTypingUsersSubject = new BehaviorSubject<Message[]>([]);
   public messages: Message[] = [];
-  private authErrorSubscription!: Subscription;
   private chats: any[] = [];
   private date: Date;
 
@@ -54,7 +53,7 @@ export class ChatService {
       {
         timestamp: this.getTimestamp(this.date, -9),
         author: this.supportAgent,
-        text: 'Hello, John!\nIm here to help you whit the scheduling!',
+        text: `Hello, John!\nIm here to help you whit you'r scheduling!`,
       },
     ];
 

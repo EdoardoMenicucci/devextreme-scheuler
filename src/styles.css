@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'devextreme/dist/css/dx.light.css';
+@import './dx.generic.eddy-scheme-3.css';
 
 @tailwind base;
 @tailwind components;
@@ -7,4 +7,8 @@
 
 .flex{
     display: flex;
+}
+
+body{
+    background-color:#292C52;
 }

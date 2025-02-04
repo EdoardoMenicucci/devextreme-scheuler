@@ -1,4 +1,4 @@
-<dx-drawer class="bg-gray-200 h-screen"
+<dx-drawer class="h-screen bg-[#292C52]"
   [opened]="true"
   [closeOnOutsideClick]="false"
   openedStateMode="shrink"
@@ -16,6 +16,10 @@
         <span class="ms-1">{{item.text}}</span>
       </div>
     </dx-list>
+    <div class="p-[10px] mt-10">
+        <i class="dx-icon dx-icon-chevrondown"></i>
+        <span class="ms-1">Previous Chats</span>
+    </div>
     <dx-list
       [items]="previousChats"
       [focusStateEnabled]="false"

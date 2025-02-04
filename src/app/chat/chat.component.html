@@ -1,13 +1,19 @@
-<div class="chat-container">
-    <dx-chat
-    [height]="'100vh'"
-    [width]="'100%'"
-    [user]="currentUser"
-    [items]="(messages$ | async) || []"
-    [typingUsers]="(userChatTypingUsers$ | async) || []"
-    (onMessageEntered)="onMessageEntered($event)"
-    (onTypingStart)="userChatOnTypingStart()"
-    (onTypingEnd)="userChatOnTypingEnd()"
-  >
-  </dx-chat>
+<div class="chat-container h-full w-full flex flex-col">
+    <div class="h-[6%] min-h-[40px] ">
+        <app-previous-chats-dropdown></app-previous-chats-dropdown>
+    </div>
+    <div class="h-[94%]">
+        <dx-chat
+            [(dayHeaderFormat)]="getFromattedDate"
+            [height]="'100%'"
+            [width]="'100%'"
+            [user]="currentUser"
+            [items]="(messages$ | async) || []"
+            [typingUsers]="(userChatTypingUsers$ | async) || []"
+            (onMessageEntered)="onMessageEntered($event)"
+            (onTypingStart)="userChatOnTypingStart()"
+            (onTypingEnd)="userChatOnTypingEnd()"
+        >
+        </dx-chat>
+    </div>
 </div>

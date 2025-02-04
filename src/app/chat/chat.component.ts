@@ -6,12 +6,13 @@ import { Observable, pipe } from 'rxjs';
 import { ChatService } from './chat.service';
 import { AuthService } from '../auth/auth.service';
 import { FormsModule } from '@angular/forms';
+import { PreviousChatsDropdownComponent } from '../previous-chat/previous-chat.component';
 
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [DxChatModule, AsyncPipe, CommonModule, FormsModule],
+  imports: [DxChatModule, AsyncPipe, CommonModule, FormsModule, PreviousChatsDropdownComponent],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
 })
@@ -42,6 +43,16 @@ export class ChatComponent implements OnInit {
     this.chatService.onMessageEntered(event);
     this.chatService.sendMessageToAI(event.message!.text!).subscribe((response) => {
       console.log(response);
+    });
+  }
+
+  getFromattedDate(): string {
+    const date = new Date();
+    date.setDate(date.getDate() - 1); // Get yesterday's date
+    return date.toLocaleDateString('it-IT', {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
     });
   }
 

@@ -51,7 +51,7 @@ export class RegisterComponent {
               this.router.navigate(['/signin']);
               break;
             case 'NETWORK_ERROR':
-              alert('Errore di rete');
+              // alert('Errore di rete');
               this.router.navigate(['/home']);
               break;
           }
