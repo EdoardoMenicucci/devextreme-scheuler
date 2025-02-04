@@ -10,7 +10,7 @@ import { Chat } from '../interfaces/d.interface';
   standalone: true,
   imports: [DxSelectBoxModule, CommonModule],
   template: `
-    <div class="chat-dropdown h-full bg-[#292C52]" *ngIf="chats.length > 0">
+    <div class="chat-dropdown h-full bg-[#090730]" *ngIf="chats.length > 0">
       <dx-select-box
         [items]="chats"
         displayExpr="id"
@@ -24,7 +24,7 @@ import { Chat } from '../interfaces/d.interface';
       </dx-select-box>
     </div>
     <div
-      class="chat-dropdown h-full bg-[#292C52]"
+      class="chat-dropdown h-full bg-[#090730]"
       *ngIf="chats.length === 0"
     ></div>
   `,

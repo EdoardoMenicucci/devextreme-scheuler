@@ -1,3 +1,9 @@
 .scheduler-container {
     max-width: 70%;
 }
+
+.dx-scheduler-date-time-indicator {
+  background-color: rgba(79, 70, 229, 1) !important;
+  /* usa il colore base accent #4F46E5 */
+  border-color: rgba(79, 70, 229, 1) !important;
+}

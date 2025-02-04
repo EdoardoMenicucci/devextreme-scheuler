@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import './dx.generic.eddy-scheme-3.css';
+@import './dx.fluent.fluent-eddy-v3.css';
 
 @tailwind base;
 @tailwind components;
@@ -10,5 +10,11 @@
 }
 
 body{
-    background-color:#292C52;
+    background-color:#111827;
+}
+
+/* override del colore dell indicatore  */
+.dx-scheduler-date-time-indicator {
+  background-color: rgba(79, 70, 229, 1) !important;
+  border-color: rgba(79, 70, 229, 1) !important;
 }
