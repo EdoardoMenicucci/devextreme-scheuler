@@ -18,3 +18,21 @@ body{
   background-color: rgba(79, 70, 229, 1) !important;
   border-color: rgba(79, 70, 229, 1) !important;
 }
+
+/* variabili tema */
+:root {
+  --color-bg-primary: #111827;
+  --color-bg-secondary: #1F2937;
+
+  --color-accent: #4F46E5;
+  --color-accent-hover: #4338CA;
+  --color-accent-light: #818CF8;
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #D1D5DB;
+
+  --color-border: #374151;
+
+  --color-success: #059669;
+  --color-danger: #DC2626;
+}
