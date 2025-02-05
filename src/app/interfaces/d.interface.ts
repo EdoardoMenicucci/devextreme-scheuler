@@ -37,3 +37,8 @@ export interface messageResponse {
   Appointments: Array<any>;
 }
 
+export interface Status {
+  id: number;
+  text: string;
+}
+

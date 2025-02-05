@@ -3,6 +3,7 @@ import { DxSchedulerModule } from 'devextreme-angular';
 import { ChatComponent } from "../chat/chat.component";
 import { AppointmentService } from './appointment.service';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { Status } from '../interfaces/d.interface';
 
 @Component({
   standalone: true,
@@ -20,7 +21,7 @@ export class SchedulerComponent {
 
 
 
-  status : any[] = [
+  status : Status[] = [
     {id: 1, text: 'New'},
     {id: 2, text: 'Completed'},
     {id: 3, text: 'In Progress'},

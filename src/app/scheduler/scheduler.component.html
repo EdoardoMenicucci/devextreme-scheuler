@@ -25,9 +25,10 @@
       (onAppointmentDeleted)="onAppointmentDeleted($event)"
     >
       <dxi-resource
-        fieldExpr="statusId"
+        fieldExpr="status"
         label="Status"
-        [allowMultiple]="true"
+        displayExpr="text"
+        valueExpr="text"
         [dataSource]="status"
         [useColorAsDefault]="true"
       >
