@@ -16,6 +16,7 @@ export class SidebarComponent implements OnInit {
 
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
+    { id: 1, text: 'Dashboard', icon: 'event', path: '/dashboard' },
     { id: 2, text: 'Logout', icon: 'login', action: 'logout' },
   ];
 
@@ -108,6 +109,5 @@ export class SidebarComponent implements OnInit {
     } else if (e.itemData.action === 'logout') {
       this.authService.logout();
     }
-
   }
 }
