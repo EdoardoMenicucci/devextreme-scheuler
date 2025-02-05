@@ -5,7 +5,8 @@
 [x] Icons
 [ ] Login flow minor fixes
 [ ] Dashboard for user stats,
-[ ] Appointment in list format
+[x] Appointment in list format
+[ ] Use status insead of isCompleted on backend and adapt all logic whit api / gemini response
 
 
 ## THEN: 
