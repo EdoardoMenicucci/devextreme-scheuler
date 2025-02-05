@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
+
 export class AppointmentService {
   private apiUrl = 'http://localhost:5000/api';
   private appointmentsSubject = new BehaviorSubject<any[]>([]);

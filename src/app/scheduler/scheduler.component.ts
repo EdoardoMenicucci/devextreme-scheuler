@@ -11,10 +11,23 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.css'],
 })
+
 export class SchedulerComponent {
   currentView = 'week';
   currentDate = new Date();
   appointments: any[] = [];
+
+
+
+
+  status : any[] = [
+    {id: 1, text: 'New'},
+    {id: 2, text: 'Completed'},
+    {id: 3, text: 'In Progress'},
+    {id: 4, text: 'Missed'},
+  ];
+
+
 
   constructor(private appointmentService: AppointmentService) {
     this.appointmentService.appointments$.subscribe((data) => {

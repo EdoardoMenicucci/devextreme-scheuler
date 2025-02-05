@@ -2,31 +2,39 @@
   <app-sidebar></app-sidebar>
   <div class="scheduler-container">
     <dx-scheduler
-        timeZone="Europe/Berlin"
-        [dataSource]="appointments"
-        [views]="['day', 'week', 'workWeek', 'month']"
-        [currentView]="currentView"
-        [currentDate]="currentDate"
-        [firstDayOfWeek]="1"
-        [startDayHour]="8"
-        [endDayHour]="20"
-        [showAllDayPanel]="true"
-        [height]="'100vh'"
-        [editing]="{
-            allowAdding: true,
-            allowDeleting: true,
-            allowUpdating: true,
-            allowDragging: true
-        }"
-        dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
-        (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
-        (onAppointmentAdded)="onAppointmentAdded($event)"
-        (onAppointmentUpdated)="onAppointmentUpdated($event)"
-        (onAppointmentDeleted)="onAppointmentDeleted($event)">
+      timeZone="Europe/Berlin"
+      [dataSource]="appointments"
+      [views]="['day', 'week', 'workWeek', 'month', 'agenda']"
+      [currentView]="currentView"
+      [currentDate]="currentDate"
+      [firstDayOfWeek]="1"
+      [startDayHour]="8"
+      [endDayHour]="20"
+      [showAllDayPanel]="true"
+      [height]="'100vh'"
+      [editing]="{
+        allowAdding: true,
+        allowDeleting: true,
+        allowUpdating: true,
+        allowDragging: true
+      }"
+      dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+      (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+      (onAppointmentAdded)="onAppointmentAdded($event)"
+      (onAppointmentUpdated)="onAppointmentUpdated($event)"
+      (onAppointmentDeleted)="onAppointmentDeleted($event)"
+    >
+      <dxi-resource
+        fieldExpr="statusId"
+        label="Status"
+        [allowMultiple]="true"
+        [dataSource]="status"
+        [useColorAsDefault]="true"
+      >
+      </dxi-resource>
     </dx-scheduler>
   </div>
   <div class="w-full h-full">
-  <app-chat></app-chat>
+    <app-chat></app-chat>
   </div>
 </div>
-

@@ -7,6 +7,7 @@ import {
   DxListModule,
 } from 'devextreme-angular';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +26,9 @@ export class DashboardComponent implements OnInit {
   title = 'Dashboard';
 
   statisticsData: any[] = [];
+  cancellationRate = 0;
   upcomingAppointments: any[] = [];
+  currentDate = new Date();
 
   user = {
     id: 1,
@@ -42,6 +45,39 @@ export class DashboardComponent implements OnInit {
       cancellationRate: 0.2,
     },
   };
+
+  constructor(private dashboardService: DashboardService) {
+    // prepara i dati per il grafico
+    this.dashboardService.statistics$.subscribe((data) => {
+      this.statisticsData = [
+        { category: 'Total', value: data.totalAppointments },
+        {
+          category: 'Created',
+          value: data.createdAppointments,
+        },
+        {
+          category: 'Updated',
+          value: data.updatedAppointments,
+        },
+        {
+          category: 'Deleted',
+          value: data.deletedAppointments,
+        },
+        {
+          category: 'Completed',
+          value: data.completedAppointments,
+        },
+        {
+          category: 'Upcoming',
+          value: data.upcomingAppointments,
+        },
+        { category: 'Missed', value: data.missedAppointments },
+      ];
+
+      this.cancellationRate = data.cancellationRate;
+      console.log('Statistics data recived:', data);
+    });
+  }
 
   customizeText = (args: { value?: number; valueText?: string }): string => {
     return `${args.valueText}%`;
@@ -71,18 +107,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const stats = this.user.statistics;
-    // prepara i dati per il grafico
-    this.statisticsData = [
-      { category: 'Total', value: stats.totalAppointments },
-      { category: 'Created', value: stats.createdAppointments },
-      { category: 'Updated', value: stats.updatedAppointments },
-      { category: 'Deleted', value: stats.deletedAppointments },
-      { category: 'Completed', value: stats.completedAppointments },
-      { category: 'Upcoming', value: stats.upcomingAppointments },
-      { category: 'Missed', value: stats.missedAppointments },
-    ];
-
     // Esempio di dati per upcoming appointments
     this.upcomingAppointments = [
       {

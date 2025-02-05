@@ -1,4 +1,4 @@
-<dx-drawer class="h-screen bg-[#111827]"
+<dx-drawer class="h-screen bg-[#111827] pt-2"
   [opened]="true"
   [closeOnOutsideClick]="false"
   openedStateMode="shrink"
@@ -11,7 +11,7 @@
       [selectedItems]="[selectedRoute]"
       (onItemClick)="itemClick($event)"
       [width]="200">
-      <div *dxTemplate="let item of 'item'">
+      <div *dxTemplate="let item of 'item'" class="flex items-center">
         <i class="dx-icon dx-icon-{{item.icon}}"></i>
         <span class="ms-1">{{item.text}}</span>
       </div>

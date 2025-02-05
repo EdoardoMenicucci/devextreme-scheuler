@@ -17,7 +17,7 @@
       <div class="mt-10 w-1/2">
         <dx-circular-gauge
           id="rangebar"
-          [value]="user.statistics.cancellationRate * 100"
+          [value]="cancellationRate * 100"
           [title]="{ text: 'Cancellation Rate', font: { size: 24 } }"
         >
           <dxo-value-indicator type="rangebar" color="#f05b41">
@@ -36,7 +36,6 @@
         </h3>
         <dx-list
           [items]="upcomingAppointments"
-          [title]="{ text: 'Upcoming Appointments', font: { size: 24 } }"
           [focusStateEnabled]="false"
           [width]="500"
         >

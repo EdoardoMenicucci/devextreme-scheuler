@@ -16,7 +16,7 @@ export class SidebarComponent implements OnInit {
 
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
-    { id: 1, text: 'Dashboard', icon: 'event', path: '/dashboard' },
+    { id: 1, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },
     { id: 2, text: 'Logout', icon: 'login', action: 'logout' },
   ];
 
