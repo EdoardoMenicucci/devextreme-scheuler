@@ -1,0 +1,31 @@
+<div class="flex w-screen">
+<app-sidebar></app-sidebar>
+<div class="p-6 w-full">
+  <h1 class="text-3xl font-bold mb-6">{{ title }}</h1>
+  <!-- Grafico a barre per le statistiche -->
+  <dx-chart
+      [dataSource]="statisticsData"
+      title="Appointment Statistics"
+      palette="Soft Pastel">
+    <dxi-series
+        argumentField="category"
+        valueField="value"
+        type="bar">
+    </dxi-series>
+    <dxo-tooltip [enabled]="true"></dxo-tooltip>
+  </dx-chart>
+
+  <!-- Grafico a cerchio per la percentuale di cancellation rate -->
+  <div class="mt-10">
+    <h3 class="text-xl font-semibold mb-2">Cancellation Rate</h3>
+      <dx-circular-gauge id="rangebar" [value]="user.statistics.cancellationRate * 100" [title]="{ text: 'Cancellation Rate', font: { size: 24 } }">
+      <dxo-value-indicator type="rangebar" color="#f05b41"> </dxo-value-indicator>
+      <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
+      <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
+      <!-- <dxo-label [customizeText]="customizeText"></dxo-label> -->
+    </dxo-scale>
+  </dx-circular-gauge>
+  </div>
+</div>
+</div>
+
