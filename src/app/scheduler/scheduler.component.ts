@@ -37,16 +37,17 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     {id: false, text: 'Not Completed'},
   ]
 
-
-
   constructor(private appointmentService: AppointmentService) {
-    this.getAppointmentSub = this.appointmentService.appointments$.subscribe((data) => {
-      this.appointments = data;
-    });
   }
 
   //life cycle hook
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getAppointmentSub = this.appointmentService.appointments$.subscribe(
+      (data) => {
+        this.appointments = data;
+      }
+    );
+  }
   ngOnDestroy(): void {
     if (this.createAppointmentSub) this.createAppointmentSub.unsubscribe();
     if (this.updateAppointmentSub) this.updateAppointmentSub.unsubscribe();

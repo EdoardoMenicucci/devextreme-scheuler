@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, tap, catchError, lastValueFrom, firstValueFrom, Subscription } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, BehaviorSubject, tap, catchError, firstValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
 import { AppointmentService } from '../scheduler/appointment.service';
-import { messageResponse } from '../interfaces/d.interface';
 import { AuthService } from '../auth/auth.service';
-import { Router } from '@angular/router';
+
+import { firstLetterToUpperCase } from '../utils/generic';
 
 
 
@@ -15,16 +15,6 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class ChatService {
-  currentUser: User = {
-    id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
-    name: 'John Doe',
-  };
-
-  supportAgent: User = {
-    id: 'gemini-api',
-    name: 'Scheduler Support Agent',
-  };
-
   private apiUrl = 'http://localhost:5000';
   private messagesSubject = new BehaviorSubject<Message[]>([]);
   private userChatTypingUsersSubject = new BehaviorSubject<User[]>([]);
@@ -32,6 +22,16 @@ export class ChatService {
   public messages: Message[] = [];
   private chats: any[] = [];
   private date: Date;
+
+  currentUser: User = {
+    id: 1,
+    name: 'Err',
+  };
+
+  supportAgent: User = {
+    id: 'gemini-api',
+    name: 'Scheduler Support Agent',
+  };
 
   // private appointmentService!: AppointmentService;
   // private http!: HttpClient;
@@ -43,6 +43,9 @@ export class ChatService {
     this.date = new Date();
     this.date.setHours(0, 0, 0, 0);
 
+    this.currentUser.id = this.authService.userId ?? 0;
+    this.currentUser.name = this.authService.username ?? 'Err';
+
     this.onInit();
   }
 
@@ -52,7 +55,7 @@ export class ChatService {
       {
         timestamp: this.getTimestamp(this.date, -9),
         author: this.supportAgent,
-        text: `Hello, John!\nIm here to help you whit you'r scheduling!`,
+        text: `Hello, ${firstLetterToUpperCase(this.currentUser.name!)}\nIm here to help you whit you'r scheduling!`,
       },
     ];
 
@@ -219,6 +222,10 @@ export class ChatService {
 
   getTimestamp(date: Date, offsetMinutes = 0): number {
     return date.getTime() + offsetMinutes * 60000;
+  }
+
+  firstLetterToUpperCase(text: string): string {
+    return firstLetterToUpperCase(text);
   }
 
   userChatOnTypingStart() {
