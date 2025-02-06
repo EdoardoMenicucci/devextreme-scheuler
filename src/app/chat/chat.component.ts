@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { DxChatModule } from 'devextreme-angular';
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
-import { Observable, pipe } from 'rxjs';
+import { Observable, pipe, Subscription } from 'rxjs';
 import { ChatService } from './chat.service';
 import { AuthService } from '../auth/auth.service';
 import { FormsModule } from '@angular/forms';
@@ -16,12 +16,15 @@ import { PreviousChatsDropdownComponent } from '../previous-chat/previous-chat.c
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   currentUser: User;
   supportAgent: User;
   messages$: Observable<Message[]>;
   userChatTypingUsers$: Observable<User[]>;
   supportChatTypingUsers$: Observable<User[]>;
+
+  //subscription
+  private sendMessageSub!: Subscription;
 
   isAuthenticated: boolean = false;
 
@@ -37,6 +40,9 @@ export class ChatComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.isAuthenticated = await this.authService.isAuthenticated();
+  }
+  ngOnDestroy(): void {
+    if (this.sendMessageSub) this.sendMessageSub.unsubscribe();
   }
 
   onMessageEntered(event: MessageEnteredEvent) {

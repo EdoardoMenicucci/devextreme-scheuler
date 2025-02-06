@@ -75,8 +75,6 @@ export class RegisterComponent {
 
   ngOnDestroy(): void {
     // Chiudi la sottoscrizione memory leaks
-    if (this.authErrorSubscription) {
-      this.authErrorSubscription.unsubscribe();
-    }
+    if (this.authErrorSubscription) this.authErrorSubscription.unsubscribe();
   }
 }

@@ -1,30 +1,31 @@
 <div class="flex w-screen">
   <app-sidebar></app-sidebar>
   <div class="p-6 w-full">
-    <h1 class="text-3xl text-accent-light font-bold mb-6">
-      {{ title }} - {{ formatUserName(username) }}
-    </h1>
-    <!-- filters options -->
-     <!-- DateRange box -->
-    <div class="mb-4 max-w-2xl">
-      <dx-date-range-box
-        [min]="minDate"
-        [multiView]="false"
-        [disableOutOfRangeSelection]="true"
-        [showClearButton]="true"
-        placeholder="'Select date range...'"
-        (onValueChanged)="onDateRangeChanged($event)"
-         displayFormat="dd/MM/yyyy"
-      >
-      </dx-date-range-box>
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl text-accent-light font-bold mb-6">
+        {{ title }} - {{ formatUserName(username) }}
+      </h1>
+      <!-- filters options -->
+      <!-- DateRange box -->
+      <div class="mb-4 w-[20%]">
+        <dx-date-range-box
+          [min]="minDate"
+          [multiView]="false"
+          [disableOutOfRangeSelection]="true"
+          [showClearButton]="true"
+          placeholder="'Select date range...'"
+          (onValueChanged)="onDateRangeChanged($event)"
+          displayFormat="dd/MM/yyyy"
+        >
+        </dx-date-range-box>
+      </div>
     </div>
-
 
     <div class="border-2 border-border p-2 rounded-xl bg-bg-secondary">
       <!-- Grafico a barre per le statistiche -->
       <dx-chart
         [dataSource]="statisticsData"
-        [title]="{ text: 'Appointments Statistics', font: { size: 24 }}"
+        [title]="{ text: 'Appointments Statistics', font: { size: 24 } }"
         [palette]="palette"
       >
         <dxi-series argumentField="category" valueField="value" type="bar">
@@ -54,14 +55,19 @@
             <dxi-range [startValue]="25" [endValue]="60"></dxi-range>
             <dxi-range [startValue]="60" [endValue]="100"></dxi-range>
           </dxo-range-container>
-          <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+          <dxo-tooltip
+            [enabled]="true"
+            [customizeTooltip]="customizeTooltip"
+          ></dxo-tooltip>
         </dx-circular-gauge>
       </div>
       <!-- List/TileView di Upcoming Appointments -->
       <div
         class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
       >
-        <h3 class="text-[24px] text-white mb-2 ms-1"><i class="dx-icon-taskhelpneeded text-xl"></i> Upcoming Appointments</h3>
+        <h3 class="text-[24px] text-white mb-2 ms-1">
+          <i class="dx-icon-taskhelpneeded text-xl"></i> Upcoming Appointments
+        </h3>
         <dx-list
           [items]="upcomingAppointments"
           [focusStateEnabled]="false"
@@ -74,7 +80,7 @@
               </div>
 
               <div class="max-w-[25%]">
-                <span class="ms-1">{{formatDateTime(item.startDate)}}</span>
+                <span class="ms-1">{{ formatDateTime(item.startDate) }}</span>
                 <span *ngIf="item.isCompleted"
                   ><i class="dx-icon-check ms-2 text-success"></i
                 ></span>

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { ChatService } from '../chat/chat.service';
 import { CommonModule } from '@angular/common';
 import { Chat } from '../interfaces/d.interface';
 import { formatDateUtils } from '../utils/generic';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-previous-chats-dropdown',
@@ -38,25 +39,35 @@ import { formatDateUtils } from '../utils/generic';
     `,
   ],
 })
-export class PreviousChatsDropdownComponent implements OnInit {
+export class PreviousChatsDropdownComponent implements OnInit, OnDestroy {
   chats: Chat[] = [];
+
+  //subscription
+  private userChatsSub!: Subscription;
 
   constructor(private chatService: ChatService) {}
 
+  //life cycle hook
   ngOnInit(): void {
-    this.chatService.getUserChats().subscribe((data) => {
+    this.userChatsSub = this.chatService.getUserChats().subscribe((data) => {
       this.chats = data;
     });
   }
-
-  formatDate(dateInput: string | Date | null): string {
-    return formatDateUtils(dateInput);
+  ngOnDestroy(): void {
+    if (this.userChatsSub) this.userChatsSub.unsubscribe();
   }
 
+  //function
   onChatSelect(e: any): void {
     const selectedChat = this.chats.find((chat) => chat.id === e.value);
     if (selectedChat) {
       this.chatService.loadChatMessages(selectedChat.id);
     }
+  }
+
+  //utils
+
+  formatDate(dateInput: string | Date | null): string {
+    return formatDateUtils(dateInput);
   }
 }

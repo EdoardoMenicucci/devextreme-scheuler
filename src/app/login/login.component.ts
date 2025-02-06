@@ -13,6 +13,7 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
+
 export class LoginComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
   private authErrorSubscription!: Subscription;

@@ -13,8 +13,6 @@ import { formatDateUtils } from '../utils/generic';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent implements OnInit {
-  private authErrorSubscription!: Subscription;
-
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
     { id: 1, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },
@@ -24,6 +22,10 @@ export class SidebarComponent implements OnInit {
   previousChats = [];
 
   selectedRoute: string = '';
+
+  //subscription
+  private authErrorSubscription!: Subscription;
+  private previousChatSubscription!: Subscription;
 
   constructor(
     private router: Router,
@@ -66,9 +68,8 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    if (this.authErrorSubscription) {
-      this.authErrorSubscription.unsubscribe();
-    }
+    if (this.authErrorSubscription) this.authErrorSubscription.unsubscribe();
+    if (this.previousChatSubscription) this.previousChatSubscription.unsubscribe();
   }
   //
 

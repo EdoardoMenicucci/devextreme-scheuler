@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { ChatComponent } from "../chat/chat.component";
 import { AppointmentService } from './appointment.service';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { Status } from '../interfaces/d.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -13,10 +14,16 @@ import { Status } from '../interfaces/d.interface';
   styleUrls: ['./scheduler.component.css'],
 })
 
-export class SchedulerComponent {
+export class SchedulerComponent implements OnDestroy, OnInit {
   currentView = 'week';
   currentDate = new Date();
   appointments: any[] = [];
+
+  //subscription to prevent memory leaks
+  private getAppointmentSub!: Subscription;
+  private createAppointmentSub!: Subscription;
+  private updateAppointmentSub!: Subscription;
+  private deleteAppointmentSub!: Subscription;
 
   status : Status[] = [
     {id: 1, text: 'New'},
@@ -33,9 +40,18 @@ export class SchedulerComponent {
 
 
   constructor(private appointmentService: AppointmentService) {
-    this.appointmentService.appointments$.subscribe((data) => {
+    this.getAppointmentSub = this.appointmentService.appointments$.subscribe((data) => {
       this.appointments = data;
     });
+  }
+
+  //life cycle hook
+  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    if (this.createAppointmentSub) this.createAppointmentSub.unsubscribe();
+    if (this.updateAppointmentSub) this.updateAppointmentSub.unsubscribe();
+    if (this.deleteAppointmentSub) this.deleteAppointmentSub.unsubscribe();
+    if (this.getAppointmentSub) this.getAppointmentSub.unsubscribe();
   }
 
   async onAppointmentAdded(e: any) {
@@ -43,8 +59,8 @@ export class SchedulerComponent {
     console.log('onAppointmentUpdated', e.appointmentData);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     //
-
-    this.appointmentService.createAppointment(e.appointmentData).subscribe();
+    //naming to prevent memory leaks
+    this.createAppointmentSub = this.appointmentService.createAppointment(e.appointmentData).subscribe();
   }
 
   async onAppointmentUpdated(e: any) {
@@ -53,7 +69,7 @@ export class SchedulerComponent {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     //
 
-    this.appointmentService
+    this.updateAppointmentSub = this.appointmentService
       .updateAppointment(e.appointmentData.id, e.appointmentData)
       .subscribe();
   }
@@ -63,7 +79,7 @@ export class SchedulerComponent {
     console.log('onAppointmentUpdated', e.appointmentData);
     //
 
-    this.appointmentService.deleteAppointment(e.appointmentData.id).subscribe();
+    this.deleteAppointmentSub = this.appointmentService.deleteAppointment(e.appointmentData.id).subscribe();
   }
 
   onAppointmentFormOpening(e: any) {

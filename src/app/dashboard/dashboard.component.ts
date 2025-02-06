@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { firstLetterToUpperCase, formatDateUtils, formatDateTimeUtils } from '../utils/generic';
@@ -12,6 +12,7 @@ import {
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardService } from './dashboard.service';
 import { AuthService } from '../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +29,7 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   title = 'Dashboard';
 
   statisticsData: any[] = [];
@@ -36,6 +37,9 @@ export class DashboardComponent implements OnInit {
   upcomingAppointments: any[] = [];
   currentDate = new Date();
   username: string | null = null;
+
+  //subscription per evitare memory leaks
+  private statisticsSub!: Subscription;
 
   //filter options
   startDate: Date | null = null;
@@ -56,7 +60,7 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService
   ) {
     // prepara i dati per il grafico
-    this.dashboardService.statistics$.subscribe((data) => {
+    this.statisticsSub = this.dashboardService.statistics$.subscribe((data) => {
       this.statisticsData = [
         { category: 'Total', value: data.totalAppointments },
         {
@@ -87,6 +91,13 @@ export class DashboardComponent implements OnInit {
       this.upcomingAppointments = data.upcomingAppointmentsList;
       console.log('Statistics data recived:', data);
     });
+  }
+
+  //life cycle hook
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.statisticsSub.unsubscribe();
   }
 
   onDateRangeChanged(e: any) {
@@ -144,6 +155,4 @@ export class DashboardComponent implements OnInit {
   formatDateTime(dateInput: string | Date | null): string {
     return formatDateTimeUtils(dateInput);
   }
-
-  ngOnInit(): void {}
 }
