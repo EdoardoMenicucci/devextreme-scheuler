@@ -18,15 +18,17 @@ export class SchedulerComponent {
   currentDate = new Date();
   appointments: any[] = [];
 
-
-
-
   status : Status[] = [
     {id: 1, text: 'New'},
     {id: 2, text: 'Completed'},
     {id: 3, text: 'In Progress'},
     {id: 4, text: 'Missed'},
   ];
+
+  isCompleted = [
+    {id: true, text: 'Completed'},
+    {id: false, text: 'Not Completed'},
+  ]
 
 
 

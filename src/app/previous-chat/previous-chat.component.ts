@@ -4,6 +4,7 @@ import { DxSelectBoxModule } from 'devextreme-angular';
 import { ChatService } from '../chat/chat.service';
 import { CommonModule } from '@angular/common';
 import { Chat } from '../interfaces/d.interface';
+import { formatDateUtils } from '../utils/generic';
 
 @Component({
   selector: 'app-previous-chats-dropdown',
@@ -49,26 +50,7 @@ export class PreviousChatsDropdownComponent implements OnInit {
   }
 
   formatDate(dateInput: string | Date | null): string {
-    // format date to dd/mm/yyyy
-    if (!dateInput) {
-      return '';
-    }
-    try {
-      const date =
-        typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
-      if (!(date instanceof Date) || isNaN(date.getTime())) {
-        return '';
-      }
-
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const year = date.getFullYear();
-
-      return `${day}/${month}/${year}`;
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return '';
-    }
+    return formatDateUtils(dateInput);
   }
 
   onChatSelect(e: any): void {

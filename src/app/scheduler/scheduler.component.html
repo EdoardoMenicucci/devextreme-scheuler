@@ -33,6 +33,15 @@
         [useColorAsDefault]="true"
       >
       </dxi-resource>
+      <dxi-resource
+        fieldExpr="isCompleted"
+        label="Completion Status"
+        [dataSource]="isCompleted"
+        displayExpr="text"
+        valueExpr="id"
+        [useColorAsDefault]="true"
+      >
+      </dxi-resource>
     </dx-scheduler>
   </div>
   <div class="w-full h-full">

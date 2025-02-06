@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { firstLetterToUpperCase, formatDateUtils } from '../utils/generic';
+
 import {
   DxChartModule,
   DxCircularGaugeModule,
@@ -8,6 +10,7 @@ import {
 } from 'devextreme-angular';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardService } from './dashboard.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +20,7 @@ import { DashboardService } from './dashboard.service';
     DxCircularGaugeModule,
     SidebarComponent,
     DxListModule,
-    CommonModule,
+    CommonModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -29,24 +32,12 @@ export class DashboardComponent implements OnInit {
   cancellationRate = 0;
   upcomingAppointments: any[] = [];
   currentDate = new Date();
+  username : string | null = null;
 
-  user = {
-    id: 1,
-    name: 'John Doe',
-    email: 'example@email.com',
-    statistics: {
-      totalAppointments: 500,
-      createdAppointments: 100,
-      updatedAppointments: 50,
-      deletedAppointments: 20,
-      completedAppointments: 80,
-      upcomingAppointments: 60,
-      missedAppointments: 10,
-      cancellationRate: 0.2,
-    },
-  };
 
-  constructor(private dashboardService: DashboardService) {
+
+
+  constructor(private dashboardService: DashboardService, private authService : AuthService) {
     // prepara i dati per il grafico
     this.dashboardService.statistics$.subscribe((data) => {
       this.statisticsData = [
@@ -75,6 +66,7 @@ export class DashboardComponent implements OnInit {
       ];
 
       this.cancellationRate = data.cancellationRate;
+      this.username = this.authService.username;
       console.log('Statistics data recived:', data);
     });
   }
@@ -83,27 +75,14 @@ export class DashboardComponent implements OnInit {
     return `${args.valueText}%`;
   };
 
+  formatUserName(username: string | null): string {
+    return firstLetterToUpperCase(username
+      ? username
+      : 'User');
+  }
+
   formatDate(dateInput: string | Date | null): string {
-    // format date to dd/mm/yyyy
-    if (!dateInput) {
-      return '';
-    }
-    try {
-      const date =
-        typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
-      if (!(date instanceof Date) || isNaN(date.getTime())) {
-        return '';
-      }
-
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const year = date.getFullYear();
-
-      return `${day}/${month}/${year}`;
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return '';
-    }
+    return formatDateUtils(dateInput);
   }
 
   ngOnInit(): void {

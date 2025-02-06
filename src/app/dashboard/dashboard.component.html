@@ -1,39 +1,49 @@
 <div class="flex w-screen">
   <app-sidebar></app-sidebar>
   <div class="p-6 w-full">
-    <h1 class="text-3xl text-white font-bold mb-6">{{ title }}</h1>
-    <!-- Grafico a barre per le statistiche -->
-    <dx-chart
-      [dataSource]="statisticsData"
-      title="Appointment Statistics"
-      palette="Soft Blue"
-    >
-      <dxi-series argumentField="category" valueField="value" type="bar">
-      </dxi-series>
-      <dxo-tooltip [enabled]="true"></dxo-tooltip>
-    </dx-chart>
-    <div class="flex justify-between">
+    <h1 class="text-3xl text-accent-light font-bold mb-6">{{title}} - {{formatUserName(username)}}</h1>
+    <div class="border-2 border-border p-2 rounded-xl bg-bg-secondary">
+      <!-- Grafico a barre per le statistiche -->
+      <dx-chart
+        [dataSource]="statisticsData"
+        [title]="{ text: 'Appointments Statistics', font: { size: 24 } }"
+        palette="Dark Violet"
+      >
+        <dxi-series argumentField="category" valueField="value" type="bar">
+        </dxi-series>
+        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+      </dx-chart>
+    </div>
+
+    <div class="flex justify-between space-x-4">
       <!-- Grafico a cerchio per la percentuale di cancellation rate -->
-      <div class="mt-10 w-1/2">
+      <div
+        class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
+      >
         <dx-circular-gauge
           id="rangebar"
           [value]="cancellationRate * 100"
           [title]="{ text: 'Cancellation Rate', font: { size: 24 } }"
         >
-          <dxo-value-indicator type="rangebar" color="#f05b41">
+          <dxo-value-indicator type="rangebar" color="#9C63FF">
           </dxo-value-indicator>
           <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
           <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
             <dxo-label [customizeText]="customizeText"></dxo-label>
           </dxo-scale>
+          <dxo-range-container palette="Bright">
+            <dxi-range [startValue]="0" [endValue]="25"></dxi-range>
+            <dxi-range [startValue]="25" [endValue]="60"></dxi-range>
+            <dxi-range [startValue]="60" [endValue]="100"></dxi-range>
+          </dxo-range-container>
           <dxo-tooltip [enabled]="true"></dxo-tooltip>
         </dx-circular-gauge>
       </div>
       <!-- List/TileView di Upcoming Appointments -->
-      <div class="mt-10 w-1/2">
-        <h3 class="text-[24px] text-white mb-2">
-          Upcoming Appointments
-        </h3>
+      <div
+        class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
+      >
+        <h3 class="text-[24px] text-white mb-2">Upcoming Appointments</h3>
         <dx-list
           [items]="upcomingAppointments"
           [focusStateEnabled]="false"
