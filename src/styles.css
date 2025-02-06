@@ -21,8 +21,8 @@ body{
 
 /* override del colore dell indicatore  */
 .dx-scheduler-date-time-indicator {
-  background-color: rgba(79, 70, 229, 1) !important;
-  border-color: rgba(79, 70, 229, 1) !important;
+  background-color: #818CF8 !important;
+  border-color: #818CF8 !important;
 }
 
 /* variabili tema */
