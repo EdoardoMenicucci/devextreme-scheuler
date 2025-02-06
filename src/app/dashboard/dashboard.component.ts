@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   title = 'Dashboard';
 
   statisticsData: any[] = [];
-  cancellationRate = 0;
+  successRate = 0;
   upcomingAppointments: any[] = [];
   currentDate = new Date();
   username: string | null = null;
@@ -48,17 +48,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   minDate: Date = new Date(2021, 0, 1);
 
   palette: string[] = [
-    // '#818CF8', // accent-light (primary)
+    // '#818CF8', // accent-light
     '#4F46E5', // accent
     '#4338CA', // accent-hover
   ];
 
-  gaugePalette: string[] = ['#059669', '#fde300', '#DC2626'];
+  gaugePalette: string[] = ['#DC2626', '#fde300', '#059669'];
 
   constructor(
     private dashboardService: DashboardService,
     private authService: AuthService
-  ) {
+  ) {}
+
+  //life cycle hook
+  ngOnInit(): void {
     // prepara i dati per il grafico
     this.statisticsSub = this.dashboardService.statistics$.subscribe((data) => {
       this.statisticsData = [
@@ -86,18 +89,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         { category: 'Missed', value: data.missedAppointments },
       ];
 
-      this.cancellationRate = data.cancellationRate;
+      this.successRate = data.successRate;
       this.username = this.authService.username;
       this.upcomingAppointments = data.upcomingAppointmentsList;
       console.log('Statistics data recived:', data);
     });
   }
 
-  //life cycle hook
-  ngOnInit(): void {}
-
   ngOnDestroy(): void {
-    this.statisticsSub.unsubscribe();
+   if(this.statisticsSub) this.statisticsSub.unsubscribe();
   }
 
   onDateRangeChanged(e: any) {
@@ -143,13 +143,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Gauge customization
   customizeText = (args: { value?: number; valueText?: string }): string => {
     return `${args.valueText}%`;
   };
 
-  customizeTooltip = (args: { value?: number; valueText?: string }): string => {
-    return `${args.valueText} %`;
+  customizeTooltip = (arg: any) => {
+    return {
+      text: `${this.roundToTwo(arg.value)}%`,
+    };
   };
+  // utils
+  roundToTwo(num: number): number {
+    return Math.round(num * 100) / 100;
+  }
 
   formatUserName(username: string | null): string {
     return firstLetterToUpperCase(username ? username : 'User');

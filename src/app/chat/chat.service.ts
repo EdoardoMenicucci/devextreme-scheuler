@@ -55,7 +55,7 @@ export class ChatService {
       {
         timestamp: this.getTimestamp(this.date, -9),
         author: this.supportAgent,
-        text: `Hello, ${firstLetterToUpperCase(this.currentUser.name!)}\nIm here to help you whit you'r scheduling!`,
+        text: `Hello, ${firstLetterToUpperCase(this.currentUser.name!)}!\nIm here to help you whit you'r scheduling!`,
       },
     ];
 
