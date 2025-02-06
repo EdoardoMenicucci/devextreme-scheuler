@@ -16,11 +16,21 @@ export class DashboardService {
     this.loadStatistics();
   }
 
-  loadStatistics(): void {
+  loadStatistics(startDate? : string, endDate? : string): void {
+    let url = `${this.apiUrl}/${this.authService.userId}/fullstatistics`;
+
+    // Add query parameters if dates are provided
+    if (startDate != null && endDate != null) {
+      url += `?startDate=${startDate}&endDate=${endDate}`;
+    }
+
+    console.log(url);
+
+
     this.http
-      .get<any[]>(`${this.apiUrl}/${this.authService.userId}/fullstatistics`)
+      .get<any[]>(url)
       .subscribe((data) => {
-        console.log('Statistics recived:', data);
+        // console.log('Statistics recived:', data);
         this.appointmentsSubject.next(data);
       });
   }

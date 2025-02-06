@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { firstLetterToUpperCase, formatDateUtils } from '../utils/generic';
+import { firstLetterToUpperCase, formatDateUtils, formatDateTimeUtils } from '../utils/generic';
 
 import {
   DxChartModule,
   DxCircularGaugeModule,
   DxListModule,
+  DxDateRangeBoxModule,
 } from 'devextreme-angular';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardService } from './dashboard.service';
@@ -21,7 +22,9 @@ import { AuthService } from '../auth/auth.service';
     SidebarComponent,
     DxListModule,
     CommonModule,
+    DxDateRangeBoxModule,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -33,6 +36,12 @@ export class DashboardComponent implements OnInit {
   upcomingAppointments: any[] = [];
   currentDate = new Date();
   username: string | null = null;
+
+  //filter options
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+
+  minDate: Date = new Date(2021, 0, 1);
 
   palette: string[] = [
     // '#818CF8', // accent-light (primary)
@@ -80,8 +89,48 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  onDateRangeChanged(e: any) {
+    // Only fetch if both dates are selected or both are cleared
+    console.log(e.value[0], e.value[1]);
+    this.startDate = e.value[0];
+    this.endDate = e.value[1];
+
+    // Format dates to local ISO string without timezone
+    const formatToLocalDate = (date: Date) => {
+      return (
+        date.getFullYear() +
+        '-' +
+        String(date.getMonth() + 1).padStart(2, '0') +
+        '-' +
+        String(date.getDate()).padStart(2, '0') +
+        'T' +
+        String(date.getHours()).padStart(2, '0') +
+        ':' +
+        String(date.getMinutes()).padStart(2, '0') +
+        ':' +
+        String(date.getSeconds()).padStart(2, '0')
+      );
+    };
+
+    if (
+      (this.startDate && this.endDate) ||
+      (!this.startDate && !this.endDate)
+    ) {
+      console.log('Date range changed:', this.startDate, this.endDate);
+
+      this.dashboardService.loadStatistics(
+        this.startDate ? formatToLocalDate(this.startDate) : undefined,
+        this.endDate ? formatToLocalDate(this.endDate) : undefined
+      );
+    }
+  }
+
   customizeText = (args: { value?: number; valueText?: string }): string => {
     return `${args.valueText}%`;
+  };
+
+  customizeTooltip = (args: { value?: number; valueText?: string }): string => {
+    return `${args.valueText} %`;
   };
 
   formatUserName(username: string | null): string {
@@ -92,18 +141,9 @@ export class DashboardComponent implements OnInit {
     return formatDateUtils(dateInput);
   }
 
-  ngOnInit(): void {
-    // Esempio di dati per upcoming appointments
-    // this.upcomingAppointments = [
-    //   {
-    //     id: 1,
-    //     text: 'Meeting with Client',
-    //     date: '2023-10-15',
-    //     time: '10:00',
-    //   },
-    //   { id: 2, text: 'Team Standup', date: '2023-10-16', time: '09:30' },
-    //   { id: 3, text: 'Project Review', date: '2023-10-17', time: '11:00' },
-    //   { id: 4, text: 'Design Session', date: '2023-10-18', time: '14:00' },
-    // ];
+  formatDateTime(dateInput: string | Date | null): string {
+    return formatDateTimeUtils(dateInput);
   }
+
+  ngOnInit(): void {}
 }
