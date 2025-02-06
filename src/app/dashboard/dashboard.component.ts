@@ -107,19 +107,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.endDate = e.value[1];
 
     // Format dates to local ISO string without timezone
-    const formatToLocalDate = (date: Date) => {
+    // Helper function to format dates for the query
+    const formatToLocalDate = (date: Date, isEndDate: boolean = false) => {
+      const d = new Date(date.getTime());
+      if (isEndDate) {
+        d.setHours(23, 59, 59);
+      } else {
+        d.setHours(0, 0, 0);
+      }
       return (
-        date.getFullYear() +
+        d.getFullYear() +
         '-' +
-        String(date.getMonth() + 1).padStart(2, '0') +
+        String(d.getMonth() + 1).padStart(2, '0') +
         '-' +
-        String(date.getDate()).padStart(2, '0') +
+        String(d.getDate()).padStart(2, '0') +
         'T' +
-        String(date.getHours()).padStart(2, '0') +
+        String(d.getHours()).padStart(2, '0') +
         ':' +
-        String(date.getMinutes()).padStart(2, '0') +
+        String(d.getMinutes()).padStart(2, '0') +
         ':' +
-        String(date.getSeconds()).padStart(2, '0')
+        String(d.getSeconds()).padStart(2, '0')
       );
     };
 
@@ -131,7 +138,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       this.dashboardService.loadStatistics(
         this.startDate ? formatToLocalDate(this.startDate) : undefined,
-        this.endDate ? formatToLocalDate(this.endDate) : undefined
+        this.endDate ? formatToLocalDate(this.endDate, true) : undefined
       );
     }
   }
