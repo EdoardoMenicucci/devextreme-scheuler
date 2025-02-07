@@ -107,7 +107,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.successRate = data.successRate;
       this.username = this.authService.username;
       this.upcomingAppointments = data.upcomingAppointmentsList;
-      console.log('Statistics data recived:', data);
+
+      // Check if there is an appointment on going
+      this.upcomingAppointments.forEach((a) => {
+        a.startDate = new Date(a.startDate);
+        a.endDate = new Date(a.endDate);
+        if (a.startDate <= this.currentDate && this.currentDate <= a.endDate) {
+          console.log('Appointment On Going', a);
+        }
+      });
+      // console.log('Statistics data recived:', data);
+      console.log('current date: ', this.currentDate);
+
     });
   }
 

@@ -95,13 +95,48 @@
               </div>
 
               <div class="max-w-[25%]">
-                <span class="ms-1">{{ formatDateTime(item.startDate) }}</span>
+                <span
+                  *ngIf="
+                    item.isCompleted == null ||
+                    (item.isCompleted == false &&
+                      !(item.startDate < currentDate) &&
+                      item.endDate > currentDate)
+                  "
+                  class="ms-1"
+                  >{{ formatDateTime(item.startDate) }}</span
+                >
+                <span
+                  *ngIf="item.isCompelte"
+                  class="ms-1"
+                  >{{ formatDateTime(item.startDate) }}</span
+                >
+                <span
+                  *ngIf="
+                    (item.isCompleted == null || item.isCompleted == false) &&
+                    item.startDate < currentDate &&
+                    item.endDate > currentDate
+                  "
+                  class="text-white font-semibold"
+                  >On Going Now</span>
                 <span *ngIf="item.isCompleted"
                   ><i class="dx-icon-check ms-2 text-success"></i
                 ></span>
                 <span
-                  *ngIf="item.isCompleted == null || item.isCompleted == false"
+                  *ngIf="
+                    item.isCompleted == null ||
+                    (item.isCompleted == false &&
+                      !(item.startDate < currentDate) &&
+                      item.endDate > currentDate)
+                  "
                   ><i class="dx-icon-unpin ms-2 text-[#fde300]"></i
+                ></span>
+                <span
+                  *ngIf="
+                    (item.isCompleted == null || item.isCompleted == false) &&
+                    item.startDate < currentDate &&
+                    item.endDate > currentDate
+                  "
+                  ><i class="dx-icon-warning ms-2 text-[#DC2626]"></i
                 ></span>
               </div>
             </div>
