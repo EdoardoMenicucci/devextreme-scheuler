@@ -49,8 +49,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   palette: string[] = [
     // '#818CF8', // accent-light
-    '#4F46E5', // accent
-    '#4338CA', // accent-hover
+    '#4F46E5', // accent - TotalColor
+    '#4F46E5', // accent - CreatedColor : TODO: remove
+    '#4F46E5', // accent - UpdatedColor
+    '#DC2626', // accent-dark - DeletedColor
+    '#059669', // accent-dark -CompletedColor
+    '#fde300', // accent-dark -UpcomingColor
+    '#DC2626', // accent-dark -MissedColor
+  ];
+
+  userData: Object[] = [
+    { age: '13-17', number: 6869661 },
+    { age: '18-24', number: 40277957 },
+    { age: '25-34', number: 53481235 },
+    { age: '35-44', number: 40890002 },
+    { age: '45-54', number: 31916371 },
+    { age: '55-64', number: 13725406 },
+    { age: '65+', number: 16732183 },
   ];
 
   gaugePalette: string[] = ['#DC2626', '#fde300', '#059669'];
@@ -97,7 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-   if(this.statisticsSub) this.statisticsSub.unsubscribe();
+    if (this.statisticsSub) this.statisticsSub.unsubscribe();
   }
 
   onDateRangeChanged(e: any) {

@@ -31,6 +31,20 @@
         <dxi-series argumentField="category" valueField="value" type="bar">
         </dxi-series>
         <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        <dxo-common-series-settings
+          argumentField="category"
+          type="bar"
+          valueField="value"
+          [ignoreEmptyPoints]="true"
+        >
+        </dxo-common-series-settings>
+        <dxo-series-template nameField="category"></dxo-series-template>
+        <dxo-legend
+          verticalAlignment="bottom"
+          horizontalAlignment="center"
+          itemTextPosition="bottom"
+        >
+        </dxo-legend>
       </dx-chart>
     </div>
 
@@ -71,6 +85,7 @@
         <dx-list
           [items]="upcomingAppointments"
           [focusStateEnabled]="false"
+          selectionMode="none"
           [width]="'100%'"
         >
           <div *dxTemplate="let item of 'item'">
@@ -86,7 +101,7 @@
                 ></span>
                 <span
                   *ngIf="item.isCompleted == null || item.isCompleted == false"
-                  ><i class="dx-icon-unpin ms-2 text-yellow-500"></i
+                  ><i class="dx-icon-unpin ms-2 text-[#fde300]"></i
                 ></span>
               </div>
             </div>

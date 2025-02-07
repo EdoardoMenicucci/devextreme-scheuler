@@ -69,11 +69,17 @@ export class ChatService {
     const payload = {
       text: message,
     };
+
+    // Indica che l'assistente è in typing (stato "in digitazione")
+    this.supportChatOnTypingStart();
+
     return this.http.post(`${this.apiUrl}/api/message`, payload).pipe(
       tap((response: any) => {
         // debug
         console.log('Response:', response);
         //
+        // Rimuove il typing status al ritorno della risposta
+        this.supportChatOnTypingEnd();
 
         if (response.aiResponse.author === 'model') {
           response.aiResponse.author = this.supportAgent;
@@ -90,6 +96,8 @@ export class ChatService {
         this.appointmentService.loadAppointments();
       }),
       catchError((error: any) => {
+        // Rimuovere typing status in caso di errore
+        this.supportChatTypingUsersSubject.next([]);
         console.error('Error sending message:', error);
         if (error.status === 401) {
           // Handle Unauthorized Error
@@ -229,7 +237,7 @@ export class ChatService {
   }
 
   userChatOnTypingStart() {
-    this.supportChatTypingUsersSubject.next([this.supportAgent]);
+    this.supportChatTypingUsersSubject.next([this.currentUser]);
     console.log('userChatOnTypingStart', this.supportChatTypingUsersSubject);
   }
 
@@ -239,7 +247,7 @@ export class ChatService {
   }
 
   supportChatOnTypingStart() {
-    this.userChatTypingUsersSubject.next([this.currentUser]);
+    this.userChatTypingUsersSubject.next([this.supportAgent]);
   }
 
   supportChatOnTypingEnd() {
