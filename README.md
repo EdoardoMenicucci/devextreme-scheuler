@@ -83,6 +83,7 @@ ng serve
 - [x] Dashboard for user stats
 - [x] Appointment in list format
 - [x] Use status instead of isCompleted on backend and adapt all logic with api / gemini response
-- [ ] Share feature
+- [ ] Share appointments between users
+
 
 
