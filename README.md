@@ -8,7 +8,11 @@ A modern appointment management system built with DevExtreme Scheduler component
 ## Features
 
 - 📅 Interactive calendar interface
-- 🤖 AI-powered appointment suggestions
+- 🤖 AI-powered features:
+  - Smart appointment suggestions
+  - Automated schedule optimization
+  - Intelligent appointment modifications
+  - Context-aware scheduling assistance
 - 👥 User authentication and management
 - 📊 Personal dashboard with user statistics
 - 📝 List and calendar view for appointments
@@ -72,11 +76,13 @@ ng serve
 
 ## TODO: 
 
-- [ ] Handling previous chat / designing feature 
+- [ ] Handling previous chat / design feature 
 - [x] Logout handling
 - [x] Icons
 - [ ] Login flow minor fixes
 - [x] Dashboard for user stats
 - [x] Appointment in list format
 - [x] Use status instead of isCompleted on backend and adapt all logic with api / gemini response
+- [ ] Share feature
+
 
