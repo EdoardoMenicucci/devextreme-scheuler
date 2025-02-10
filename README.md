@@ -19,7 +19,7 @@ A modern appointment management system built with DevExtreme Scheduler component
 - Frontend: Angular 16 with TypeScript
 - CSS: Tailwind CSS
 - UI Components: DevExtreme
-- Backend: C# .NET 7
+- Backend: C# .NET 8
 - Database: Microsoft SQL Server
 - AI Integration: Google Gemini
 - Authentication: JWT
@@ -28,8 +28,8 @@ A modern appointment management system built with DevExtreme Scheduler component
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- Angular CLI v16
+- Node.js
+- Angular CLI v19
 - Microsoft SQL Server
 - Google Gemini API key - GEMINI_KEY on backend user's secret
 - Microsoft SQL Server running instance with default settings
