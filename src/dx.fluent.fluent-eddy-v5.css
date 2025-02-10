@@ -115,9 +115,13 @@
   color: #4f46e5;
 }
 @font-face {
-  font-family: DXIcons;
-  src: local("DevExtreme Fluent Icons"),local("devextreme_fluent_icons"),url("icons/dxiconsfluent.woff2") format("woff2"),url("icons/dxiconsfluent.woff") format("woff"),url("icons/dxiconsfluent.ttf") format("truetype");
-  font-weight: 400;
+  font-family: 'DXIcons';
+  src: local("DevExtreme Generic Icons"),
+    local("devextreme_generic_icons"),
+    url("assets/icons/dxicons.woff2") format("woff2"),
+    url("assets/icons/dxicons.woff") format("woff"),
+    url("assets/icons/dxicons.ttf") format("truetype");
+  font-weight: normal;
   font-style: normal;
 }
 .dx-icon {
