@@ -1,6 +1,7 @@
 # DevExtreme Scheduler
 
-[DevExtreme Documentation](https://js.devexpress.com/Documentation/Guide/UI_Components/Scheduler/Getting_Started_with_Scheduler/)
+[DevExtreme](https://js.devexpress.com/Angular/)
+[Tailwind CSS](https://tailwindcss.com/)
 
 A modern appointment management system built with DevExtreme Scheduler component, featuring AI-powered scheduling assistance and user-friendly interface.
 
@@ -16,7 +17,7 @@ A modern appointment management system built with DevExtreme Scheduler component
 
 ## Tech Stack
 
-- Frontend: Angular 16 with TypeScript
+- Frontend: Angular 19 with TypeScript
 - CSS: Tailwind CSS
 - UI Components: DevExtreme
 - Backend: C# .NET 8
@@ -71,11 +72,11 @@ ng serve
 
 ## TODO: 
 
-[ ] Handling previous chat / designing feature 
-[x] Logout handling
-[x] Icons
-[ ] Login flow minor fixes
-[x] Dashboard for user stats,
-[x] Appointment in list format
-[x] Use status instead of isCompleted on backend and adapt all logic with api / gemini response
+- [ ] Handling previous chat / designing feature 
+- [x] Logout handling
+- [x] Icons
+- [ ] Login flow minor fixes
+- [x] Dashboard for user stats
+- [x] Appointment in list format
+- [x] Use status instead of isCompleted on backend and adapt all logic with api / gemini response
 
