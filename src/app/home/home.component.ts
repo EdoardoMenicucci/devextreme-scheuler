@@ -8,6 +8,7 @@ import {
   faDesktop,
   faServer,
   faRobot,
+  faShare,
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -22,6 +23,7 @@ export class HomeComponent {
   faLinkedin = faLinkedin;
   faDesktop = faDesktop;
   faServer = faServer;
+  faShare = faShare;
 
   constructor(private router: Router) {}
 
