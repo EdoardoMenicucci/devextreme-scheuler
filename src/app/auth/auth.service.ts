@@ -40,11 +40,13 @@ export class AuthService {
   private initializeFromStorage() {
     const savedToken = localStorage.getItem(this.TOKEN_KEY);
     if (savedToken) {
+      //debug
       console.log('Token:', savedToken);
       this.setToken(savedToken);
     }
     const savedUserId = localStorage.getItem(this.USER_ID);
     if (savedUserId) {
+      //debug
       console.log('User ID:', savedUserId);
       this.userId = parseInt(savedUserId, 10);
     } else {
@@ -52,11 +54,13 @@ export class AuthService {
     }
     const savedUsername = localStorage.getItem(this.USER_NAME);
     if (savedUsername) {
-      console.log('Username:', savedUsername);
+    //debug
+    console.log('Username:', savedUsername);
       this.username = savedUsername;
     }
     const savedChatsId = localStorage.getItem(this.CHATS_ID);
     if (savedChatsId) {
+      //debug
       console.log('Chats ID:', savedChatsId);
       this.chatsId = JSON.parse(savedChatsId);
     }
@@ -180,7 +184,6 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.token && !!this.userId;
   }
-
 
   getAuthErrors(): Observable<{ type: string; message: string } | null> {
     return this.authError.asObservable();
