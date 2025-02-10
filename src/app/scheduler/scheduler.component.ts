@@ -18,6 +18,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   currentView = 'week';
   currentDate = new Date();
   appointments: any[] = [];
+  private formInitialized = false;
 
   //subscription to prevent memory leaks
   private getAppointmentSub!: Subscription;
@@ -44,25 +45,32 @@ export class SchedulerComponent implements OnDestroy, OnInit {
 
   constructor(private appointmentService: AppointmentService) {}
 
-    // Add this method to handle sharing
+  // Add this method to handle sharing
   onAppointmentFormSharing(username: string, appointmentData: any) {
     if (username) {
       // Call your service to share the appointment
-      this.appointmentService.shareAppointment(appointmentData, username).subscribe({
-        next: (response) => {
-          // Handle successful sharing
-          notify('Appointment shared successfully', 'success', 3000);
-        },
-        error: (error) => {
-          notify('Failed to share appointment', 'error', 3000);
-        }
-      });
+      this.appointmentService
+        .shareAppointment(appointmentData, username)
+        .subscribe({
+          next: (response) => {
+            // Handle successful sharing
+            notify('Appointment shared successfully', 'success', 3000);
+          },
+          error: (error) => {
+            notify('Failed to share appointment', 'error', 3000);
+          },
+        });
     }
   }
 
   // Add this method to customize the appointment form
   onAppointmentFormCreated(e: any) {
     const form = e.form;
+
+    // Check if form is already initialized
+    if (this.formInitialized) {
+      return;
+    }
 
     const shareGroup = {
       itemType: 'group',
@@ -75,7 +83,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
           dataField: 'sharedWith',
           editorType: 'dxTextBox',
           cssClass: 'share-textbox',
-          colSpan: 1, // Will use full width
+          colSpan: 1,
           editorOptions: {
             width: '100%',
           },
@@ -85,7 +93,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
           itemType: 'button',
           horizontalAlignment: 'left',
           cssClass: ['share-button'],
-          colSpan: 1, // Will use full width
+          colSpan: 1,
           buttonOptions: {
             text: 'Share',
             type: 'success',
@@ -99,10 +107,16 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       ],
     };
 
-    // Add the sharing group to the form items
     const items = form.option('items');
-    items.push(shareGroup);
-    form.option('items', items);
+    const hasShareGroup = items.some(
+      (item: any) => item.cssClass === 'sharing-group'
+    );
+
+    if (!hasShareGroup) {
+      items.push(shareGroup);
+      form.option('items', items);
+      this.formInitialized = true;
+    }
   }
 
   //life cycle hook

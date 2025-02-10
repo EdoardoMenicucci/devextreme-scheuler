@@ -24,6 +24,7 @@ export class AppointmentService {
   shareAppointment(appointmentData: any, username: string) {
     console.log('Sharing appointment with:', username);
     console.log('Appointment data:', appointmentData);
+    //todo test
 
 
     return this.http.post(`appointment/share/${appointmentData.id}/${username}`, appointmentData);

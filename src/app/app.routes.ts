@@ -18,12 +18,13 @@ export const routes: Routes = [
     path: 'scheduler',
     component: SchedulerComponent,
     canActivate: [authGuard],
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard],
-    runGuardsAndResolvers: 'always',
+    runGuardsAndResolvers: 'always'
   },
   { path: 'login', component: LoginComponent },
   { path: 'signin', component: RegisterComponent },
