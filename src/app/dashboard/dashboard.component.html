@@ -95,18 +95,14 @@
               </div>
 
               <div class="max-w-[25%]">
+                <!-- Status - Date -->
                 <span
                   *ngIf="
-                    item.isCompleted == null ||
+                    item.isCompleted == true ||
                     (item.isCompleted == false &&
                       !(item.startDate < currentDate) &&
                       item.endDate > currentDate)
                   "
-                  class="ms-1"
-                  >{{ formatDateTime(item.startDate) }}</span
-                >
-                <span
-                  *ngIf="item.isCompelte"
                   class="ms-1"
                   >{{ formatDateTime(item.startDate) }}</span
                 >
@@ -118,6 +114,8 @@
                   "
                   class="text-white font-semibold"
                   >On Going Now</span>
+
+                <!-- Icons -->
                 <span *ngIf="item.isCompleted"
                   ><i class="dx-icon-check ms-2 text-success"></i
                 ></span>

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DxSchedulerModule } from 'devextreme-angular';
+import { DxSchedulerModule, DxButtonModule } from 'devextreme-angular';
+import notify from 'devextreme/ui/notify';
 import { ChatComponent } from "../chat/chat.component";
 import { AppointmentService } from './appointment.service';
 import { SidebarComponent } from "../sidebar/sidebar.component";
@@ -8,12 +9,11 @@ import { Subscription } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [DxSchedulerModule, ChatComponent, SidebarComponent],
+  imports: [DxSchedulerModule, ChatComponent, SidebarComponent, DxButtonModule],
   selector: 'app-scheduler',
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.css'],
 })
-
 export class SchedulerComponent implements OnDestroy, OnInit {
   currentView = 'week';
   currentDate = new Date();
@@ -25,19 +25,84 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   private updateAppointmentSub!: Subscription;
   private deleteAppointmentSub!: Subscription;
 
-  status : Status[] = [
-    {id: 1, text: 'New'},
-    {id: 2, text: 'Completed'},
-    {id: 3, text: 'In Progress'},
-    {id: 4, text: 'Missed'},
+  status: Status[] = [
+    { id: 1, text: 'New' },
+    { id: 2, text: 'Completed' },
+    { id: 3, text: 'In Progress' },
+    { id: 4, text: 'Missed' },
   ];
 
   isCompleted = [
-    {id: true, text: 'Completed'},
-    {id: false, text: 'Not Completed'},
-  ]
+    { id: true, text: 'Completed' },
+    { id: false, text: 'Not Completed' },
+  ];
 
-  constructor(private appointmentService: AppointmentService) {
+  shareAppointment = {
+    username: '',
+    isShared: false,
+  };
+
+  constructor(private appointmentService: AppointmentService) {}
+
+    // Add this method to handle sharing
+  onAppointmentFormSharing(username: string, appointmentData: any) {
+    if (username) {
+      // Call your service to share the appointment
+      this.appointmentService.shareAppointment(appointmentData, username).subscribe({
+        next: (response) => {
+          // Handle successful sharing
+          notify('Appointment shared successfully', 'success', 3000);
+        },
+        error: (error) => {
+          notify('Failed to share appointment', 'error', 3000);
+        }
+      });
+    }
+  }
+
+  // Add this method to customize the appointment form
+  onAppointmentFormCreated(e: any) {
+    const form = e.form;
+
+    const shareGroup = {
+      itemType: 'group',
+      cssClass: 'sharing-group',
+      editorOptions: {
+        width: '100%',
+      },
+      items: [
+        {
+          dataField: 'sharedWith',
+          editorType: 'dxTextBox',
+          cssClass: 'share-textbox',
+          colSpan: 1, // Will use full width
+          editorOptions: {
+            width: '100%',
+          },
+          label: { text: 'Share with (username)' },
+        },
+        {
+          itemType: 'button',
+          horizontalAlignment: 'left',
+          cssClass: ['share-button'],
+          colSpan: 1, // Will use full width
+          buttonOptions: {
+            text: 'Share',
+            type: 'success',
+            width: '100%',
+            onClick: () => {
+              const formData = form.option('formData');
+              this.onAppointmentFormSharing(formData.sharedWith, formData);
+            },
+          },
+        },
+      ],
+    };
+
+    // Add the sharing group to the form items
+    const items = form.option('items');
+    items.push(shareGroup);
+    form.option('items', items);
   }
 
   //life cycle hook
@@ -61,7 +126,9 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     //
     //naming to prevent memory leaks
-    this.createAppointmentSub = this.appointmentService.createAppointment(e.appointmentData).subscribe();
+    this.createAppointmentSub = this.appointmentService
+      .createAppointment(e.appointmentData)
+      .subscribe();
   }
 
   async onAppointmentUpdated(e: any) {
@@ -80,7 +147,9 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     console.log('onAppointmentUpdated', e.appointmentData);
     //
 
-    this.deleteAppointmentSub = this.appointmentService.deleteAppointment(e.appointmentData.id).subscribe();
+    this.deleteAppointmentSub = this.appointmentService
+      .deleteAppointment(e.appointmentData.id)
+      .subscribe();
   }
 
   onAppointmentFormOpening(e: any) {

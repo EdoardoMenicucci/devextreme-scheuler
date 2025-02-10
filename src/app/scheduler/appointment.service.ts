@@ -5,7 +5,6 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-
 export class AppointmentService {
   private apiUrl = 'http://localhost:5000/api';
   private appointmentsSubject = new BehaviorSubject<any[]>([]);
@@ -17,9 +16,17 @@ export class AppointmentService {
 
   loadAppointments(): void {
     this.http.get<any[]>(`${this.apiUrl}/appointment`).subscribe((data) => {
-      console.log('Appointment recived:',data);
+      console.log('Appointment recived:', data);
       this.appointmentsSubject.next(data);
     });
+  }
+
+  shareAppointment(appointmentData: any, username: string) {
+    console.log('Sharing appointment with:', username);
+    console.log('Appointment data:', appointmentData);
+
+
+    return this.http.post(`appointment/share/${appointmentData.id}/${username}`, appointmentData);
   }
 
   createAppointment(appointment: any): Observable<any> {

@@ -188,7 +188,7 @@ export class ChatService {
         }
       });
       //debug
-      console.log('Messages loaded:', this.messages);
+      // console.log('Messages loaded:', this.messages);
       //
     } catch (error: any) {
       console.error('Error loading messages:', error);

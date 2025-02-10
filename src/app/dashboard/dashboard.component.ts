@@ -80,28 +80,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // prepara i dati per il grafico
     this.statisticsSub = this.dashboardService.statistics$.subscribe((data) => {
       this.statisticsData = [
-        { category: 'Total', value: data.totalAppointments },
+        { category: 'Total', value: data.totalAppointments ?? 0 },
         {
           category: 'Created',
-          value: data.createdAppointments,
+          value: data.createdAppointments ?? 0,
         },
         {
           category: 'Updated',
-          value: data.updatedAppointments,
+          value: data.updatedAppointments ?? 0,
         },
         {
           category: 'Deleted',
-          value: data.deletedAppointments,
+          value: data.deletedAppointments ?? 0,
         },
         {
           category: 'Completed',
-          value: data.completedAppointments,
+          value: data.completedAppointments ?? 0,
         },
         {
           category: 'Upcoming',
-          value: data.upcomingAppointments,
+          value: data.upcomingAppointments ?? 0,
         },
-        { category: 'Missed', value: data.missedAppointments },
+        { category: 'Missed', value: data.missedAppointments ?? 0 },
       ];
 
       this.successRate = data.successRate;
