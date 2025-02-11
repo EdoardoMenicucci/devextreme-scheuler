@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
     <div class="chat-dropdown h-full bg-[#090730]" *ngIf="chats.length > 0">
       <dx-select-box
         [items]="chats"
-        displayExpr="id"
+        [displayExpr]="getDisplayText"
         valueExpr="id"
         placeholder="Seleziona una chat precedente"
         (onValueChanged)="onChatSelect($event)"
@@ -66,6 +66,10 @@ export class PreviousChatsDropdownComponent implements OnInit, OnDestroy {
   }
 
   //utils
+  getDisplayText = (item: Chat): string => {
+    if (!item) return '';
+    return formatDateUtils(item.createdAt);
+  };
 
   formatDate(dateInput: string | Date | null): string {
     return formatDateUtils(dateInput);

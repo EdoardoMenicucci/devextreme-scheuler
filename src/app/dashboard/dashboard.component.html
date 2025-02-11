@@ -1,6 +1,6 @@
 <div class="flex w-screen">
   <app-sidebar></app-sidebar>
-  <div class="p-6 w-full">
+  <div class="p-6 w-full overflow-auto max-h-screen">
     <div class="flex justify-between items-center">
       <h1 class="text-3xl text-accent-light font-bold mb-6">
         {{ title }} - {{ formatUserName(username) }}
@@ -99,7 +99,7 @@
                 <span
                   *ngIf="
                     item.isCompleted == true ||
-                    ((item.isCompleted == false || item.isCompleted == null)&&
+                    ((item.isCompleted == false || item.isCompleted == null) &&
                       !(item.startDate < currentDate) &&
                       item.endDate > currentDate)
                   "
@@ -113,7 +113,8 @@
                     item.endDate > currentDate
                   "
                   class="text-white font-semibold"
-                  >On Going Now</span>
+                  >On Going Now</span
+                >
 
                 <!-- Icons -->
                 <span *ngIf="item.isCompleted"
@@ -142,5 +143,7 @@
         </dx-list>
       </div>
     </div>
+    <!-- Contacts section -->
+    <app-contact></app-contact>
   </div>
 </div>

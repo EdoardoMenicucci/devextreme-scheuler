@@ -1,15 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DxSchedulerModule, DxButtonModule } from 'devextreme-angular';
+import { DxSchedulerModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { ChatComponent } from '../chat/chat.component';
 import { AppointmentService } from './appointment.service';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Status } from '../interfaces/d.interface';
 import { from, Subscription } from 'rxjs';
+import { ContactService } from '../contact/contact.service';
 
 @Component({
   standalone: true,
-  imports: [DxSchedulerModule, ChatComponent, SidebarComponent, DxButtonModule],
+  imports: [DxSchedulerModule, ChatComponent, SidebarComponent, DxButtonModule, DxSelectBoxModule],
   selector: 'app-scheduler',
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.css'],
@@ -25,6 +26,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   private createAppointmentSub!: Subscription;
   private updateAppointmentSub!: Subscription;
   private deleteAppointmentSub!: Subscription;
+  private friendsSub!: Subscription;
 
   status: Status[] = [
     { id: 1, text: 'New' },
@@ -43,7 +45,12 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     isShared: false,
   };
 
-  constructor(private appointmentService: AppointmentService) {}
+  friends: any[] = [];
+
+  constructor(
+    private appointmentService: AppointmentService,
+    private contactService: ContactService
+  ) {}
 
   // Add this method to handle sharing
   onAppointmentFormSharing(username: string, appointmentData: any) {
@@ -76,23 +83,31 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     ) {
       formItems.push({
         colSpan: 1,
-        cssClass: 'share-textbox',
-        label: { text: 'Share with (username)' },
-        editorType: 'dxTextBox',
+        label: { text: 'Share with friend' },
+        editorType: 'dxSelectBox',
         dataField: 'sharedWith',
+        cssClass: 'shared-with',
+        editorOptions: {
+          dataSource: this.friends,
+          displayExpr: 'friendUsername',
+          valueExpr: 'friendUsername',
+          placeholder: 'Select a friend to share with'
+        }
       });
       formItems.push({
         itemType: 'button',
-        cssClass: 'share-button',
         horizontalAlignment: 'left',
+        cssClass: 'share-button',
         buttonOptions: {
           text: 'Share',
-          type: 'success',
+          type: 'default',
           onClick: () => {
             const formData = form.option('formData');
-            this.onAppointmentFormSharing(formData.sharedWith, formData);
-          },
-        },
+            if (formData.sharedWith) {
+              this.onAppointmentFormSharing(formData.sharedWith, formData);
+            }
+          }
+        }
       });
       form.option('items', formItems);
     }
@@ -105,12 +120,20 @@ export class SchedulerComponent implements OnDestroy, OnInit {
         this.appointments = data;
       }
     );
+
+    // Add friends subscription
+    this.friendsSub = this.contactService.getFriends().subscribe(
+      (friends) => {
+        this.friends = friends;
+      }
+    );
   }
   ngOnDestroy(): void {
     if (this.createAppointmentSub) this.createAppointmentSub.unsubscribe();
     if (this.updateAppointmentSub) this.updateAppointmentSub.unsubscribe();
     if (this.deleteAppointmentSub) this.deleteAppointmentSub.unsubscribe();
     if (this.getAppointmentSub) this.getAppointmentSub.unsubscribe();
+    if (this.friendsSub) this.friendsSub.unsubscribe();
   }
 
   async onAppointmentAdded(e: any) {

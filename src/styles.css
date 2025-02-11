@@ -36,7 +36,21 @@ body{
   color: white !important;
 }
 
-.share-textbox .dx-texteditor-input{
+.shared-with .dx-texteditor-input{
+  background-color: #10151C !important;
+  /* color: white !important; */
+}
+
+.shared-with .dx-dropdowneditor-icon {
+  background-color: #10151C !important;
+  /* color: white !important; */
+}
+
+.shared-with .dx-texteditor-buttons-container{
+  background-color: #10151C !important;
+}
+
+.friend .dx-texteditor-input{
   background-color: #10151C !important;
   /* color: white !important; */
 }
@@ -49,10 +63,6 @@ body{
   justify-content: space-between !important;
   align-items: center !important;
   margin-top: 20px !important;
-}
-
-.share-textbox{
-
 }
 
 .share-button{

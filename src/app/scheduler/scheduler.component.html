@@ -3,6 +3,7 @@
   <div class="scheduler-container">
     <dx-scheduler
       timeZone="Europe/Berlin"
+      dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
       [dataSource]="appointments"
       [views]="['day', 'week', 'workWeek', 'month', 'agenda']"
       [currentView]="currentView"
