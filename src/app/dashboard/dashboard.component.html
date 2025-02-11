@@ -99,7 +99,7 @@
                 <span
                   *ngIf="
                     item.isCompleted == true ||
-                    (item.isCompleted == false &&
+                    ((item.isCompleted == false || item.isCompleted == null)&&
                       !(item.startDate < currentDate) &&
                       item.endDate > currentDate)
                   "

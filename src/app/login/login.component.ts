@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { loginForm } from '../interfaces/d.interface';
 import { AuthService } from '../auth/auth.service';
+import notify from 'devextreme/ui/notify';
+
 
 @Component({
   selector: 'app-login',
@@ -30,7 +32,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Controlla autenticazione iniziale
     if (this.authService.isAuthenticated()) {
       this.isAuthenticated = true;
-      this.router.navigate(['/scheduler']);
+      this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/scheduler']);
+      });
     }
     // Sottoscrizione agli errori di autenticazione
     this.authErrorSubscription = this.authService
@@ -42,13 +46,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           switch (error.type) {
             case 'TOKEN_EXPIRED':
+              notify('Sessione scaduta, effettua nuovamente il login', 'error', 3000);
               this.router.navigate(['/login']);
               break;
             case 'UNAUTHORIZED':
+              notify('Non autorizzato', 'error', 3000);
               this.router.navigate(['/signin']);
               break;
             case 'NETWORK_ERROR':
-              alert('Errore di rete');
+              notify('Errore di rete', 'error', 3000);
               this.router.navigate(['/home']);
               break;
           }
@@ -62,9 +68,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(this.loginForm).subscribe({
       next: () => {
         this.isAuthenticated = true;
-        this.router.navigate(['/scheduler']);
+        this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/scheduler']);
+        });
       },
       error: (error) => {
+        notify('Errore di autenticazione', 'error', 3000);
         console.error('Registration failed:', error);
       },
     });

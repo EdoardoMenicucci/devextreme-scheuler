@@ -5,6 +5,8 @@ import { registerForm } from '../interfaces/d.interface';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth/auth.service';
+import notify from 'devextreme/ui/notify';
+
 
 @Component({
   selector: 'app-register',
@@ -33,7 +35,9 @@ export class RegisterComponent {
     // Controlla autenticazione iniziale
     if (this.authService.isAuthenticated()) {
       this.isAuthenticated = true;
-      this.router.navigate(['/scheduler']);
+      this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/scheduler']);
+      });
     }
     // Sottoscrizione agli errori di autenticazione
     this.authErrorSubscription = this.authService
@@ -45,13 +49,15 @@ export class RegisterComponent {
 
           switch (error.type) {
             case 'TOKEN_EXPIRED':
+              notify('Sessione scaduta, effettua nuovamente il login', 'error', 3000);
               this.router.navigate(['/login']);
               break;
             case 'UNAUTHORIZED':
+              notify('Non autorizzato', 'error', 3000);
               this.router.navigate(['/signin']);
               break;
             case 'NETWORK_ERROR':
-              // alert('Errore di rete');
+              notify('Errore di rete', 'error', 3000);
               this.router.navigate(['/home']);
               break;
           }
@@ -65,9 +71,12 @@ export class RegisterComponent {
     this.authService.register(this.registerForm).subscribe({
       next: () => {
         this.isAuthenticated = true;
-        this.router.navigate(['/scheduler']);
+        this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/scheduler']);
+        });
       },
       error: (error : Error) => {
+        notify('Errore durante la registrazione', 'error', 3000);
         console.error('Registration failed:', error);
       },
     });

@@ -9,6 +9,8 @@ import { AuthService } from '../auth/auth.service';
 
 import { firstLetterToUpperCase } from '../utils/generic';
 
+import notify from 'devextreme/ui/notify';
+
 
 
 @Injectable({
@@ -52,7 +54,7 @@ export class ChatService {
 
         this.currentUser.id = this.authService.userId ?? 0;
         this.currentUser.name = this.authService.username ?? 'Err';
-        
+
     this.messages = [
       {
         timestamp: this.getTimestamp(this.date, -9),
@@ -103,13 +105,13 @@ export class ChatService {
         console.error('Error sending message:', error);
         if (error.status === 401) {
           // Handle Unauthorized Error
-          alert('You are not authorized to perform this action.');
+          notify('You are not authorized to perform this action', 'error', 3000);
         } else if (error.status === 400) {
           // Handle Bad Request Error
-          alert('Bad request. Please check your input.');
+          notify('Bad request. Please check your input', 'error', 3000);
         } else {
           // Handle other errors
-          alert('An unexpected error occurred.');
+          notify('An unexpected error occurred', 'error', 3000);
         }
         return new Observable<any>();
       })
@@ -130,13 +132,13 @@ export class ChatService {
           console.error('Error sending message:', error);
           if (error.status === 401) {
             // Handle Unauthorized Error
-            alert('You are not authorized to perform this action.');
+            notify('You are not authorized to perform this action', 'error', 3000);
           } else if (error.status === 400) {
             // Handle Bad Request Error
-            alert('Bad request. Please check your input.');
+            notify('Bad request. Please check your input', 'error', 3000);
           } else {
             // Handle other errors
-            alert('An unexpected error occurred.');
+            notify('An unexpected error occurred', 'error', 3000);
           }
           return new Observable<any>();
         })
@@ -153,13 +155,13 @@ export class ChatService {
         console.error('Error sending message:', error);
         if (error.status === 401) {
           // Handle Unauthorized Error
-          alert('You are not authorized to perform this action.');
+          notify('You are not authorized to perform this action', 'error', 3000);
         } else if (error.status === 400) {
           // Handle Bad Request Error
-          alert('Bad request. Please check your input.');
+          notify('Bad request. Please check your input', 'error', 3000);
         } else {
           // Handle other errors
-          alert('An unexpected error occurred.');
+          notify('An unexpected error occurred', 'error', 3000);
         }
         return new Observable<any>();
       })
@@ -195,11 +197,11 @@ export class ChatService {
     } catch (error: any) {
       console.error('Error loading messages:', error);
       if (error.status === 401) {
-        alert('You are not authorized to perform this action.');
+        notify('You are not authorized to perform this action', 'error', 3000);
       } else if (error.status === 400) {
-        alert('Bad request. Please check your input.');
+        notify('Bad request. Please check your input', 'error', 3000);
       } else {
-        alert('An unexpected error occurred.');
+        notify('An unexpected error occurred', 'error', 3000);
       }
     }
   }

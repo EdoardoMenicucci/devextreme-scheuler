@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DxSchedulerModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { ChatComponent } from "../chat/chat.component";
+import { ChatComponent } from '../chat/chat.component';
 import { AppointmentService } from './appointment.service';
-import { SidebarComponent } from "../sidebar/sidebar.component";
+import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Status } from '../interfaces/d.interface';
-import { Subscription } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -67,55 +67,34 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   onAppointmentFormCreated(e: any) {
     const form = e.form;
 
-    // Check if form is already initialized
-    if (this.formInitialized) {
-      return;
-    }
+    let formItems = form.option('items');
 
-    const shareGroup = {
-      itemType: 'group',
-      cssClass: 'sharing-group',
-      editorOptions: {
-        width: '100%',
-      },
-      items: [
-        {
-          dataField: 'sharedWith',
-          editorType: 'dxTextBox',
-          cssClass: 'share-textbox',
-          colSpan: 1,
-          editorOptions: {
-            width: '100%',
-          },
-          label: { text: 'Share with (username)' },
-        },
-        {
-          itemType: 'button',
-          horizontalAlignment: 'left',
-          cssClass: ['share-button'],
-          colSpan: 1,
-          buttonOptions: {
-            text: 'Share',
-            type: 'success',
-            width: '100%',
-            onClick: () => {
-              const formData = form.option('formData');
-              this.onAppointmentFormSharing(formData.sharedWith, formData);
-            },
+    if (
+      !formItems.find(function (i: any) {
+        return i.dataField === 'sharedWith';
+      })
+    ) {
+      formItems.push({
+        colSpan: 1,
+        cssClass: 'share-textbox',
+        label: { text: 'Share with (username)' },
+        editorType: 'dxTextBox',
+        dataField: 'sharedWith',
+      });
+      formItems.push({
+        itemType: 'button',
+        cssClass: 'share-button',
+        horizontalAlignment: 'left',
+        buttonOptions: {
+          text: 'Share',
+          type: 'success',
+          onClick: () => {
+            const formData = form.option('formData');
+            this.onAppointmentFormSharing(formData.sharedWith, formData);
           },
         },
-      ],
-    };
-
-    const items = form.option('items');
-    const hasShareGroup = items.some(
-      (item: any) => item.cssClass === 'sharing-group'
-    );
-
-    if (!hasShareGroup) {
-      items.push(shareGroup);
-      form.option('items', items);
-      this.formInitialized = true;
+      });
+      form.option('items', formItems);
     }
   }
 
@@ -142,7 +121,14 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     //naming to prevent memory leaks
     this.createAppointmentSub = this.appointmentService
       .createAppointment(e.appointmentData)
-      .subscribe();
+      .subscribe({
+        next: () => {
+          notify('Appointment created successfully', 'success', 3000);
+        },
+        error: (error) => {
+          notify('Failed to create appointment', 'error', 3000);
+        },
+      });
   }
 
   async onAppointmentUpdated(e: any) {
@@ -153,7 +139,14 @@ export class SchedulerComponent implements OnDestroy, OnInit {
 
     this.updateAppointmentSub = this.appointmentService
       .updateAppointment(e.appointmentData.id, e.appointmentData)
-      .subscribe();
+      .subscribe({
+        next: () => {
+          notify('Appointment updated successfully', 'success', 3000);
+        },
+        error: (error) => {
+          notify('Failed to update appointment', 'error', 3000);
+        },
+      });
   }
 
   onAppointmentDeleted(e: any) {
@@ -163,7 +156,14 @@ export class SchedulerComponent implements OnDestroy, OnInit {
 
     this.deleteAppointmentSub = this.appointmentService
       .deleteAppointment(e.appointmentData.id)
-      .subscribe();
+      .subscribe({
+        next: () => {
+          notify('Appointment deleted successfully', 'success', 3000);
+        },
+        error: (error) => {
+          notify('Failed to delete appointment', 'error', 3000);
+        },
+      });
   }
 
   onAppointmentFormOpening(e: any) {

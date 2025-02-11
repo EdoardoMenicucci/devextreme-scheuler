@@ -5,6 +5,7 @@ import { ChatService } from '../chat/chat.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { formatDateUtils } from '../utils/generic';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   standalone: true,
@@ -53,13 +54,15 @@ export class SidebarComponent implements OnInit {
         if (error) {
           switch (error.type) {
             case 'TOKEN_EXPIRED':
+              notify('Session expired, please login again', 'error', 3000);
               this.router.navigate(['/login']);
               break;
             case 'UNAUTHORIZED':
+              notify('Unauthorized', 'error', 3000);
               this.router.navigate(['/signin']);
               break;
             case 'NETWORK_ERROR':
-              // alert('Network error occurred');
+              notify('Network error', 'error', 3000);
               this.router.navigate(['/home']);
               break;
           }

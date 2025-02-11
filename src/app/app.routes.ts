@@ -18,7 +18,7 @@ export const routes: Routes = [
     path: 'scheduler',
     component: SchedulerComponent,
     canActivate: [authGuard],
-    runGuardsAndResolvers: 'always'
+    runGuardsAndResolvers: 'always',
   },
   {
     path: 'dashboard',
