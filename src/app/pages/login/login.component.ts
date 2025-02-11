@@ -1,35 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { registerForm } from '../interfaces/d.interface';
-import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { loginForm } from '../../interfaces/d.interface';
+import { AuthService } from '../../auth/auth.service';
 import notify from 'devextreme/ui/notify';
 
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-login',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css',
 })
-export class RegisterComponent {
+
+export class LoginComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
   private authErrorSubscription!: Subscription;
-  private errorMessage: string = '';
+  errorMessage: string = '';
 
-  public registerForm: registerForm = {
-    username: '',
+  public loginForm: loginForm = {
     email: '',
     password: '',
   };
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     // Controlla autenticazione iniziale
@@ -67,16 +64,16 @@ export class RegisterComponent {
       });
   }
 
-  handleRegister(): void {
-    this.authService.register(this.registerForm).subscribe({
+  handleLogin(): void {
+    this.authService.login(this.loginForm).subscribe({
       next: () => {
         this.isAuthenticated = true;
         this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
           this.router.navigate(['/scheduler']);
         });
       },
-      error: (error : Error) => {
-        notify('Errore durante la registrazione', 'error', 3000);
+      error: (error) => {
+        notify('Errore di autenticazione', 'error', 3000);
         console.error('Registration failed:', error);
       },
     });
@@ -84,6 +81,8 @@ export class RegisterComponent {
 
   ngOnDestroy(): void {
     // Chiudi la sottoscrizione memory leaks
-    if (this.authErrorSubscription) this.authErrorSubscription.unsubscribe();
+    if (this.authErrorSubscription) {
+      this.authErrorSubscription.unsubscribe();
+    }
   }
 }

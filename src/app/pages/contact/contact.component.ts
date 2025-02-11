@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxListModule, DxTextBoxModule, DxButtonModule } from 'devextreme-angular';
 import { ContactService } from './contact.service';
-import { Friend, FriendRequest } from '../models/friend-request.model';
+import { Friend, FriendRequest } from '../../models/friend-request.model';
 import notify from 'devextreme/ui/notify';
-import { SidebarComponent } from "../sidebar/sidebar.component";
+import { SidebarComponent } from "../../components/sidebar/sidebar.component";
 
 @Component({
   selector: 'app-contact',

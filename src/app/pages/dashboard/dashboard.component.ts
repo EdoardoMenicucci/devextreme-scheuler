@@ -1,7 +1,7 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { firstLetterToUpperCase, formatDateUtils, formatDateTimeUtils } from '../utils/generic';
+import { firstLetterToUpperCase, formatDateUtils, formatDateTimeUtils } from '../../utils/generic';
 
 import {
   DxChartModule,
@@ -9,9 +9,9 @@ import {
   DxListModule,
   DxDateRangeBoxModule,
 } from 'devextreme-angular';
-import { SidebarComponent } from '../sidebar/sidebar.component';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { DashboardService } from './dashboard.service';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { Subscription } from 'rxjs';
 
 @Component({

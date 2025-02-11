@@ -4,7 +4,7 @@ import { DxChatModule } from 'devextreme-angular';
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 import { Observable, pipe, Subscription } from 'rxjs';
 import { ChatService } from './chat.service';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { PreviousChatsDropdownComponent } from '../previous-chat/previous-chat.component';
 import notify from 'devextreme/ui/notify';

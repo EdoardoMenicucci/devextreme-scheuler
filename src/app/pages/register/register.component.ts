@@ -1,32 +1,35 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { registerForm } from '../../interfaces/d.interface';
 import { Subscription } from 'rxjs';
-import { loginForm } from '../interfaces/d.interface';
-import { AuthService } from '../auth/auth.service';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../auth/auth.service';
 import notify from 'devextreme/ui/notify';
 
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css',
 })
-
-export class LoginComponent implements OnInit, OnDestroy {
+export class RegisterComponent {
   isAuthenticated: boolean = false;
   private authErrorSubscription!: Subscription;
-  errorMessage: string = '';
+  private errorMessage: string = '';
 
-  public loginForm: loginForm = {
+  public registerForm: registerForm = {
+    username: '',
     email: '',
     password: '',
   };
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
     // Controlla autenticazione iniziale
@@ -64,16 +67,16 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleLogin(): void {
-    this.authService.login(this.loginForm).subscribe({
+  handleRegister(): void {
+    this.authService.register(this.registerForm).subscribe({
       next: () => {
         this.isAuthenticated = true;
         this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
           this.router.navigate(['/scheduler']);
         });
       },
-      error: (error) => {
-        notify('Errore di autenticazione', 'error', 3000);
+      error: (error : Error) => {
+        notify('Errore durante la registrazione', 'error', 3000);
         console.error('Registration failed:', error);
       },
     });
@@ -81,8 +84,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // Chiudi la sottoscrizione memory leaks
-    if (this.authErrorSubscription) {
-      this.authErrorSubscription.unsubscribe();
-    }
+    if (this.authErrorSubscription) this.authErrorSubscription.unsubscribe();
   }
 }

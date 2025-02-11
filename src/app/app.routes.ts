@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { SchedulerComponent } from './scheduler/scheduler.component';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { SchedulerComponent } from './pages/scheduler/scheduler.component';
+import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 //auth guard
 import { authGuard } from './guards/auth.guard';
-import { ContactComponent } from './contact/contact.component';
+import { ContactComponent } from './pages/contact/contact.component';
 
 
 

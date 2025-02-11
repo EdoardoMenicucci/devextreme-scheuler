@@ -3,8 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { ChatService } from '../chat/chat.service';
 import { CommonModule } from '@angular/common';
-import { Chat } from '../interfaces/d.interface';
-import { formatDateUtils } from '../utils/generic';
+import { Chat } from '../../interfaces/d.interface';
+import { formatDateUtils } from '../../utils/generic';
 import { Subscription } from 'rxjs';
 
 @Component({

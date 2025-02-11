@@ -4,10 +4,10 @@ import { HttpClient } from '@angular/common/http';
 
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
-import { AppointmentService } from '../scheduler/appointment.service';
-import { AuthService } from '../auth/auth.service';
+import { AppointmentService } from '../../pages/scheduler/appointment.service';
+import { AuthService } from '../../auth/auth.service';
 
-import { firstLetterToUpperCase } from '../utils/generic';
+import { firstLetterToUpperCase } from '../../utils/generic';
 
 import notify from 'devextreme/ui/notify';
 

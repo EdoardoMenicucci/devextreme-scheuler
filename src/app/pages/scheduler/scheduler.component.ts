@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DxSchedulerModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { ChatComponent } from '../chat/chat.component';
+import { ChatComponent } from '../../components/chat/chat.component';
 import { AppointmentService } from './appointment.service';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { Status } from '../interfaces/d.interface';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { Status } from '../../interfaces/d.interface';
 import { from, Subscription } from 'rxjs';
 import { ContactService } from '../contact/contact.service';
 

@@ -3,8 +3,8 @@ import { DxDrawerModule, DxListModule } from 'devextreme-angular';
 import { Router, RouterModule } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
-import { formatDateUtils } from '../utils/generic';
+import { AuthService } from '../../auth/auth.service';
+import { formatDateUtils } from '../../utils/generic';
 import notify from 'devextreme/ui/notify';
 
 @Component({
@@ -17,7 +17,7 @@ export class SidebarComponent implements OnInit {
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
     { id: 2, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },
-    { id: 2, text: 'Contact', icon: 'user', path: '/contact' },
+    { id: 2, text: 'Contact', icon: 'group', path: '/contact' },
     { id: 3, text: 'Logout', icon: 'login', action: 'logout' },
   ];
 
