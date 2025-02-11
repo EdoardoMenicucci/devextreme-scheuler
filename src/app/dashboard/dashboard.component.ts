@@ -10,7 +10,6 @@ import {
   DxDateRangeBoxModule,
 } from 'devextreme-angular';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { ContactComponent } from '../contact/contact.component';
 import { DashboardService } from './dashboard.service';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
@@ -25,7 +24,6 @@ import { Subscription } from 'rxjs';
     DxListModule,
     CommonModule,
     DxDateRangeBoxModule,
-    ContactComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './dashboard.component.html',
