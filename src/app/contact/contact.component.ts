@@ -4,11 +4,12 @@ import { DxListModule, DxTextBoxModule, DxButtonModule } from 'devextreme-angula
 import { ContactService } from './contact.service';
 import { Friend, FriendRequest } from '../models/friend-request.model';
 import notify from 'devextreme/ui/notify';
+import { SidebarComponent } from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [DxListModule, DxTextBoxModule, DxButtonModule, CommonModule],
+  imports: [DxListModule, DxTextBoxModule, DxButtonModule, CommonModule, SidebarComponent, SidebarComponent],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.css',
 })

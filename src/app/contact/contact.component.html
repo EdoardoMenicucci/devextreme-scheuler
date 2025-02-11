@@ -1,124 +1,138 @@
-<h1 class="text-3xl text-accent-light font-bold mb-6 mt-8">Contact Section</h1>
-
-<!-- Add new friend request section -->
-<div class="w-full bg-bg-secondary p-4 rounded-xl border-2 border-border mb-4">
-  <div class="flex items-center gap-4">
-    <h3 class="text-[24px] text-white">
-      <i class="dx-icon-plus text-xl"></i> Add New Friend
-    </h3>
-    <div class="flex-1 flex gap-2">
-      <dx-text-box
-        [(value)]="newFriendUsername"
-        placeholder="Enter username"
-        class="flex-1"
-        stylingMode="filled"
-      ></dx-text-box>
-      <dx-button
-        text="Send Request"
-        type="default"
-        (onClick)="sendFriendRequest()"
-        [disabled]="!newFriendUsername.trim()"
-      ></dx-button>
-    </div>
-  </div>
-</div>
-
-<div class="w-full flex gap-4 text-white">
-  <!-- Friends section -->
-  <div class="friend w-1/2 bg-bg-secondary p-2 rounded-xl border-2 border-border">
-    <div class="flex items-center">
-      <h3 class="text-[24px] text-white mb-2 ms-1">
-        <i class="dx-icon-group text-xl"></i> Friends
-      </h3>
-    </div>
-    <dx-list
-      [dataSource]="friends"
-      [height]="400"
-      [searchEnabled]="true"
-      searchExpr="friendUsername"
+<div class="flex w-screen">
+  <app-sidebar></app-sidebar>
+  <div class="p-6 w-full overflow-auto max-h-screen">
+    <h1 class="text-3xl text-accent-light font-bold mb-8">
+      Contact Section
+    </h1>
+    <!-- Add new friend request section -->
+    <div
+      class="w-full bg-bg-secondary p-4 rounded-xl border-2 border-border mb-4"
     >
-      <div *dxTemplate="let friend of 'item'">
-        <div class="flex items-center p-1">
-          <i class="dx-icon-user text-xl mr-2"></i>
-          <div>
-            <div class="font-bold">{{ friend.friendUsername }}</div>
-            <!-- <div class="text-sm text-gray-400">{{friend.email}}</div> -->
-          </div>
+      <div class="flex items-center gap-4">
+        <h3 class="text-[24px] text-white">
+          <i class="dx-icon-plus text-xl"></i> Add New Friend
+        </h3>
+        <div class="flex-1 flex gap-2">
+          <dx-text-box
+            [(value)]="newFriendUsername"
+            placeholder="Enter username"
+            class="flex-1"
+            stylingMode="filled"
+          ></dx-text-box>
+          <dx-button
+            text="Send Request"
+            type="default"
+            (onClick)="sendFriendRequest()"
+            [disabled]="!newFriendUsername.trim()"
+          ></dx-button>
         </div>
       </div>
-    </dx-list>
-  </div>
-  <!-- Upcoming request section -->
-  <div class="w-1/2 bg-bg-secondary p-2 rounded-xl border-2 border-border">
-    <div class="flex items-center">
-      <h3 class="text-[24px] text-white mb-2 ms-1">
-        <i class="dx-icon-message text-xl"></i> Upcoming Friends Request
-      </h3>
     </div>
-    <dx-list [dataSource]="pendingRequests" [height]="400">
-      <div *dxTemplate="let request of 'item'">
-        <div class="flex items-center justify-between p-2">
-          <div class="flex items-center">
-            <i class="dx-icon-user text-2xl mr-2"></i>
-            <div>
-              <div class="font-bold text-gray-400">
-                {{ request.senderUsername }}
-              </div>
-              <div class="text-sm text-gray-400">
-                Sent at: {{ request.requestedAt | date }}
+
+    <div class="w-full flex gap-4 text-white">
+      <!-- Friends section -->
+      <div
+        class="friend w-1/2 bg-bg-secondary p-2 rounded-xl border-2 border-border"
+      >
+        <div class="flex items-center">
+          <h3 class="text-[24px] text-white mb-2 ms-1">
+            <i class="dx-icon-group text-xl"></i> Friends
+          </h3>
+        </div>
+        <dx-list
+          [dataSource]="friends"
+          [height]="400"
+          [searchEnabled]="true"
+          searchExpr="friendUsername"
+        >
+          <div *dxTemplate="let friend of 'item'">
+            <div class="flex items-center p-1">
+              <i class="dx-icon-user text-xl mr-2"></i>
+              <div>
+                <div class="font-bold">{{ friend.friendUsername }}</div>
+                <!-- <div class="text-sm text-gray-400">{{friend.email}}</div> -->
               </div>
             </div>
           </div>
-          <div class="flex gap-2">
-            <button
-              class="bg-green-500 hover:bg-green-600 px-3 py-1 rounded text-white"
-              (click)="acceptRequest(request.senderId)"
-            >
-              Accept
-            </button>
-            <button
-              class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-white"
-              (click)="rejectRequest(request.senderId)"
-            >
-              Reject
-            </button>
+        </dx-list>
+      </div>
+      <!-- Upcoming request section -->
+      <div class="w-1/2 bg-bg-secondary p-2 rounded-xl border-2 border-border">
+        <div class="flex items-center">
+          <h3 class="text-[24px] text-white mb-2 ms-1">
+            <i class="dx-icon-message text-xl"></i> Upcoming Friends Request
+          </h3>
+        </div>
+        <dx-list [dataSource]="pendingRequests" [height]="400">
+          <div *dxTemplate="let request of 'item'">
+            <div class="flex items-center justify-between p-2">
+              <div class="flex items-center">
+                <i class="dx-icon-user text-2xl mr-2"></i>
+                <div>
+                  <div class="font-bold text-gray-400">
+                    {{ request.senderUsername }}
+                  </div>
+                  <div class="text-sm text-gray-400">
+                    Sent at: {{ request.requestedAt | date }}
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  class="bg-green-500 hover:bg-green-600 px-3 py-1 rounded text-white"
+                  (click)="acceptRequest(request.senderId)"
+                >
+                  Accept
+                </button>
+                <button
+                  class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-white"
+                  (click)="rejectRequest(request.senderId)"
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        </dx-list>
+      </div>
+    </div>
+    <!-- shared appointment section -->
+    <div
+      class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
+    >
+      <h3 class="text-[24px] text-white mb-2 ms-1">
+        <i class="dx-icon-taskhelpneeded text-xl"></i> Shared Appointments
+      </h3>
+      <dx-list
+        [items]="sharedAppointments"
+        [focusStateEnabled]="false"
+        selectionMode="none"
+        [width]="'100%'"
+      >
+        <div *dxTemplate="let item of 'item'">
+          <div class="flex justify-between items-center w-full">
+            <div class="max-w-[75%]">
+              <span class="">{{ item.text }}</span>
+              <div class="text-sm text-gray-400">
+                Shared by: {{ item.ownerUsername }}
+              </div>
+            </div>
+
+            <div class="max-w-[25%]">
+              <span class="ms-1">{{ formatDateTime(item.startDate) }}</span>
+              <span *ngIf="item.isCompleted">
+                <i class="dx-icon-check ms-2 text-success"></i>
+              </span>
+              <span *ngIf="!item.isCompleted && item.startDate > currentDate">
+                <i class="dx-icon-unpin ms-2 text-[#fde300]"></i>
+              </span>
+              <span *ngIf="!item.isCompleted && item.startDate <= currentDate">
+                <i class="dx-icon-warning ms-2 text-[#DC2626]"></i>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </dx-list>
+      </dx-list>
+    </div>
   </div>
 </div>
-  <!-- shared appointment section -->
-  <div class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary">
-    <h3 class="text-[24px] text-white mb-2 ms-1">
-      <i class="dx-icon-taskhelpneeded text-xl"></i> Shared Appointments
-    </h3>
-    <dx-list
-      [items]="sharedAppointments"
-      [focusStateEnabled]="false"
-      selectionMode="none"
-      [width]="'100%'"
-    >
-      <div *dxTemplate="let item of 'item'">
-        <div class="flex justify-between items-center w-full">
-          <div class="max-w-[75%]">
-            <span class="">{{ item.text }}</span>
-            <div class="text-sm text-gray-400">Shared by: {{ item.ownerUsername }}</div>
-          </div>
-
-          <div class="max-w-[25%]">
-            <span class="ms-1">{{ formatDateTime(item.startDate) }}</span>
-            <span *ngIf="item.isCompleted">
-              <i class="dx-icon-check ms-2 text-success"></i>
-            </span>
-            <span *ngIf="!item.isCompleted && item.startDate > currentDate">
-              <i class="dx-icon-unpin ms-2 text-[#fde300]"></i>
-            </span>
-            <span *ngIf="!item.isCompleted && item.startDate <= currentDate">
-              <i class="dx-icon-warning ms-2 text-[#DC2626]"></i>
-            </span>
-          </div>
-        </div>
-      </div>
-    </dx-list>
-  </div>

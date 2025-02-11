@@ -16,8 +16,9 @@ import notify from 'devextreme/ui/notify';
 export class SidebarComponent implements OnInit {
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
-    { id: 1, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },
-    { id: 2, text: 'Logout', icon: 'login', action: 'logout' },
+    { id: 2, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },
+    { id: 2, text: 'Contact', icon: 'user', path: '/contact' },
+    { id: 3, text: 'Logout', icon: 'login', action: 'logout' },
   ];
 
   previousChats = [];
@@ -72,7 +73,8 @@ export class SidebarComponent implements OnInit {
 
   ngOnDestroy(): void {
     if (this.authErrorSubscription) this.authErrorSubscription.unsubscribe();
-    if (this.previousChatSubscription) this.previousChatSubscription.unsubscribe();
+    if (this.previousChatSubscription)
+      this.previousChatSubscription.unsubscribe();
   }
   //
 
@@ -88,7 +90,7 @@ export class SidebarComponent implements OnInit {
   }
 
   itemClick(e: any) {
-    console.log("item click", e);
+    console.log('item click', e);
 
     //router navigation
     if (e.itemData.path) {

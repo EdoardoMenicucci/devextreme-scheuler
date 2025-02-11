@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 //auth guard
 import { authGuard } from './guards/auth.guard';
+import { ContactComponent } from './contact/contact.component';
 
 
 
@@ -24,7 +25,13 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard],
-    runGuardsAndResolvers: 'always'
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'contact',
+    component: ContactComponent,
+    canActivate: [authGuard],
+    runGuardsAndResolvers: 'always',
   },
   { path: 'login', component: LoginComponent },
   { path: 'signin', component: RegisterComponent },
