@@ -106,7 +106,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       this.successRate = data.successRate;
       console.log('Success rate:', this.successRate);
-      
+
       this.username = this.authService.username;
       this.upcomingAppointments = data.upcomingAppointmentsList;
 
