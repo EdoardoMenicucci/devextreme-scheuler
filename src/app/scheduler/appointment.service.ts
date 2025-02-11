@@ -27,7 +27,10 @@ export class AppointmentService {
     //todo test
 
 
-    return this.http.post(`appointment/share/${appointmentData.id}/${username}`, appointmentData);
+    return this.http.post(
+      `${this.apiUrl}/appointment/share/${appointmentData.id}/${username}`,
+      appointmentData
+    );
   }
 
   createAppointment(appointment: any): Observable<any> {

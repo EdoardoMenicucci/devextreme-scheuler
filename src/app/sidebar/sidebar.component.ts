@@ -85,12 +85,15 @@ export class SidebarComponent implements OnInit {
   }
 
   itemClick(e: any) {
+    console.log("item click", e);
+
     //router navigation
     if (e.itemData.path) {
       this.selectedRoute = e.itemData.path;
       this.router.navigate([e.itemData.path]);
     } else if (e.itemData.action === 'logout') {
       this.authService.logout();
+      this.router.navigate(['/home']);
     }
   }
 }

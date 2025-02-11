@@ -41,16 +41,18 @@ export class ChatService {
     private authService: AuthService
   ) {
     this.date = new Date();
-    this.date.setHours(0, 0, 0, 0);
 
-    this.currentUser.id = this.authService.userId ?? 0;
-    this.currentUser.name = this.authService.username ?? 'Err';
 
     this.onInit();
   }
 
   onInit() {
     //first assistant message
+        this.date.setHours(0, 0, 0, 0);
+
+        this.currentUser.id = this.authService.userId ?? 0;
+        this.currentUser.name = this.authService.username ?? 'Err';
+        
     this.messages = [
       {
         timestamp: this.getTimestamp(this.date, -9),
