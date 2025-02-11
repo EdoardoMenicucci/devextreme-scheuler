@@ -16,12 +16,15 @@ export class ContactComponent implements OnInit {
   friends: Friend[] = [];
   pendingRequests: FriendRequest[] = [];
   newFriendUsername: string = '';
+  sharedAppointments: any[] = [];
+  currentDate: Date = new Date();
 
   constructor(private contactService: ContactService) { }
 
   ngOnInit() {
     this.loadFriends();
     this.loadPendingRequests();
+    this.loadSharedAppointments();
   }
 
   loadFriends() {
@@ -62,5 +65,22 @@ export class ContactComponent implements OnInit {
         }
       });
     }
+  }
+
+  loadSharedAppointments() {
+    this.contactService.getSharedAppointments().subscribe({
+      next: (appointments) => {
+        this.sharedAppointments = appointments;
+        console.log('Shared appointments:', this.sharedAppointments);
+      },
+      error: (error) => {
+        console.error('Error loading shared appointments:', error);
+        notify('Failed to load shared appointments', 'error', 3000);
+      }
+    });
+  }
+
+  formatDateTime(date: string | Date): string {
+    return new Date(date).toLocaleString();
   }
 }

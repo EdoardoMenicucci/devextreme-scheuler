@@ -45,4 +45,8 @@ export class ContactService {
       { responseType: 'text' }
     );
   }
+
+  getSharedAppointments(): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:5000/api/appointment/shared`);
+  }
 }

@@ -88,3 +88,37 @@
     </dx-list>
   </div>
 </div>
+  <!-- shared appointment section -->
+  <div class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary">
+    <h3 class="text-[24px] text-white mb-2 ms-1">
+      <i class="dx-icon-taskhelpneeded text-xl"></i> Shared Appointments
+    </h3>
+    <dx-list
+      [items]="sharedAppointments"
+      [focusStateEnabled]="false"
+      selectionMode="none"
+      [width]="'100%'"
+    >
+      <div *dxTemplate="let item of 'item'">
+        <div class="flex justify-between items-center w-full">
+          <div class="max-w-[75%]">
+            <span class="">{{ item.text }}</span>
+            <div class="text-sm text-gray-400">Shared by: {{ item.ownerUsername }}</div>
+          </div>
+
+          <div class="max-w-[25%]">
+            <span class="ms-1">{{ formatDateTime(item.startDate) }}</span>
+            <span *ngIf="item.isCompleted">
+              <i class="dx-icon-check ms-2 text-success"></i>
+            </span>
+            <span *ngIf="!item.isCompleted && item.startDate > currentDate">
+              <i class="dx-icon-unpin ms-2 text-[#fde300]"></i>
+            </span>
+            <span *ngIf="!item.isCompleted && item.startDate <= currentDate">
+              <i class="dx-icon-warning ms-2 text-[#DC2626]"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </dx-list>
+  </div>
