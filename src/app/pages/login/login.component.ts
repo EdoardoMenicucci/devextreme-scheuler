@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { loginForm } from '../../interfaces/d.interface';
+import { loginForm } from '../../models/d.interface';
 import { AuthService } from '../../auth/auth.service';
 import notify from 'devextreme/ui/notify';
 

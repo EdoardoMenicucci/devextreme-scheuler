@@ -122,9 +122,9 @@
                 ></span>
                 <span
                   *ngIf="
-                    item.isCompleted == null ||
-                    (item.isCompleted == false &&
-                      !(item.startDate < currentDate) &&
+                    (item.isCompleted == null ||
+                    item.isCompleted == false) &&
+                      !(item.startDate < currentDate &&
                       item.endDate > currentDate)
                   "
                   ><i class="dx-icon-unpin ms-2 text-[#fde300]"></i

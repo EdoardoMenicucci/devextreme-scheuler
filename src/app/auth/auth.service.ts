@@ -4,13 +4,14 @@ import {
   loginForm,
   registerForm,
   registerBackendForm,
-} from '../interfaces/d.interface';
+} from '../models/d.interface';
 import { BehaviorSubject, catchError, Observable, Subject, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  //store names in loclastorage
   private readonly TOKEN_KEY = 'chat_token';
   private readonly USER_ID = 'user_id';
   private readonly USER_NAME = 'user_name';
@@ -27,6 +28,7 @@ export class AuthService {
     type: string;
     message: string;
   } | null>(null);
+  private authStateChanged = new BehaviorSubject<boolean>(false);
 
   private token: string = '';
   public username: string | null = null;
@@ -54,8 +56,8 @@ export class AuthService {
     }
     const savedUsername = localStorage.getItem(this.USER_NAME);
     if (savedUsername) {
-    //debug
-    console.log('Username:', savedUsername);
+      //debug
+      console.log('Username:', savedUsername);
       this.username = savedUsername;
     }
     const savedChatsId = localStorage.getItem(this.CHATS_ID);
@@ -103,6 +105,7 @@ export class AuthService {
         if (response.userId) this.setUserId(response.userId);
         if (response.username) this.setUsername(response.username);
         if (response.chatIds) this.setChatsId(response.chatIds);
+        this.authStateChanged.next(true); // Broadcast auth to force reload components
       }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
@@ -147,6 +150,7 @@ export class AuthService {
             console.log('User ID:', this.userId);
           }
           if (response.username) this.setUsername(response.username);
+          this.authStateChanged.next(true); // Broadcast auth to force reload components
         }),
         catchError((error: HttpErrorResponse) => {
           if (error.status === 401) {
@@ -183,6 +187,10 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.token && !!this.userId;
+  }
+
+  getAuthState(): Observable<boolean> {
+    return this.authStateChanged.asObservable();
   }
 
   getAuthErrors(): Observable<{ type: string; message: string } | null> {

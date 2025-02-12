@@ -14,6 +14,7 @@ import notify from 'devextreme/ui/notify';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent implements OnInit {
+
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
     { id: 2, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },

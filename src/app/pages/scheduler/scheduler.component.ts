@@ -4,13 +4,21 @@ import notify from 'devextreme/ui/notify';
 import { ChatComponent } from '../../components/chat/chat.component';
 import { AppointmentService } from './appointment.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { Status } from '../../interfaces/d.interface';
-import { from, Subscription } from 'rxjs';
+import { Status } from '../../models/d.interface';
+import { filter, from, Subscription } from 'rxjs';
 import { ContactService } from '../contact/contact.service';
+import { AuthService } from '../../auth/auth.service';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [DxSchedulerModule, ChatComponent, SidebarComponent, DxButtonModule, DxSelectBoxModule],
+  imports: [
+    DxSchedulerModule,
+    ChatComponent,
+    SidebarComponent,
+    DxButtonModule,
+    DxSelectBoxModule,
+  ],
   selector: 'app-scheduler',
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.css'],
@@ -22,6 +30,8 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   private formInitialized = false;
 
   //subscription to prevent memory leaks
+  private routerSub!: Subscription;
+  private authStateSub!: Subscription;
   private getAppointmentSub!: Subscription;
   private createAppointmentSub!: Subscription;
   private updateAppointmentSub!: Subscription;
@@ -49,8 +59,17 @@ export class SchedulerComponent implements OnDestroy, OnInit {
 
   constructor(
     private appointmentService: AppointmentService,
-    private contactService: ContactService
-  ) {}
+    private authService: AuthService,
+    private contactService: ContactService,
+    private router: Router
+  ) {
+    this.routerSub = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        // Reload data when route changes
+        this.appointmentService.loadAppointments();
+      });
+  }
 
   // Add this method to handle sharing
   onAppointmentFormSharing(username: string, appointmentData: any) {
@@ -91,8 +110,8 @@ export class SchedulerComponent implements OnDestroy, OnInit {
           dataSource: this.friends,
           displayExpr: 'friendUsername',
           valueExpr: 'friendUsername',
-          placeholder: 'Select a friend to share with'
-        }
+          placeholder: 'Select a friend to share with',
+        },
       });
       formItems.push({
         itemType: 'button',
@@ -106,8 +125,8 @@ export class SchedulerComponent implements OnDestroy, OnInit {
             if (formData.sharedWith) {
               this.onAppointmentFormSharing(formData.sharedWith, formData);
             }
-          }
-        }
+          },
+        },
       });
       form.option('items', formItems);
     }
@@ -120,15 +139,20 @@ export class SchedulerComponent implements OnDestroy, OnInit {
         this.appointments = data;
       }
     );
-
+    //On auth status change reload component
+    this.authStateSub = this.authService.getAuthState().subscribe(() => {
+      // Reload appointments
+      this.appointmentService.loadAppointments();
+    });
     // Add friends subscription
-    this.friendsSub = this.contactService.getFriends().subscribe(
-      (friends) => {
-        this.friends = friends;
-      }
-    );
+    this.friendsSub = this.contactService.getFriends().subscribe((friends) => {
+      this.friends = friends;
+    });
   }
+
   ngOnDestroy(): void {
+     if (this.routerSub) this.routerSub.unsubscribe();
+    if (this.authStateSub) this.authStateSub.unsubscribe();
     if (this.createAppointmentSub) this.createAppointmentSub.unsubscribe();
     if (this.updateAppointmentSub) this.updateAppointmentSub.unsubscribe();
     if (this.deleteAppointmentSub) this.deleteAppointmentSub.unsubscribe();
