@@ -10,10 +10,12 @@ import { ContactService } from '../contact/contact.service';
 import { AuthService } from '../../auth/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
   imports: [
+    CommonModule,
     DxSchedulerModule,
     ChatComponent,
     SidebarComponent,
@@ -92,6 +94,16 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+
+  // * Hold tracks of the current view type of the scheduler
+  //* To Customize the Scheduler based on the view type
+  onOptionChanged(e: any) {
+    console.log(e);
+    if (e.name === 'currentView') {
+      this.currentView = e.value;
+    }
   }
 
   // Add this method to handle sharing

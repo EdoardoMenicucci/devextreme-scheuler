@@ -19,11 +19,13 @@
         allowUpdating: true,
         allowDragging: true
       }"
+      dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
       appointmentTemplate="appointmentTemplate"
       (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
       (onAppointmentAdded)="onAppointmentAdded($event)"
       (onAppointmentUpdated)="onAppointmentUpdated($event)"
       (onAppointmentDeleted)="onAppointmentDeleted($event)"
+      (onOptionChanged)="onOptionChanged($event)"
     >
       <dxi-resource
         fieldExpr="isCompleted"
@@ -35,15 +37,35 @@
       >
       </dxi-resource>
       <!-- * Template Della Box dell'appuntamneto nello Schedulers -->
-      <div *dxTemplate="let data of 'appointmentTemplate'" [class]="getAppointmentClass(data)">
-        <div>
-          <div class="appointment-title">{{data.appointmentData.text}}</div>
+
+      <div
+        *dxTemplate="let data of 'appointmentTemplate'"
+        [class]="getAppointmentClass(data)"
+      >
+        <!-- Template for Agenda view -->
+        <div *ngIf="currentView === 'agenda'" class="flex items-center justify-between w-full px-4 py-2 space-x-4">
+          <div class="flex-1 font-semibold truncate">{{ data.appointmentData.text }}</div>
+          <div class="flex-none text-sm text-gray-200">
+            {{ formatAppointmentDate(data.appointmentData.startDate) }} -
+            {{ formatAppointmentDate(data.appointmentData.endDate) }}
+          </div>
+          <div class="flex-none text-sm"
+               [ngClass]="{'text-green-500': data.appointmentData.isCompleted, 'text-red-500': !data.appointmentData.isCompleted}">
+            {{ data.appointmentData.isCompleted ? "Completed" : "Not Completed" }}
+          </div>
+        </div>
+
+        <!-- Template for Regular Scheduler view -->
+        <div *ngIf="currentView !== 'agenda'" class="appointment">
+          <div class="appointment-title">{{ data.appointmentData.text }}</div>
           <div class="appointment-time">
-            {{formatAppointmentDate(data.appointmentData.startDate)}} -
-            {{formatAppointmentDate(data.appointmentData.endDate)}}
+            {{ formatAppointmentDate(data.appointmentData.startDate) }} -
+            {{ formatAppointmentDate(data.appointmentData.endDate) }}
           </div>
           <div class="appointment-status">
-            {{data.appointmentData.isCompleted ? 'Completed' : 'Not Completed'}}
+            {{
+              data.appointmentData.isCompleted ? "Completed" : "Not Completed"
+            }}
           </div>
         </div>
       </div>

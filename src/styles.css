@@ -78,11 +78,11 @@ body{
 
 /* *Horiziontal Appointmnet (AGENDA) */
 .dx-scheduler-appointment-horizontal {
-    min-height: fit-content;
+    /* min-height: fit-content; */
 }
 .dx-scheduler-appointment-horizontal .dx-scheduler-appointment-content {
   /* min-height: 6rem; */
-  min-height: fit-content;
+  /* min-height: fit-content; */
 }
 /* ================================== */
 

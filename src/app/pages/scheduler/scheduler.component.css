@@ -37,7 +37,22 @@
 
 .appointment-completed {
   border-left: 4px solid #4BB543;
-  opacity: 0.6;
+  position: relative;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 0px,
+    rgba(255, 255, 255, 0.15) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  background-size: 28px 28px;
+  opacity: 0.8;
+}
+
+.appointment-completed .appointment-title,
+.appointment-completed .appointment-time,
+.appointment-completed .appointment-status {
+  opacity: 0.7;
 }
 
 .appointment-not-completed {
