@@ -24,3 +24,11 @@
   color: #666;
   text-align: right;
 }
+
+:host ::ng-deep .dx-chat-messagelist-content {
+    padding-top: 20px !important;
+}
+
+.chat-container {
+  /* max-width: 30rem */
+}

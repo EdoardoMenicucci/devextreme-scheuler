@@ -6,7 +6,7 @@ import { DxButtonModule } from 'devextreme-angular';
   standalone: true,
   imports: [DxButtonModule],
   template: `
-    <div class="chat-toolbar flex gap-2 p-2 bg-gray-100 border-b">
+    <div class="chat-toolbar flex gap-2 p-2 border-b justify-center mx-2">
       <dx-button
         icon="trash"
         text="Clear Chat"
@@ -16,7 +16,7 @@ import { DxButtonModule } from 'devextreme-angular';
       </dx-button>
       <dx-button
         icon="download"
-        text="Load Previous Messages"
+        text="Prev. Messages"
         [stylingMode]="'text'"
         (onClick)="loadPrevious.emit()"
       >

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DxDrawerModule, DxListModule } from 'devextreme-angular';
+import { DxButtonModule, DxDrawerModule, DxListModule } from 'devextreme-angular';
 import { Router, RouterModule } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -11,7 +11,7 @@ import { ErrorHandlerService } from '../../auth/error-handler.service';
 
 @Component({
   standalone: true,
-  imports: [DxDrawerModule, DxListModule, RouterModule],
+  imports: [DxDrawerModule, DxListModule, RouterModule, DxButtonModule],
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
 })
@@ -34,6 +34,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   previousChats = [];
   selectedRoute: any = null;
+
+  isDrawerOpen = true;
 
   constructor(
     private router: Router,
@@ -67,6 +69,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  toggleDrawer() {
+    this.isDrawerOpen = !this.isDrawerOpen;
   }
 
   onMainItemClick(e: any): void {
