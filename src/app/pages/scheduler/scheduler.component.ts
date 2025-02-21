@@ -187,7 +187,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       },
       {
         dataField: 'sharedWith',
-        colSpan: 2, // Occupa tutta la larghezza
+        colSpan: 1, // Occupa tutta la larghezza
         label: { text: 'Share with friend' },
         editorType: 'dxSelectBox',
         editorOptions: {
@@ -200,8 +200,9 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       },
       {
         itemType: 'button',
-        colSpan: 2, // Occupa tutta la larghezza
+        colSpan: 1, // Occupa tutta la larghezza
         horizontalAlignment: 'left',
+        cssClass: 'mt-4',
         buttonOptions: {
           text: 'Share',
           type: 'default',
@@ -276,6 +277,29 @@ export class SchedulerComponent implements OnDestroy, OnInit {
         },
         error: (error) => {
           notify('Failed to delete appointment', 'error', 3000);
+        },
+      });
+  }
+
+  toggleAppointmentCompletion(appointmentData: any) {
+    const updatedAppointment = {
+      ...appointmentData,
+      isCompleted: !appointmentData.isCompleted
+    };
+
+    this.appointmentService
+      .updateAppointment(updatedAppointment.id, updatedAppointment)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          notify(
+            `Appointment marked as ${updatedAppointment.isCompleted ? 'completed' : 'incomplete'}`,
+            'success',
+            2000
+          );
+        },
+        error: (error) => {
+          notify('Failed to update appointment status', 'error', 2000);
         },
       });
   }

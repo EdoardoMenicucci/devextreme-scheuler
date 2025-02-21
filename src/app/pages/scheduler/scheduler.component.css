@@ -2,30 +2,8 @@
     max-width: 70%;
 }
 
-.dx-scheduler-date-time-indicator {
-  background-color: rgba(79, 70, 229, 1) !important;
-  /* usa il colore base accent #4F46E5 */
-  border-color: rgba(79, 70, 229, 1) !important;
-}
 
-.custom-appointment-form {
-  /* Stili per il container del form */
-}
-
-.custom-appointment-form ::ng-deep .dx-textbox,
-.custom-appointment-form ::ng-deep .dx-datebox,
-.custom-appointment-form ::ng-deep .dx-selectbox {
-  /* Stili per gli input */
-}
-
-.custom-appointment-form ::ng-deep .dx-button {
-  /* Stili per i bottoni */
-}
-
-.custom-appointment-form ::ng-deep .dx-checkbox {
-  /* Stili per i checkbox */
-}
-
+/* *Custom Appointment Box */
 .appointment-container {
   padding: 5px;
   height: 100%;
@@ -81,4 +59,73 @@
 .appointment-status {
   font-size: 0.8em;
   font-style: italic;
+}
+
+
+/* * Custom Tooltip */
+.custom-tooltip {
+  padding: 12px;
+  background: #090730;
+  border: 1px solid #4F46E5;
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.tooltip-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: white;
+  margin-right: 12px;
+}
+
+.tooltip-status {
+  font-size: 0.8em;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tooltip-status.completed {
+  background-color: rgba(75, 181, 67, 0.2);
+  color: #4BB543;
+}
+
+.tooltip-status.not-completed {
+  background-color: rgba(255, 149, 0, 0.2);
+  color: #FF9500;
+}
+
+.tooltip-time {
+  color: #d4d4d4;
+  font-size: 0.9em;
+  margin-bottom: 12px;
+}
+
+.tooltip-toggle-btn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #4F46E5;
+  color: white;
+}
+
+.tooltip-toggle-btn:hover {
+  background-color: #4B5563;
+}
+
+.tooltip-toggle-btn.completed {
+  background-color: #DC2626;
+}
+
+.tooltip-toggle-btn.completed:hover {
+  background-color: #B91C1C;
 }

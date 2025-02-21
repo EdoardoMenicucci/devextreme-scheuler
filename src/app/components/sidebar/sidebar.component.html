@@ -28,8 +28,8 @@
         (onItemClick)="onLogoutClick($event)"
         [width]="200">
         <div *dxTemplate="let item of 'item'" class="flex items-center">
-          <i class="dx-icon dx-icon-{{item.icon}}"></i>
-          <span class="ms-1">{{item.text}}</span>
+          <i class="icon-red dx-icon dx-icon-{{item.icon}}"></i>
+          <span class="ms-1 icon-red">{{item.text}}</span>
         </div>
       </dx-list>
     </div>

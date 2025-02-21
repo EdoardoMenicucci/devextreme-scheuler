@@ -1,11 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-@import './dx.fluent.fluent-eddy-v3.css';
+/* @import './assets/dx.fluent.fluent-eddy-ready.css'; */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* * Reset */
+/* * Classic Reset */
 *{
     margin: 0;
     padding: 0;
@@ -23,35 +23,24 @@ body{
   border-color: #818CF8 !important;
 }
 
+.dx-scheduler-date-table-current-date .dx-scheduler-date-table-cell-text,
+.dx-scheduler-header-panel-current-time-cell .dx-scheduler-header-panel-cell-date,
+.dx-scheduler-header-panel-current-time-cell,
 .dx-scheduler-time-panel-current-time-cell{
   color: white !important;
 }
 
-.dx-scheduler-header-panel-current-time-cell{
-  color: white !important;
-}
-.dx-scheduler-header-panel-current-time-cell .dx-scheduler-header-panel-cell-date{
-  color: white !important;
-}
-
-.dx-scheduler-date-table-current-date .dx-scheduler-date-table-cell-text{
-  color: white !important;
-}
-
 /* *Appointment Edit Form Customization */
+.custom-appointment-form .dx-overlay-content{
+  border: 1px solid #374151;
+}
+.custom-appointment-form .dx-texteditor-buttons-container,
+.custom-appointment-form .dx-dropdowneditor-icon,
 .custom-appointment-form .dx-texteditor-input{
   background-color: #10151C !important;
-  /* color: white !important; */
 }
-
-.custom-appointment-form .dx-dropdowneditor-icon {
-  background-color: #10151C !important;
-  /* color: white !important; */
-}
-
-.custom-appointment-form .dx-texteditor-buttons-container{
-  background-color: #10151C !important;
-}
+/* ! Background select not correct */
+/* dx-list dx-widget dx-collection */
 
 .custom-appointment-form .dx-switch-container {
   background-color: #10151C !important;
@@ -78,11 +67,8 @@ body{
 
 /* *Horiziontal Appointmnet (AGENDA) */
 .dx-scheduler-appointment-horizontal {
-    /* min-height: fit-content; */
 }
 .dx-scheduler-appointment-horizontal .dx-scheduler-appointment-content {
-  /* min-height: 6rem; */
-  /* min-height: fit-content; */
 }
 /* ================================== */
 
