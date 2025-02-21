@@ -1,10 +1,13 @@
 <div class="chat-container h-full w-full flex flex-col">
-    <div class="h-[6%] min-h-[40px] ">
-        <app-previous-chats-dropdown></app-previous-chats-dropdown>
-    </div>
-    <div class="h-[94%]">
+    <app-chat-toolbar
+        (clearChat)="clearChat()"
+        (loadPrevious)="loadPreviousMessages()"
+    >
+    </app-chat-toolbar>
+    <div class="flex-1">
         <dx-chat
             [showDayHeaders]="false"
+            [class.dx-chat-disabled]="isDisabled"
             [height]="'100%'"
             [width]="'100%'"
             [user]="currentUser"

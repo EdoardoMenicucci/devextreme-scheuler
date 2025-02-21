@@ -52,20 +52,11 @@ export class ChatService implements OnDestroy {
   }
 
   onInit() {
-    //first assistant message
-        this.date.setHours(0, 0, 0, 0);
+    this.date.setHours(0, 0, 0, 0);
+    this.currentUser.id = this.authService.userId ?? 0;
+    this.currentUser.name = this.authService.username ?? 'Err';
 
-        this.currentUser.id = this.authService.userId ?? 0;
-        this.currentUser.name = this.authService.username ?? 'Err';
-
-    this.messages = [
-      {
-        timestamp: this.getTimestamp(this.date, -9),
-        author: this.supportAgent,
-        text: `Hello, ${firstLetterToUpperCase(this.currentUser.name!)}!\nIm here to help you whit you'r scheduling!`,
-      },
-    ];
-
+    this.messages = [];
     this.messagesSubject$.next(this.messages);
     this.userChatTypingUsers$.next([]);
     this.supportChatTypingUsers$.next([]);
@@ -186,6 +177,11 @@ export class ChatService implements OnDestroy {
       this.messages = [...this.messages];
       this.messagesSubject$.next(this.messages);
     }
+  }
+
+  clearMessages(): void {
+    this.messages = [];
+    this.messagesSubject$.next(this.messages);
   }
 
   //utilities
