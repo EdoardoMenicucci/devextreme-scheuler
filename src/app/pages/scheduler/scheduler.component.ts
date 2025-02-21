@@ -56,163 +56,14 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     private contactService: ContactService,
     private router: Router
   ) {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.appointmentService.loadAppointments();
-      });
-  }
-
-  // Add this method to handle sharing
-  onAppointmentFormSharing(username: string, appointmentData: any) {
-    if (username) {
-      // Call your service to share the appointment
-      this.appointmentService
-        .shareAppointment(appointmentData, username)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (response) => {
-            // Handle successful sharing
-            notify('Appointment shared successfully', 'success', 3000);
-          },
-          error: (error) => {
-            notify('Failed to share appointment', 'error', 3000);
-          },
-        });
-    }
-  }
-
-  // Add this method to customize the appointment form
-  onAppointmentFormCreated(e: any) {
-    const form = e.form;
-
-    let formItems = form.option('items');
-
-    if (
-      !formItems.find(function (i: any) {
-        return i.dataField === 'sharedWith';
-      })
-    ) {
-      formItems.push({
-        colSpan: 1,
-        label: { text: 'Share with friend' },
-        editorType: 'dxSelectBox',
-        dataField: 'sharedWith',
-        cssClass: 'shared-with',
-        editorOptions: {
-          dataSource: this.friends,
-          displayExpr: 'friendUsername',
-          valueExpr: 'friendUsername',
-          placeholder: 'Select a friend to share with',
-        },
-      });
-      formItems.push({
-        itemType: 'button',
-        horizontalAlignment: 'left',
-        cssClass: 'share-button',
-        buttonOptions: {
-          text: 'Share',
-          type: 'default',
-          onClick: () => {
-            const formData = form.option('formData');
-            if (formData.sharedWith) {
-              this.onAppointmentFormSharing(formData.sharedWith, formData);
-            }
-          },
-        },
-      });
-      form.option('items', formItems);
-    }
-  }
-
-  onAppointmentFormOpening(e: any) {
-    const form = e.form;
-
-    // Add close on outside click configuration
-    e.popup.option({
-      closeOnOutsideClick: true,
-      wrapperAttr: { 'class': 'custom-appointment-form' }
-    });
-
-    form.option('items', [{
-      dataField: 'text',
-      colSpan: 2,  // Occupa tutta la larghezza
-      label: { text: 'Subject' },
-      editorType: 'dxTextBox',
-      editorOptions: {
-        width: '100%'
-      }
-    }, {
-      dataField: 'startDate',
-      label: { text: 'Start Date' },
-      editorType: 'dxDateBox',
-      editorOptions: {
-        width: '100%',
-        type: 'datetime'
-      }
-    }, {
-      dataField: 'endDate',
-      label: { text: 'End Date' },
-      editorType: 'dxDateBox',
-      editorOptions: {
-        width: '100%',
-        type: 'datetime'
-      }
-    }, {
-      dataField: 'allDay',
-      label: { text: 'All Day' },
-      editorType: 'dxSwitch',
-      cssClass: 'custom-switch-container',
-      editorOptions: {
-        width: '100%',
-        switchedOnText: 'Yes',
-        switchedOffText: 'No'
-      }
-    }, {
-      dataField: 'isCompleted',
-      label: { text: 'Completion Status' },
-      editorType: 'dxSelectBox',
-      editorOptions: {
-        items: this.isCompleted,
-        displayExpr: 'text',
-        valueExpr: 'id',
-        width: '100%'
-      }
-    }, {
-      dataField: 'sharedWith',
-      colSpan: 2,  // Occupa tutta la larghezza
-      label: { text: 'Share with friend' },
-      editorType: 'dxSelectBox',
-      editorOptions: {
-        dataSource: this.friends,
-        displayExpr: 'friendUsername',
-        valueExpr: 'friendUsername',
-        width: '100%',
-        placeholder: 'Select a friend to share with'
-      }
-    }, {
-      itemType: 'button',
-      colSpan: 2,  // Occupa tutta la larghezza
-      horizontalAlignment: 'left',
-      buttonOptions: {
-        text: 'Share',
-        type: 'default',
-        width: '100%',  // Bottone largo quanto il form
-        onClick: () => {
-          const formData = form.option('formData');
-          if (formData.sharedWith) {
-            this.onAppointmentFormSharing(formData.sharedWith, formData);
-          }
-        }
-      }
-    }]);
-
-    // To prevent the default items from being shown
-    e.popup.option('showTitle', true);
-    e.popup.option('title', e.appointmentData?.text ? 'Edit Appointment' : 'Create Appointment');
+    // this.router.events
+    //   .pipe(
+    //     filter((event) => event instanceof NavigationEnd),
+    //     takeUntil(this.destroy$)
+    //   )
+    //   .subscribe(() => {
+    //     // this.appointmentService.loadAppointments();
+    //   });
   }
 
   //life cycle hook
@@ -241,6 +92,124 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  // Add this method to handle sharing
+  onAppointmentFormSharing(username: string, appointmentData: any) {
+    if (username) {
+      // Call your service to share the appointment
+      this.appointmentService
+        .shareAppointment(appointmentData, username)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            // Handle successful sharing
+            notify('Appointment shared successfully', 'success', 3000);
+          },
+          error: (error) => {
+            notify('Failed to share appointment', 'error', 3000);
+          },
+        });
+    }
+  }
+
+  // * Scheduler Customizations
+  onAppointmentFormOpening(e: any) {
+    const form = e.form;
+
+    // Add close on outside click configuration
+    e.popup.option({
+      closeOnOutsideClick: true,
+      wrapperAttr: { class: 'custom-appointment-form' },
+    });
+
+    form.option('items', [
+      {
+        dataField: 'text',
+        colSpan: 2, // Occupa tutta la larghezza
+        label: { text: 'Subject' },
+        editorType: 'dxTextBox',
+        editorOptions: {
+          width: '100%',
+        },
+      },
+      {
+        dataField: 'startDate',
+        label: { text: 'Start Date' },
+        editorType: 'dxDateBox',
+        editorOptions: {
+          width: '100%',
+          type: 'datetime',
+        },
+      },
+      {
+        dataField: 'endDate',
+        label: { text: 'End Date' },
+        editorType: 'dxDateBox',
+        editorOptions: {
+          width: '100%',
+          type: 'datetime',
+        },
+      },
+      {
+        dataField: 'allDay',
+        label: { text: 'All Day' },
+        editorType: 'dxSwitch',
+        cssClass: 'custom-switch-container',
+        editorOptions: {
+          width: '100%',
+          switchedOnText: 'Yes',
+          switchedOffText: 'No',
+        },
+      },
+      {
+        dataField: 'isCompleted',
+        label: { text: 'Completion Status' },
+        editorType: 'dxSelectBox',
+        editorOptions: {
+          items: this.isCompleted,
+          displayExpr: 'text',
+          valueExpr: 'id',
+          width: '100%',
+        },
+      },
+      {
+        dataField: 'sharedWith',
+        colSpan: 2, // Occupa tutta la larghezza
+        label: { text: 'Share with friend' },
+        editorType: 'dxSelectBox',
+        editorOptions: {
+          dataSource: this.friends,
+          displayExpr: 'friendUsername',
+          valueExpr: 'friendUsername',
+          width: '100%',
+          placeholder: 'Select a friend to share with',
+        },
+      },
+      {
+        itemType: 'button',
+        colSpan: 2, // Occupa tutta la larghezza
+        horizontalAlignment: 'left',
+        buttonOptions: {
+          text: 'Share',
+          type: 'default',
+          width: '100%', // Bottone largo quanto il form
+          onClick: () => {
+            const formData = form.option('formData');
+            if (formData.sharedWith) {
+              this.onAppointmentFormSharing(formData.sharedWith, formData);
+            }
+          },
+        },
+      },
+    ]);
+
+    // To prevent the default items from being shown
+    e.popup.option('showTitle', true);
+    e.popup.option(
+      'title',
+      e.appointmentData?.text ? 'Edit Appointment' : 'Create Appointment'
+    );
   }
 
   //actions
@@ -310,7 +279,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   formatAppointmentDate(date: Date): string {
     return new Date(date).toLocaleTimeString([], {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 }

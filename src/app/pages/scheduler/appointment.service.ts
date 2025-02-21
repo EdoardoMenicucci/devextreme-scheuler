@@ -13,7 +13,7 @@ export class AppointmentService implements OnDestroy {
   appointments$ = this.appointmentsSubject.asObservable();
 
   constructor(private http: HttpClient) {
-    this.loadAppointments();
+    // this.loadAppointments();
   }
 
   loadAppointments(): void {

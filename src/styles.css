@@ -15,8 +15,9 @@
 body{
     background-color:#111827;
 }
+/* ================================== */
 
-/* *override del colore dell indicatore  */
+/* *override del colore dell indicatore e altri stili dello scheduler */
 .dx-scheduler-date-time-indicator {
   background-color: #818CF8 !important;
   border-color: #818CF8 !important;
@@ -33,7 +34,11 @@ body{
   color: white !important;
 }
 
-/* *Appointment Edit Customization */
+.dx-scheduler-date-table-current-date .dx-scheduler-date-table-cell-text{
+  color: white !important;
+}
+
+/* *Appointment Edit Form Customization */
 .custom-appointment-form .dx-texteditor-input{
   background-color: #10151C !important;
   /* color: white !important; */
@@ -58,6 +63,18 @@ body{
 }
 /* ================================== */
 
+/* *Vertical Appointmnet */
+/* All'hover viene mostrato tutto il testo */
+.dx-scheduler-appointment-vertical{
+  min-height: fit-content;
+  overflow-y: hidden;
+}
+
+.dx-scheduler-appointment-vertical .appointment-container:hover{
+  overflow-y: hidden;
+  min-height: fit-content;
+}
+/* ================================== */
 
 /* *Horiziontal Appointmnet (AGENDA) */
 .dx-scheduler-appointment-horizontal {
@@ -69,24 +86,11 @@ body{
 }
 /* ================================== */
 
-
+/* * Contact View */
 .friend .dx-texteditor-input{
   background-color: #10151C !important;
 }
-
-.sharing-group{
-  /* background-color: #1F2937 !important; */
-  display: flex !important;
-  height: 100% !important;
-  width: 100% !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  margin-top: 20px !important;
-}
-
-.share-button{
-  margin-top: 15px;
-}
+/* ================================== */
 
 /* *variabili tema */
 :root {
