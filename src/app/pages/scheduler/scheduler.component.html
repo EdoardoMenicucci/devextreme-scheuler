@@ -19,21 +19,12 @@
         allowUpdating: true,
         allowDragging: true
       }"
-      dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
-      (onAppointmentFormOpening)="onAppointmentFormCreated($event)"
+      appointmentTemplate="appointmentTemplate"
+      (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
       (onAppointmentAdded)="onAppointmentAdded($event)"
       (onAppointmentUpdated)="onAppointmentUpdated($event)"
       (onAppointmentDeleted)="onAppointmentDeleted($event)"
     >
-      <!-- <dxi-resource
-        fieldExpr="status"
-        label="Status"
-        displayExpr="text"
-        valueExpr="text"
-        [dataSource]="status"
-        [useColorAsDefault]="true"
-      >
-      </dxi-resource> -->
       <dxi-resource
         fieldExpr="isCompleted"
         label="Completion Status"
@@ -43,6 +34,20 @@
         [useColorAsDefault]="true"
       >
       </dxi-resource>
+      <!-- * Template Della vista dell'appuntamneto nello Schedulers -->
+      <div *dxTemplate="let data of 'appointmentTemplate'" [class]="getAppointmentClass(data)">
+        <div>
+          <div class="appointment-title">{{data.appointmentData.text}}</div>
+          <div class="appointment-time">
+            {{formatAppointmentDate(data.appointmentData.startDate)}} -
+            {{formatAppointmentDate(data.appointmentData.endDate)}}
+          </div>
+          <div class="appointment-status">
+            {{data.appointmentData.isCompleted ? 'Completed' : 'Not Completed'}}
+          </div>
+        </div>
+      </div>
+      <!-- ********************************************************* -->
     </dx-scheduler>
   </div>
   <div class="w-full h-full ps-2 pe-2 pb-2">

@@ -7,3 +7,62 @@
   /* usa il colore base accent #4F46E5 */
   border-color: rgba(79, 70, 229, 1) !important;
 }
+
+.custom-appointment-form {
+  /* Stili per il container del form */
+}
+
+.custom-appointment-form ::ng-deep .dx-textbox,
+.custom-appointment-form ::ng-deep .dx-datebox,
+.custom-appointment-form ::ng-deep .dx-selectbox {
+  /* Stili per gli input */
+}
+
+.custom-appointment-form ::ng-deep .dx-button {
+  /* Stili per i bottoni */
+}
+
+.custom-appointment-form ::ng-deep .dx-checkbox {
+  /* Stili per i checkbox */
+}
+
+.appointment-container {
+  padding: 5px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-completed {
+  border-left: 4px solid #4BB543;
+  opacity: 0.6;
+}
+
+.appointment-not-completed {
+  border-left: 4px solid #FF9500;
+}
+
+.appointment-title {
+  font-weight: bold;
+  margin-bottom: 4px;
+  white-space: normal; /* Changed from nowrap to normal */
+  overflow: visible; /* Changed from hidden */
+  word-wrap: break-word;
+  line-height: 1.2;
+  max-height: 2.4em; /* Allows for 2 lines of text */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Show maximum of 2 lines */
+  -webkit-box-orient: vertical;
+}
+
+.appointment-time {
+  font-size: 0.85em;
+  color: #d4d4d4;
+  margin-bottom: 2px;
+}
+
+.appointment-status {
+  font-size: 0.8em;
+  font-style: italic;
+}

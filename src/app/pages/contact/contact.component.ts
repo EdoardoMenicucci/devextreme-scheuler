@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxListModule, DxTextBoxModule, DxButtonModule } from 'devextreme-angular';
 import { ContactService } from './contact.service';

@@ -5,21 +5,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* * Reset */
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-.flex{
-    display: flex;
-}
-
 body{
     background-color:#111827;
 }
 
-/* override del colore dell indicatore  */
+/* *override del colore dell indicatore  */
 .dx-scheduler-date-time-indicator {
   background-color: #818CF8 !important;
   border-color: #818CF8 !important;
@@ -36,23 +33,45 @@ body{
   color: white !important;
 }
 
-.shared-with .dx-texteditor-input{
+/* *Appointment Edit Customization */
+.custom-appointment-form .dx-texteditor-input{
   background-color: #10151C !important;
   /* color: white !important; */
 }
 
-.shared-with .dx-dropdowneditor-icon {
+.custom-appointment-form .dx-dropdowneditor-icon {
   background-color: #10151C !important;
   /* color: white !important; */
 }
 
-.shared-with .dx-texteditor-buttons-container{
+.custom-appointment-form .dx-texteditor-buttons-container{
   background-color: #10151C !important;
 }
+
+.custom-appointment-form .dx-switch-container {
+  background-color: #10151C !important;
+  max-width: 8rem;
+}
+
+.custom-appointment-form .custom-switch-container {
+  margin: auto;
+}
+/* ================================== */
+
+
+/* *Horiziontal Appointmnet (AGENDA) */
+.dx-scheduler-appointment-horizontal {
+    min-height: fit-content;
+}
+.dx-scheduler-appointment-horizontal .dx-scheduler-appointment-content {
+  /* min-height: 6rem; */
+  min-height: fit-content;
+}
+/* ================================== */
+
 
 .friend .dx-texteditor-input{
   background-color: #10151C !important;
-  /* color: white !important; */
 }
 
 .sharing-group{
@@ -69,7 +88,7 @@ body{
   margin-top: 15px;
 }
 
-/* variabili tema */
+/* *variabili tema */
 :root {
   --color-bg-primary: #111827;
   --color-bg-secondary: #1F2937;

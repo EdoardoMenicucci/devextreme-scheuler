@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { registerForm } from '../../models/d.interface';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import notify from 'devextreme/ui/notify';
-
+import { ErrorHandlerService } from '../../auth/error-handler.service';
 
 @Component({
   selector: 'app-register',
@@ -15,10 +15,10 @@ import notify from 'devextreme/ui/notify';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
   isAuthenticated: boolean = false;
-  private authErrorSubscription!: Subscription;
-  private errorMessage: string = '';
+  errorMessage: string = '';
 
   public registerForm: registerForm = {
     username: '',
@@ -27,63 +27,44 @@ export class RegisterComponent {
   };
 
   constructor(
-    private router: Router,
     private authService: AuthService,
+    private router: Router,
+    private errorHandler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
-    // Controlla autenticazione iniziale
     if (this.authService.isAuthenticated()) {
-      this.isAuthenticated = true;
-      this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/scheduler']);
-      });
+      this.handleSuccessfulAuth();
     }
-    // Sottoscrizione agli errori di autenticazione
-    this.authErrorSubscription = this.authService
-      .getAuthErrors()
-      .subscribe((error) => {
-        if (error) {
-          this.isAuthenticated = false;
-          this.errorMessage = error.message;
 
-          switch (error.type) {
-            case 'TOKEN_EXPIRED':
-              notify('Sessione scaduta, effettua nuovamente il login', 'error', 3000);
-              this.router.navigate(['/login']);
-              break;
-            case 'UNAUTHORIZED':
-              notify('Non autorizzato', 'error', 3000);
-              this.router.navigate(['/signin']);
-              break;
-            case 'NETWORK_ERROR':
-              notify('Errore di rete', 'error', 3000);
-              this.router.navigate(['/home']);
-              break;
-          }
-        } else {
-          this.errorMessage = '';
-        }
+    this.authService.getAuthErrors()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(error => {
+        this.isAuthenticated = !error;
+        this.errorMessage = error?.message ?? '';
+        this.errorHandler.handleAuthError(error);
       });
-  }
-
-  handleRegister(): void {
-    this.authService.register(this.registerForm).subscribe({
-      next: () => {
-        this.isAuthenticated = true;
-        this.router.navigate(['/'], { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/scheduler']);
-        });
-      },
-      error: (error : Error) => {
-        notify('Errore durante la registrazione', 'error', 3000);
-        console.error('Registration failed:', error);
-      },
-    });
   }
 
   ngOnDestroy(): void {
-    // Chiudi la sottoscrizione memory leaks
-    if (this.authErrorSubscription) this.authErrorSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private handleSuccessfulAuth(): void {
+    this.isAuthenticated = true;
+    this.router
+      .navigate(['/'], { skipLocationChange: true })
+      .then(() => this.router.navigate(['/scheduler']));
+  }
+
+  handleRegister(): void {
+    this.authService
+      .register(this.registerForm)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.handleSuccessfulAuth(),
+        error: () => notify('Errore durante la registrazione', 'error', 3000),
+      });
   }
 }

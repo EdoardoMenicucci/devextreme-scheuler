@@ -1,37 +1,39 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DashboardService {
-  private apiUrl = 'http://localhost:5000/api/userstatistics';
-  private appointmentsSubject = new BehaviorSubject<any>([]);
+export class DashboardService implements OnDestroy {
+  private readonly apiUrl = 'http://localhost:5000/api/userstatistics';
+  private readonly destroy$ = new Subject<void>();
+  private readonly statisticsSubject$ = new BehaviorSubject<any>([]);
 
-  statistics$ = this.appointmentsSubject.asObservable();
+  statistics$ = this.statisticsSubject$.asObservable();
 
   constructor(private http: HttpClient, private authService: AuthService) {
     this.loadStatistics();
   }
 
-  loadStatistics(startDate? : string, endDate? : string): void {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.statisticsSubject$.complete();
+  }
+
+  loadStatistics(startDate?: string, endDate?: string): void {
     let url = `${this.apiUrl}/${this.authService.userId}/fullstatistics`;
 
-    // Add query parameters if dates are provided
     if (startDate != null && endDate != null) {
       url += `?startDate=${startDate}&endDate=${endDate}`;
     }
 
-    console.log(url);
-
-
-    this.http
-      .get<any[]>(url)
-      .subscribe((data) => {
-        // console.log('Statistics recived:', data);
-        this.appointmentsSubject.next(data);
+    this.http.get<any[]>(url)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.statisticsSubject$.next(data);
       });
   }
 }

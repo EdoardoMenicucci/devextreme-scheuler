@@ -4,31 +4,34 @@
   openedStateMode="shrink"
   revealMode="slide"
   template="menu">
-  <div *dxTemplate="let data of 'menu'">
-    <dx-list
-      [items]="navigation"
-      [focusStateEnabled]="false"
-      [selectedItems]="[selectedRoute]"
-      (onItemClick)="itemClick($event)"
-      [width]="200">
-      <div *dxTemplate="let item of 'item'" class="flex items-center">
-        <i class="dx-icon dx-icon-{{item.icon}}"></i>
-        <span class="ms-1">{{item.text}}</span>
-      </div>
-    </dx-list>
-    <div class="p-[10px] mt-10 flex items-center">
-        <i class="dx-icon dx-icon-chevrondown"></i>
-        <span class="ms-1">Previous Chats</span>
+  <div *dxTemplate="let data of 'menu'" class="h-full flex flex-col">
+
+    <!-- Lista principale -->
+    <div class="flex-grow">
+      <dx-list
+        [items]="navigation"
+        [focusStateEnabled]="false"
+        (onItemClick)="onMainItemClick($event)"
+        [width]="200">
+        <div *dxTemplate="let item of 'item'" class="flex items-center">
+          <i class="dx-icon dx-icon-{{item.icon}}"></i>
+          <span class="ms-1">{{item.text}}</span>
+        </div>
+      </dx-list>
     </div>
-    <dx-list
-      [items]="previousChats"
-      [focusStateEnabled]="false"
-      [selectedItems]="[selectedRoute]"
-      (onItemClick)="loadChat($event)"
-      [width]="200">
-      <div *dxTemplate="let item of 'item'">
-        <span class="ms-1">{{formatDate(item.createdAt)}}</span>
-      </div>
-    </dx-list>
+
+    <!-- Logout -->
+    <div class="mt-auto">
+      <dx-list
+        [items]="logout"
+        [focusStateEnabled]="false"
+        (onItemClick)="onLogoutClick($event)"
+        [width]="200">
+        <div *dxTemplate="let item of 'item'" class="flex items-center">
+          <i class="dx-icon dx-icon-{{item.icon}}"></i>
+          <span class="ms-1">{{item.text}}</span>
+        </div>
+      </dx-list>
+    </div>
   </div>
 </dx-drawer>

@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DxDrawerModule, DxListModule } from 'devextreme-angular';
 import { Router, RouterModule } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { formatDateUtils } from '../../utils/generic';
 import notify from 'devextreme/ui/notify';
+import { NotificationService } from '../notification/notification.service';
+import { ErrorHandlerService } from '../../auth/error-handler.service';
 
 @Component({
   standalone: true,
@@ -13,93 +15,86 @@ import notify from 'devextreme/ui/notify';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
 
   navigation = [
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
     { id: 2, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },
-    { id: 2, text: 'Contact', icon: 'group', path: '/contact' },
-    { id: 3, text: 'Logout', icon: 'login', action: 'logout' },
+    { id: 3, text: 'Contact', icon: 'group', path: '/contact' },
+    {
+      id: 4,
+      text: 'Notifications',
+      icon: 'bell',
+      action: 'toggleNotifications',
+    },
   ];
 
+  logout = [{ id: 1, text: 'Logout', icon: 'runner', path: '/home' }];
+
   previousChats = [];
-
-  selectedRoute: string = '';
-
-  //subscription
-  private authErrorSubscription!: Subscription;
-  private previousChatSubscription!: Subscription;
+  selectedRoute: any = null;
 
   constructor(
     private router: Router,
     private chatService: ChatService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private errorHandler: ErrorHandlerService
   ) {
-    //Get previous user chats (this feature need to be polished)
-    this.chatService.getUserChats().subscribe((data) => {
-      this.previousChats = data;
-    });
+    this.chatService
+      .getUserChats()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.previousChats = data;
+      });
   }
 
-  //Lifecycle hook
   ngOnInit(): void {
-    // Check initial authentication
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
       return;
     }
 
-    // Subscribe to authentication errors
-    this.authErrorSubscription = this.authService
+    this.authService
       .getAuthErrors()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((error) => {
-        if (error) {
-          switch (error.type) {
-            case 'TOKEN_EXPIRED':
-              notify('Session expired, please login again', 'error', 3000);
-              this.router.navigate(['/login']);
-              break;
-            case 'UNAUTHORIZED':
-              notify('Unauthorized', 'error', 3000);
-              this.router.navigate(['/signin']);
-              break;
-            case 'NETWORK_ERROR':
-              notify('Network error', 'error', 3000);
-              this.router.navigate(['/home']);
-              break;
-          }
-        }
+        this.errorHandler.handleAuthError(error);
       });
   }
 
   ngOnDestroy(): void {
-    if (this.authErrorSubscription) this.authErrorSubscription.unsubscribe();
-    if (this.previousChatSubscription)
-      this.previousChatSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
-  //
+
+  onMainItemClick(e: any): void {
+    const item = e?.itemData;
+    if (item?.path) {
+      this.router.navigate([item.path]);
+      this.selectedRoute = item;
+    }
+    if (item?.action === 'toggleNotifications') {
+      this.notificationService.toggle();
+    }
+  }
+
+  onLogoutClick(e: any): void {
+    const item = e?.itemData;
+    if (item?.action === 'logout') {
+      this.authService.logout();
+      this.router.navigate(['/home']);
+    }
+  }
 
   loadChat(e: any) {
-    // debug
-    console.log(e);
-    //
-    this.chatService.loadChatMessages(e.itemData.id);
+    if (e?.itemData?.id) {
+      this.chatService.loadChatMessages(e.itemData.id);
+    }
   }
 
   formatDate(dateInput: string | Date | null): string {
     return formatDateUtils(dateInput);
-  }
-
-  itemClick(e: any) {
-    console.log('item click', e);
-
-    //router navigation
-    if (e.itemData.path) {
-      this.selectedRoute = e.itemData.path;
-      this.router.navigate([e.itemData.path]);
-    } else if (e.itemData.action === 'logout') {
-      this.authService.logout();
-      this.router.navigate(['/home']);
-    }
   }
 }

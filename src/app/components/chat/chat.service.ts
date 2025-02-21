@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, tap, catchError, firstValueFrom } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Observable, BehaviorSubject, tap, catchError, firstValueFrom, Subject, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
 import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 
 import { AppointmentService } from '../../pages/scheduler/appointment.service';
@@ -11,16 +10,16 @@ import { firstLetterToUpperCase } from '../../utils/generic';
 
 import notify from 'devextreme/ui/notify';
 
-
-
 @Injectable({
   providedIn: 'root',
 })
-export class ChatService {
-  private apiUrl = 'http://localhost:5000';
-  private messagesSubject = new BehaviorSubject<Message[]>([]);
-  private userChatTypingUsersSubject = new BehaviorSubject<User[]>([]);
-  private supportChatTypingUsersSubject = new BehaviorSubject<Message[]>([]);
+export class ChatService implements OnDestroy {
+  private readonly apiUrl = 'http://localhost:5000';
+  private readonly destroy$ = new Subject<void>();
+  private readonly messagesSubject$ = new BehaviorSubject<Message[]>([]);
+  private readonly userChatTypingUsers$ = new BehaviorSubject<User[]>([]);
+  private readonly supportChatTypingUsers$ = new BehaviorSubject<Message[]>([]);
+
   public messages: Message[] = [];
   private chats: any[] = [];
   private date: Date;
@@ -35,17 +34,21 @@ export class ChatService {
     name: 'Scheduler Support Agent',
   };
 
-  // private appointmentService!: AppointmentService;
-  // private http!: HttpClient;
   constructor(
     private appointmentService: AppointmentService,
     private http: HttpClient,
     private authService: AuthService
   ) {
     this.date = new Date();
-
-
     this.onInit();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.messagesSubject$.complete();
+    this.userChatTypingUsers$.complete();
+    this.supportChatTypingUsers$.complete();
   }
 
   onInit() {
@@ -63,18 +66,27 @@ export class ChatService {
       },
     ];
 
-    this.messagesSubject.next(this.messages);
-    this.userChatTypingUsersSubject.next([]);
-    this.supportChatTypingUsersSubject.next([]);
+    this.messagesSubject$.next(this.messages);
+    this.userChatTypingUsers$.next([]);
+    this.supportChatTypingUsers$.next([]);
   }
 
   //Main functions
   sendMessageToAI(message: string): Observable<any> {
+
     const payload = {
       text: message,
     };
 
-    // Indica che l'assistente è in typing (stato "in digitazione")
+    // Add user message immediately
+    this.messages.push({
+      text: message,
+      timestamp: this.getTimestamp(this.date),
+      author: this.currentUser,
+    });
+    this.messagesSubject$.next(this.messages);
+
+    // Assistant typing (stato "in digitazione")
     this.supportChatOnTypingStart();
 
     return this.http.post(`${this.apiUrl}/api/message`, payload).pipe(
@@ -82,40 +94,38 @@ export class ChatService {
         // debug
         console.log('Response:', response);
         //
-        // Rimuove il typing status al ritorno della risposta
+        // Remove asistant typing
         this.supportChatOnTypingEnd();
 
-        if (response.aiResponse.author === 'model') {
-          response.aiResponse.author = this.supportAgent;
-        } else {
-          response.aiResponse.author = this.currentUser;
+        if (response.aiResponse) {
+          this.messages.push({
+            author: this.supportAgent,
+            text: response.aiResponse.text,
+            timestamp: this.getTimestamp(this.date),
+          });
+
+          this.messagesSubject$.next(this.messages);
+          this.appointmentService.loadAppointments();
         }
-
-        this.messages.push({
-          author: response.aiResponse.author,
-          text: response.aiResponse.text,
-          timestamp: this.getTimestamp(this.date),
-        });
-
-        this.appointmentService.loadAppointments();
       }),
-      catchError((error: any) => {
-        // Rimuovere typing status in caso di errore
-        this.supportChatTypingUsersSubject.next([]);
-        console.error('Error sending message:', error);
-        if (error.status === 401) {
-          // Handle Unauthorized Error
-          notify('You are not authorized to perform this action', 'error', 3000);
-        } else if (error.status === 400) {
-          // Handle Bad Request Error
-          notify('Bad request. Please check your input', 'error', 3000);
-        } else {
-          // Handle other errors
-          notify('An unexpected error occurred', 'error', 3000);
-        }
-        return new Observable<any>();
-      })
+      catchError(this.handleError.bind(this))
     );
+  }
+
+  private handleError(error: any): Observable<never> {
+    this.supportChatOnTypingEnd();
+    console.error('Error:', error);
+
+    const errorMessages: { [key: string]: string } = {
+      401: 'You are not authorized to perform this action',
+      400: 'Bad request. Please check your input',
+      default: 'An unexpected error occurred'
+    };
+
+    const status = (error as { status: number }).status;
+
+    notify(errorMessages[status.toString()] || errorMessages['default'], 'error', 3000);
+    return new Observable<never>();
   }
 
   getUserChats(): Observable<any> {
@@ -124,24 +134,11 @@ export class ChatService {
       .pipe(
         tap((response: any) => {
           // debug
-          console.log('Response:', response);
+          // console.log('Response:', response);
           //
           this.chats = response;
         }),
-        catchError((error: any) => {
-          console.error('Error sending message:', error);
-          if (error.status === 401) {
-            // Handle Unauthorized Error
-            notify('You are not authorized to perform this action', 'error', 3000);
-          } else if (error.status === 400) {
-            // Handle Bad Request Error
-            notify('Bad request. Please check your input', 'error', 3000);
-          } else {
-            // Handle other errors
-            notify('An unexpected error occurred', 'error', 3000);
-          }
-          return new Observable<any>();
-        })
+        catchError(this.handleError)
       );
   }
 
@@ -151,20 +148,7 @@ export class ChatService {
         console.log('Response:', response);
         this.messages = response;
       }),
-      catchError((error: any) => {
-        console.error('Error sending message:', error);
-        if (error.status === 401) {
-          // Handle Unauthorized Error
-          notify('You are not authorized to perform this action', 'error', 3000);
-        } else if (error.status === 400) {
-          // Handle Bad Request Error
-          notify('Bad request. Please check your input', 'error', 3000);
-        } else {
-          // Handle other errors
-          notify('An unexpected error occurred', 'error', 3000);
-        }
-        return new Observable<any>();
-      })
+      catchError(this.handleError)
     );
   }
 
@@ -175,57 +159,46 @@ export class ChatService {
       )) as any[];
       this.onInit();
       response.forEach((element) => {
+
         if (element.author == 'model') {
           element.author = this.supportAgent;
-          this.messages.push({
-            author: element.author,
-            text: element.text,
-            timestamp: element.timestamp,
-          });
         } else {
           element.author = this.currentUser;
-          this.messages.push({
-            author: element.author,
-            text: element.text,
-            timestamp: element.timestamp,
-          });
         }
+
+        this.messages.push({
+          author: element.author,
+          text: element.text,
+          timestamp: element.timestamp,
+        });
       });
       //debug
       // console.log('Messages loaded:', this.messages);
       //
     } catch (error: any) {
-      console.error('Error loading messages:', error);
-      if (error.status === 401) {
-        notify('You are not authorized to perform this action', 'error', 3000);
-      } else if (error.status === 400) {
-        notify('Bad request. Please check your input', 'error', 3000);
-      } else {
-        notify('An unexpected error occurred', 'error', 3000);
-      }
+      this.handleError(error);
     }
   }
 
   async onMessageEntered(event: MessageEnteredEvent) {
     // this.sendMessageToAI(event.message!.text || '');
     if (event.message) {
-      this.messages = [...this.messages, event.message];
+      this.messages = [...this.messages];
+      this.messagesSubject$.next(this.messages);
     }
-    this.messagesSubject.next(this.messages);
-    console.log('onMessageEntered', this.messagesSubject);
   }
 
   //utilities
-  get userChatTypingUsers$(): Observable<User[]> {
-    return this.userChatTypingUsersSubject.asObservable();
+  get userChatTypingUsers(): Observable<User[]> {
+    return this.userChatTypingUsers$.asObservable();
   }
 
-  get supportChatTypingUsers$(): Observable<Message[]> {
-    return this.supportChatTypingUsersSubject.asObservable();
+  get supportChatTypingUsers(): Observable<Message[]> {
+    return this.supportChatTypingUsers$.asObservable();
   }
 
   get messages$(): Observable<Message[]> {
-    return this.messagesSubject.asObservable();
+    return this.messagesSubject$.asObservable();
   }
 
   getUsers(): User[] {
@@ -241,20 +214,20 @@ export class ChatService {
   }
 
   userChatOnTypingStart() {
-    this.supportChatTypingUsersSubject.next([this.currentUser]);
-    console.log('userChatOnTypingStart', this.supportChatTypingUsersSubject);
+    this.userChatTypingUsers$.next([this.currentUser]);
+    // console.log('userChatOnTypingStart', this.supportChatTypingUsers$);
   }
 
   userChatOnTypingEnd() {
-    this.supportChatTypingUsersSubject.next([]);
-    console.log('userChatOnTypingEnd', this.supportChatTypingUsersSubject);
+    this.supportChatTypingUsers$.next([]);
+    // console.log('userChatOnTypingEnd', this.supportChatTypingUsers$);
   }
 
   supportChatOnTypingStart() {
-    this.userChatTypingUsersSubject.next([this.supportAgent]);
+    this.userChatTypingUsers$.next([this.supportAgent]);
   }
 
   supportChatOnTypingEnd() {
-    this.userChatTypingUsersSubject.next([]);
+    this.userChatTypingUsers$.next([]);
   }
 }

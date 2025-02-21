@@ -84,6 +84,7 @@ ng serve
 - [x] Appointment in list format
 - [x] Use status instead of isCompleted on backend and adapt all logic with api / gemini response
 - [ ] Share appointments between users
+- [ ] Cleanup subscription only for "long lived" observable - not HTTP Req
 
 
 

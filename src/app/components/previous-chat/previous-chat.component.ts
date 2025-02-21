@@ -53,6 +53,7 @@ export class PreviousChatsDropdownComponent implements OnInit, OnDestroy {
       this.chats = data;
     });
   }
+  //cleanup subscriptions needs only for "LONG-LIVED" OBSERVABLES, Not single events
   ngOnDestroy(): void {
     if (this.userChatsSub) this.userChatsSub.unsubscribe();
   }

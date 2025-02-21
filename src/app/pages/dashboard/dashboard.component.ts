@@ -12,7 +12,7 @@ import {
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { DashboardService } from './dashboard.service';
 import { AuthService } from '../../auth/auth.service';
-import { Subscription } from 'rxjs';
+import {  Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,8 +38,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentDate = new Date();
   username: string | null = null;
 
-  //subscription per evitare memory leaks
-  private statisticsSub!: Subscription;
+  //subscription
+  private readonly destroy$ = new Subject<void>();
 
   //filter options
   startDate: Date | null = null;
@@ -78,54 +78,51 @@ export class DashboardComponent implements OnInit, OnDestroy {
   //life cycle hook
   ngOnInit(): void {
     // prepara i dati per il grafico
-    this.statisticsSub = this.dashboardService.statistics$.subscribe((data) => {
-      this.statisticsData = [
-        { category: 'Total', value: data.totalAppointments ?? 0 },
-        {
-          category: 'Created',
-          value: data.createdAppointments ?? 0,
-        },
-        {
-          category: 'Updated',
-          value: data.updatedAppointments ?? 0,
-        },
-        {
-          category: 'Deleted',
-          value: data.deletedAppointments ?? 0,
-        },
-        {
-          category: 'Completed',
-          value: data.completedAppointments ?? 0,
-        },
-        {
-          category: 'Upcoming',
-          value: data.upcomingAppointments ?? 0,
-        },
-        { category: 'Missed', value: data.missedAppointments ?? 0 },
-      ];
+    this.dashboardService.statistics$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.statisticsData = [
+          { category: 'Total', value: data.totalAppointments ?? 0 },
+          { category: 'Created', value: data.createdAppointments ?? 0 },
+          { category: 'Updated', value: data.updatedAppointments ?? 0 },
+          { category: 'Deleted', value: data.deletedAppointments ?? 0 },
+          { category: 'Completed', value: data.completedAppointments ?? 0 },
+          { category: 'Upcoming', value: data.upcomingAppointments ?? 0 },
+          { category: 'Missed', value: data.missedAppointments ?? 0 },
+        ];
 
-      this.successRate = data.successRate;
-      console.log('Success rate:', this.successRate);
+        this.successRate = data.successRate ?? 0;
+        this.username = this.authService.username;
 
-      this.username = this.authService.username;
-      this.upcomingAppointments = data.upcomingAppointmentsList;
+        if (
+          data.upcomingAppointmentsList &&
+          Array.isArray(data.upcomingAppointmentsList)
+        ) {
+          this.upcomingAppointments = data.upcomingAppointmentsList;
 
-      // Check if there is an appointment on going
-      this.upcomingAppointments.forEach((a) => {
-        a.startDate = new Date(a.startDate);
-        a.endDate = new Date(a.endDate);
-        if (a.startDate <= this.currentDate && this.currentDate <= a.endDate) {
-          console.log('Appointment On Going', a);
+          this.upcomingAppointments.forEach((a) => {
+            if (a) {
+              a.startDate = new Date(a.startDate);
+              a.endDate = new Date(a.endDate);
+              if (
+                a.startDate <= this.currentDate &&
+                this.currentDate <= a.endDate
+              ) {
+                console.log('Appointment On Going', a);
+              }
+            }
+          });
+        } else {
+          this.upcomingAppointments = [];
         }
-      });
-      // console.log('Statistics data recived:', data);
-      console.log('current date: ', this.currentDate);
 
-    });
+        console.log('current date: ', this.currentDate);
+      });
   }
 
   ngOnDestroy(): void {
-    if (this.statisticsSub) this.statisticsSub.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onDateRangeChanged(e: any) {
@@ -181,6 +178,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       text: `${this.roundToTwo(arg.value)}%`,
     };
   };
+
   // utils
   roundToTwo(num: number): number {
     return Math.round(num * 100) / 100;

@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { Appointment } from '../../models/appointment.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AppointmentService {
+export class AppointmentService implements OnDestroy {
   private apiUrl = 'http://localhost:5000/api';
-  private appointmentsSubject = new BehaviorSubject<any[]>([]);
+  private appointmentsSubject = new BehaviorSubject<Appointment[]>([]);
+  private destroy$ = new Subject<void>();
   appointments$ = this.appointmentsSubject.asObservable();
 
   constructor(private http: HttpClient) {
@@ -15,39 +17,61 @@ export class AppointmentService {
   }
 
   loadAppointments(): void {
-    this.http.get<any[]>(`${this.apiUrl}/appointment`).subscribe((data) => {
-      console.log('Appointment recived:', data);
-      this.appointmentsSubject.next(data);
-    });
+    this.http
+      .get<Appointment[]>(`${this.apiUrl}/appointment`)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          console.log('Appointments received:', data);
+          this.appointmentsSubject.next(data);
+        },
+        error: (error) => console.error('Error loading appointments:', error),
+      });
   }
 
-  shareAppointment(appointmentData: any, username: string) {
-    console.log('Sharing appointment with:', username);
-    console.log('Appointment data:', appointmentData);
-    //todo test
+  shareAppointment(
+    appointmentData: Appointment,
+    username: string
+  ): Observable<any> {
+    return this.http
+      .post(
+        `${this.apiUrl}/appointment/share/${appointmentData.id}/${username}`,
+        appointmentData
+      )
+      .pipe(takeUntil(this.destroy$));
+  }
 
+  createAppointment(appointment: Appointment): Observable<Appointment> {
+    return this.http
+      .post<Appointment>(`${this.apiUrl}/appointment`, appointment)
+      .pipe(
+        tap(() => this.loadAppointments()),
+        takeUntil(this.destroy$)
+      );
+  }
 
-    return this.http.post(
-      `${this.apiUrl}/appointment/share/${appointmentData.id}/${username}`,
-      appointmentData
+  updateAppointment(
+    id: string,
+    appointment: Appointment
+  ): Observable<Appointment> {
+    return this.http
+      .put<Appointment>(`${this.apiUrl}/appointment/${id}`, appointment)
+      .pipe(
+        tap(() => this.loadAppointments()),
+        takeUntil(this.destroy$)
+      );
+  }
+
+  deleteAppointment(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/appointment/${id}`).pipe(
+      tap(() => this.loadAppointments()),
+      takeUntil(this.destroy$)
     );
   }
 
-  createAppointment(appointment: any): Observable<any> {
-    return this.http
-      .post(`${this.apiUrl}/appointment`, appointment)
-      .pipe(tap(() => this.loadAppointments()));
-  }
-
-  updateAppointment(id: string, appointment: any): Observable<any> {
-    return this.http
-      .put(`${this.apiUrl}/appointment/${id}`, appointment)
-      .pipe(tap(() => this.loadAppointments()));
-  }
-
-  deleteAppointment(id: string): Observable<any> {
-    return this.http
-      .delete(`${this.apiUrl}/appointment/${id}`)
-      .pipe(tap(() => this.loadAppointments()));
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.appointmentsSubject.complete();
   }
 }
