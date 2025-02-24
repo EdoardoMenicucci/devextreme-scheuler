@@ -125,12 +125,13 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   onAppointmentFormOpening(e: any) {
     const form = e.form;
 
-    // Add close on outside click configuration
+    // Forms Options
     e.popup.option({
       closeOnOutsideClick: true,
       wrapperAttr: { class: 'custom-appointment-form' },
     });
 
+    // Customize the form layout
     form.option('items', [
       {
         dataField: 'text',
@@ -213,6 +214,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       },
     ]);
 
+    // Customize the form bottom toolbar
     e.popup.option('toolbarItems', [
       {
         widget: 'dxButton',
@@ -266,7 +268,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
         },
       },
     ]);
-    // To prevent the default items from being shown
+    // Custom Form Title
     e.popup.option('showTitle', true);
     e.popup.option(
       'title',
