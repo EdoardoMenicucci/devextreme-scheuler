@@ -79,12 +79,15 @@ ng serve
 - [ ] Handling previous chat / design feature 
 - [x] Logout handling
 - [x] Icons
-- [ ] Login flow minor fixes
+- [x] Login flow minor fixes
 - [x] Dashboard for user stats
 - [x] Appointment in list format
 - [x] Use status instead of isCompleted on backend and adapt all logic with api / gemini response
-- [ ] Share appointments between users
-- [ ] Cleanup subscription only for "long lived" observable - not HTTP Req
+- [x] Share appointments between users
+- [x] Cleanup subscription only for "long lived" observable - not HTTP Req
+- [x] Scheduler / Agenda View (Appointemnts Box and Form) Customiziation
+- [ ] Add Appointment Priority Feature
+
 
 
 
