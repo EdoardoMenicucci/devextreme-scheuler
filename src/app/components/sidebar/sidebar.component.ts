@@ -19,6 +19,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   navigation = [
+    { id: 0, text: '', icon: 'menu', action: 'toggleDrawer' },
     { id: 1, text: 'Scheduler', icon: 'event', path: '/scheduler' },
     { id: 2, text: 'Dashboard', icon: 'taskinprogress', path: '/dashboard' },
     { id: 3, text: 'Contact', icon: 'group', path: '/contact' },
@@ -83,6 +84,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
     if (item?.action === 'toggleNotifications') {
       this.notificationService.toggle();
+    }
+    if (item?.action === 'toggleDrawer') {
+      this.toggleDrawer();
     }
   }
 

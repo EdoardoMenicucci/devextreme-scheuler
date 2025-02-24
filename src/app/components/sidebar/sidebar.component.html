@@ -8,31 +8,8 @@
   template="menu"
 >
   <div *dxTemplate="let data of 'menu'" class="h-full flex flex-col">
-    <!-- TRY 2 -->
-    <div class="fixed top-2 left-3 z-50 text-white">
-      <dx-button
-        icon="menu"
-        stylingMode="text"
-        (onClick)="toggleDrawer()"
-        [width]="32"
-        [height]="32"
-        class="text-3xl"
-      >
-      </dx-button>
-    </div>
-    <!-- Toggle Sidebar -->
-    <!-- <div class="p-2 absolute top-0 right-0">
-      <dx-button
-        icon="menu"
-        stylingMode="text"
-        (onClick)="toggleDrawer()"
-        [width]="32"
-        [height]="32"
-      >
-      </dx-button>
-    </div> -->
     <!-- Lista principale -->
-    <div class="flex-grow pt-8">
+    <div class="flex-grow">
       <dx-list
         [items]="navigation"
         [focusStateEnabled]="false"
@@ -40,7 +17,10 @@
         [width]="200"
       >
         <div *dxTemplate="let item of 'item'" class="flex items-center">
-          <i class="text-3xl dx-icon dx-icon-{{ item.icon }}" style="--dx-icon-size: 40px;"></i>
+          <i
+            class="text-3xl dx-icon dx-icon-{{ item.icon }}"
+            style="--dx-icon-size: 40px"
+          ></i>
           <span class="ms-2 text-lg">{{ item.text }}</span>
         </div>
       </dx-list>
