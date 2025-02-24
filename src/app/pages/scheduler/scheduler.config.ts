@@ -10,21 +10,6 @@ export interface AppointmentFormField {
   buttonOptions?: any;
 }
 
-export interface ComponentWithForm {
-  form?: any;
-  friends: any[];
-  isCompleted: any[];
-  onAppointmentFormSharing: (username: string, appointmentData: any) => void;
-}
-
-export interface ComponentWithPopup {
-  form: any;
-  popup: any;
-  onAppointmentAdded: (e: any) => void;
-  onAppointmentUpdated: (e: any) => void;
-  onAppointmentDeleted: (e: any) => void;
-}
-
 export interface ComponentContext {
   component: any;
   form: any;
