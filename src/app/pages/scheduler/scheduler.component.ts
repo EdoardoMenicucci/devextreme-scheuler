@@ -1,15 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DxSchedulerModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DxSchedulerModule, DxButtonModule, DxSelectBoxModule, DxSchedulerComponent } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { ChatComponent } from '../../components/chat/chat.component';
 import { AppointmentService } from './appointment.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { Status } from '../../models/d.interface';
-import { filter, from, Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ContactService } from '../contact/contact.service';
 import { AuthService } from '../../auth/auth.service';
-import { NavigationEnd, Router } from '@angular/router';
-import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -27,6 +26,13 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./scheduler.component.css'],
 })
 export class SchedulerComponent implements OnDestroy, OnInit {
+
+  //*Usato per avere riferimento del componente Scheduler
+  // *ViewChild decorator to get a reference to the DxSchedulerComponent instance
+  @ViewChild(DxSchedulerComponent, { static: false })
+  scheduler!: DxSchedulerComponent;
+
+
   currentView = 'week';
   currentDate = new Date();
   appointments: any[] = [];
@@ -57,16 +63,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     private authService: AuthService,
     private contactService: ContactService,
     private router: Router
-  ) {
-    // this.router.events
-    //   .pipe(
-    //     filter((event) => event instanceof NavigationEnd),
-    //     takeUntil(this.destroy$)
-    //   )
-    //   .subscribe(() => {
-    //     // this.appointmentService.loadAppointments();
-    //   });
-  }
+  ) {}
 
   //life cycle hook
   ngOnInit(): void {
@@ -95,7 +92,6 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   // * Hold tracks of the current view type of the scheduler
   //* To Customize the Scheduler based on the view type
@@ -281,10 +277,17 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       });
   }
 
-  toggleAppointmentCompletion(appointmentData: any) {
+  toggleAppointmentCompletion(appointmentData: any, e: any) {
+
+    //* Prevent the default behavior of the event (open the form)
+    if (e) {
+      e.event.stopPropagation();
+      this.scheduler.instance.hideAppointmentTooltip();
+    }
+
     const updatedAppointment = {
       ...appointmentData,
-      isCompleted: !appointmentData.isCompleted
+      isCompleted: !appointmentData.isCompleted,
     };
 
     this.appointmentService
@@ -293,7 +296,9 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       .subscribe({
         next: () => {
           notify(
-            `Appointment marked as ${updatedAppointment.isCompleted ? 'completed' : 'incomplete'}`,
+            `Appointment marked as ${
+              updatedAppointment.isCompleted ? 'completed' : 'incomplete'
+            }`,
             'success',
             2000
           );

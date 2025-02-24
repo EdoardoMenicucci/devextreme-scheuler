@@ -81,7 +81,7 @@
       </div>
       <!-- ********************************************************* -->
 
-      <!-- * Tooltip Custom -->
+      <!-- * Toolbar Custom -->
       <div *dxTemplate="let data of 'tooltipTemplate'" class="custom-tooltip">
         <div class="tooltip-header">
           <div class="tooltip-title">{{data.appointmentData.text}}</div>
@@ -96,11 +96,12 @@
           {{formatAppointmentDate(data.appointmentData.startDate)}} -
           {{formatAppointmentDate(data.appointmentData.endDate)}}
         </div>
-        <button class="tooltip-toggle-btn"
-                [class.completed]="data.appointmentData.isCompleted"
-                (click)="toggleAppointmentCompletion(data.appointmentData)">
-          {{data.appointmentData.isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'}}
-        </button>
+        <dx-button
+          class="tooltip-toggle-btn"
+          [text]="data.appointmentData.isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'"
+          [type]="data.appointmentData.isCompleted ? 'danger' : 'default'"
+          (onClick)="toggleAppointmentCompletion(data.appointmentData, $event)"
+        ></dx-button>
       </div>
       <!-- ********************************************************* -->
     </dx-scheduler>

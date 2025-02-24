@@ -114,7 +114,7 @@
   border: none;
   cursor: pointer;
   transition: all 0.2s;
-  background-color: #4F46E5;
+  /* background-color: #4F46E5; */
   color: white;
 }
 

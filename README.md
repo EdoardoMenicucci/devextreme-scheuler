@@ -10,7 +10,6 @@ A modern appointment management system built with DevExtreme Scheduler component
 - 📅 Interactive calendar interface
 - 🤖 AI-powered features:
   - Smart appointment suggestions
-  - Automated schedule optimization
   - Intelligent appointment modifications
   - Context-aware scheduling assistance
 - 👥 User authentication and management
@@ -60,6 +59,7 @@ ng serve
 ```bash
 # Open the solution in Visual Studio 2022
 # Restore NuGet packages
+# Create a Database named 'scheduler'
 # Update database connection string in appsettings.json
 # Run the application
 ```
@@ -87,6 +87,7 @@ ng serve
 - [x] Cleanup subscription only for "long lived" observable - not HTTP Req
 - [x] Scheduler / Agenda View (Appointemnts Box and Form) Customiziation
 - [ ] Add Appointment Priority Feature
+- [ ] Move Sidebar to Template whit router-outlet (then remove it from home - login - register view)
 
 
 
