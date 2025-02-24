@@ -1,26 +1,25 @@
 <dx-drawer
   class="h-screen bg-[#111827] pt-2 border-e-2 border-accent relative"
   [opened]="isDrawerOpen"
-  [minSize]="32"
-  revealMode="slide"
+  [minSize]="50"
   [closeOnOutsideClick]="false"
   openedStateMode="shrink"
-  revealMode="slide"
+  revealMode="expand"
   template="menu"
 >
-  <!-- TRY 2 -->
-  <div class="fixed top-2 left-2 z-50 text-white">
-    <dx-button
-      icon="menu"
-      stylingMode="text"
-      (onClick)="toggleDrawer()"
-      [width]="32"
-      [height]="32"
-    >
-    </dx-button>
-  </div>
-
   <div *dxTemplate="let data of 'menu'" class="h-full flex flex-col">
+    <!-- TRY 2 -->
+    <div class="fixed top-2 left-3 z-50 text-white">
+      <dx-button
+        icon="menu"
+        stylingMode="text"
+        (onClick)="toggleDrawer()"
+        [width]="32"
+        [height]="32"
+        class="text-3xl"
+      >
+      </dx-button>
+    </div>
     <!-- Toggle Sidebar -->
     <!-- <div class="p-2 absolute top-0 right-0">
       <dx-button
@@ -41,8 +40,8 @@
         [width]="200"
       >
         <div *dxTemplate="let item of 'item'" class="flex items-center">
-          <i class="dx-icon dx-icon-{{ item.icon }}"></i>
-          <span class="ms-1">{{ item.text }}</span>
+          <i class="text-3xl dx-icon dx-icon-{{ item.icon }}" style="--dx-icon-size: 40px;"></i>
+          <span class="ms-2 text-lg">{{ item.text }}</span>
         </div>
       </dx-list>
     </div>
@@ -56,8 +55,8 @@
         [width]="200"
       >
         <div *dxTemplate="let item of 'item'" class="flex items-center">
-          <i class="icon-red dx-icon dx-icon-{{ item.icon }}"></i>
-          <span class="ms-1 icon-red">{{ item.text }}</span>
+          <i class="text-3xl dx-icon dx-icon-{{ item.icon }}"></i>
+          <span class="text-lg ms-2 icon-red">{{ item.text }}</span>
         </div>
       </dx-list>
     </div>
