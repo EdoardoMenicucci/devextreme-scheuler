@@ -9,7 +9,6 @@ import {
   DxListModule,
   DxDateRangeBoxModule,
 } from 'devextreme-angular';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { DashboardService } from './dashboard.service';
 import { AuthService } from '../../auth/auth.service';
 import {  Subject, takeUntil } from 'rxjs';
@@ -20,7 +19,6 @@ import {  Subject, takeUntil } from 'rxjs';
   imports: [
     DxChartModule,
     DxCircularGaugeModule,
-    SidebarComponent,
     DxListModule,
     CommonModule,
     DxDateRangeBoxModule,

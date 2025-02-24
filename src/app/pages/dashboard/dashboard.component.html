@@ -1,149 +1,142 @@
-<div class="flex w-screen">
-  <app-sidebar></app-sidebar>
-  <div class="p-6 w-full overflow-auto max-h-screen">
-    <div class="flex justify-between items-center">
-      <h1 class="text-3xl text-accent-light font-bold mb-9">
-        {{ title }} - {{ formatUserName(username) }}
-      </h1>
-      <!-- filters options -->
-      <!-- DateRange box -->
-      <div class="mb-4 w-[20%]">
-        <dx-date-range-box
-          [min]="minDate"
-          [multiView]="false"
-          [disableOutOfRangeSelection]="true"
-          [showClearButton]="true"
-          placeholder="'Select date range...'"
-          (onValueChanged)="onDateRangeChanged($event)"
-          displayFormat="dd/MM/yyyy"
-        >
-        </dx-date-range-box>
-      </div>
+<div class="p-6 w-full overflow-auto max-h-screen">
+  <div class="flex justify-between items-center">
+    <h1 class="text-3xl text-accent-light font-bold mb-9">
+      {{ title }} - {{ formatUserName(username) }}
+    </h1>
+    <!-- filters options -->
+    <!-- DateRange box -->
+    <div class="mb-4 w-[20%]">
+      <dx-date-range-box
+        [min]="minDate"
+        [multiView]="false"
+        [disableOutOfRangeSelection]="true"
+        [showClearButton]="true"
+        placeholder="'Select date range...'"
+        (onValueChanged)="onDateRangeChanged($event)"
+        displayFormat="dd/MM/yyyy"
+      >
+      </dx-date-range-box>
     </div>
+  </div>
 
-    <div class="border-2 border-border p-2 rounded-xl bg-bg-secondary">
-      <!-- Grafico a barre per le statistiche -->
-      <dx-chart
-        [dataSource]="statisticsData"
-        [title]="{ text: 'Appointments Statistics', font: { size: 24 } }"
-        [palette]="palette"
+  <div class="border-2 border-border p-2 rounded-xl bg-bg-secondary">
+    <!-- Grafico a barre per le statistiche -->
+    <dx-chart
+      [dataSource]="statisticsData"
+      [title]="{ text: 'Appointments Statistics', font: { size: 24 } }"
+      [palette]="palette"
+    >
+      <dxi-series argumentField="category" valueField="value" type="bar">
+      </dxi-series>
+      <dxo-tooltip [enabled]="true"></dxo-tooltip>
+      <dxo-common-series-settings
+        argumentField="category"
+        type="bar"
+        valueField="value"
+        [ignoreEmptyPoints]="true"
       >
-        <dxi-series argumentField="category" valueField="value" type="bar">
-        </dxi-series>
-        <dxo-tooltip [enabled]="true"></dxo-tooltip>
-        <dxo-common-series-settings
-          argumentField="category"
-          type="bar"
-          valueField="value"
-          [ignoreEmptyPoints]="true"
-        >
-        </dxo-common-series-settings>
-        <dxo-series-template nameField="category"></dxo-series-template>
-        <dxo-legend
-          verticalAlignment="bottom"
-          horizontalAlignment="center"
-          itemTextPosition="bottom"
-        >
-        </dxo-legend>
-      </dx-chart>
+      </dxo-common-series-settings>
+      <dxo-series-template nameField="category"></dxo-series-template>
+      <dxo-legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center"
+        itemTextPosition="bottom"
+      >
+      </dxo-legend>
+    </dx-chart>
+  </div>
+
+  <div class="flex justify-between space-x-4">
+    <!-- Grafico a cerchio per la percentuale di cancellation rate -->
+    <div
+      class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
+    >
+      <dx-circular-gauge
+        id="rangebar"
+        [value]="successRate * 100"
+        [title]="{ text: 'Success Rate', font: { size: 24 } }"
+      >
+        <dxo-value-indicator type="rangebar" color="#4F46E5">
+        </dxo-value-indicator>
+        <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
+        <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
+          <dxo-label [customizeText]="customizeText"></dxo-label>
+        </dxo-scale>
+        <dxo-range-container [palette]="gaugePalette">
+          <dxi-range [startValue]="0" [endValue]="25"></dxi-range>
+          <dxi-range [startValue]="25" [endValue]="60"></dxi-range>
+          <dxi-range [startValue]="60" [endValue]="100"></dxi-range>
+        </dxo-range-container>
+        <dxo-tooltip
+          [enabled]="true"
+          [customizeTooltip]="customizeTooltip"
+        ></dxo-tooltip>
+      </dx-circular-gauge>
     </div>
-
-    <div class="flex justify-between space-x-4">
-      <!-- Grafico a cerchio per la percentuale di cancellation rate -->
-      <div
-        class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
+    <!-- List/TileView di Upcoming Appointments -->
+    <div
+      class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
+    >
+      <h3 class="text-[24px] text-white mb-2 ms-1">
+        <i class="dx-icon-taskhelpneeded text-xl"></i> Upcoming Appointments
+      </h3>
+      <dx-list
+        [items]="upcomingAppointments"
+        [focusStateEnabled]="false"
+        selectionMode="none"
+        [width]="'100%'"
       >
-        <dx-circular-gauge
-          id="rangebar"
-          [value]="successRate * 100"
-          [title]="{ text: 'Success Rate', font: { size: 24 } }"
-        >
-          <dxo-value-indicator type="rangebar" color="#4F46E5">
-          </dxo-value-indicator>
-          <dxo-geometry [startAngle]="180" [endAngle]="0"> </dxo-geometry>
-          <dxo-scale [startValue]="0" [endValue]="100" [tickInterval]="10">
-            <dxo-label [customizeText]="customizeText"></dxo-label>
-          </dxo-scale>
-          <dxo-range-container [palette]="gaugePalette">
-            <dxi-range [startValue]="0" [endValue]="25"></dxi-range>
-            <dxi-range [startValue]="25" [endValue]="60"></dxi-range>
-            <dxi-range [startValue]="60" [endValue]="100"></dxi-range>
-          </dxo-range-container>
-          <dxo-tooltip
-            [enabled]="true"
-            [customizeTooltip]="customizeTooltip"
-          ></dxo-tooltip>
-        </dx-circular-gauge>
-      </div>
-      <!-- List/TileView di Upcoming Appointments -->
-      <div
-        class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
-      >
-        <h3 class="text-[24px] text-white mb-2 ms-1">
-          <i class="dx-icon-taskhelpneeded text-xl"></i> Upcoming Appointments
-        </h3>
-        <dx-list
-          [items]="upcomingAppointments"
-          [focusStateEnabled]="false"
-          selectionMode="none"
-          [width]="'100%'"
-        >
-          <div *dxTemplate="let item of 'item'">
-            <div class="flex justify-between items-center w-full">
-              <div class="max-w-[75%]">
-                <span class="">{{ item.text }}</span>
-              </div>
+        <div *dxTemplate="let item of 'item'">
+          <div class="flex justify-between items-center w-full">
+            <div class="max-w-[75%]">
+              <span class="">{{ item.text }}</span>
+            </div>
 
-              <div class="max-w-[25%]">
-                <!-- Status - Date -->
-                <span
-                  *ngIf="
-                    item.isCompleted == true ||
-                    ((item.isCompleted == false || item.isCompleted == null) &&
-                      !(item.startDate < currentDate) &&
-                      item.endDate > currentDate)
-                  "
-                  class="ms-1"
-                  >{{ formatDateTime(item.startDate) }}</span
-                >
-                <span
-                  *ngIf="
-                    (item.isCompleted == null || item.isCompleted == false) &&
-                    item.startDate < currentDate &&
-                    item.endDate > currentDate
-                  "
-                  class="text-white font-semibold"
-                  >On Going Now</span
-                >
+            <div class="max-w-[25%]">
+              <!-- Status - Date -->
+              <span
+                *ngIf="
+                  item.isCompleted == true ||
+                  ((item.isCompleted == false || item.isCompleted == null) &&
+                    !(item.startDate < currentDate) &&
+                    item.endDate > currentDate)
+                "
+                class="ms-1"
+                >{{ formatDateTime(item.startDate) }}</span
+              >
+              <span
+                *ngIf="
+                  (item.isCompleted == null || item.isCompleted == false) &&
+                  item.startDate < currentDate &&
+                  item.endDate > currentDate
+                "
+                class="text-white font-semibold"
+                >On Going Now</span
+              >
 
-                <!-- Icons -->
-                <span *ngIf="item.isCompleted"
-                  ><i class="dx-icon-check ms-2 text-success"></i
-                ></span>
-                <span
-                  *ngIf="
-                    (item.isCompleted == null ||
-                    item.isCompleted == false) &&
-                      !(item.startDate < currentDate &&
-                      item.endDate > currentDate)
-                  "
-                  ><i class="dx-icon-unpin ms-2 text-[#fde300]"></i
-                ></span>
-                <span
-                  *ngIf="
-                    (item.isCompleted == null || item.isCompleted == false) &&
-                    item.startDate < currentDate &&
-                    item.endDate > currentDate
-                  "
-                  ><i class="dx-icon-warning ms-2 text-[#DC2626]"></i
-                ></span>
-              </div>
+              <!-- Icons -->
+              <span *ngIf="item.isCompleted"
+                ><i class="dx-icon-check ms-2 text-success"></i
+              ></span>
+              <span
+                *ngIf="
+                  (item.isCompleted == null || item.isCompleted == false) &&
+                  !(item.startDate < currentDate && item.endDate > currentDate)
+                "
+                ><i class="dx-icon-unpin ms-2 text-[#fde300]"></i
+              ></span>
+              <span
+                *ngIf="
+                  (item.isCompleted == null || item.isCompleted == false) &&
+                  item.startDate < currentDate &&
+                  item.endDate > currentDate
+                "
+                ><i class="dx-icon-warning ms-2 text-[#DC2626]"></i
+              ></span>
             </div>
           </div>
-        </dx-list>
-      </div>
+        </div>
+      </dx-list>
     </div>
-    <!-- Contacts section -->
-    <!-- <app-contact></app-contact> -->
   </div>
 </div>

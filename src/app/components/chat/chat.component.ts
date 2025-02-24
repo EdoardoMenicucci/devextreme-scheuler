@@ -80,8 +80,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   };
 
   loadPreviousMessages() {
-    // You can implement this method to load previous messages
-    // For example:
     notify('Loading previous messages...', 'info', 2000);
     // this.chatService.loadPreviousMessages();
   }

@@ -1,8 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DxButtonModule, DxDrawerModule, DxListModule } from 'devextreme-angular';
-import { Router, RouterModule } from '@angular/router';
+import {
+  DxButtonModule,
+  DxDrawerModule,
+  DxListModule,
+} from 'devextreme-angular';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { formatDateUtils } from '../../utils/generic';
 import notify from 'devextreme/ui/notify';
@@ -16,7 +20,10 @@ import { ErrorHandlerService } from '../../auth/error-handler.service';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  shouldShowSidebar = false;
+
   private readonly destroy$ = new Subject<void>();
+  private readonly publicRoutes = ['/login', '/signin', '/home'];
 
   navigation = [
     { id: 0, text: '', icon: 'menu', action: 'toggleDrawer' },
@@ -44,32 +51,55 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private notificationService: NotificationService,
     private errorHandler: ErrorHandlerService
-  ) {
-    this.chatService
-      .getUserChats()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.previousChats = data;
-      });
-  }
+  ) {}
 
   ngOnInit(): void {
-    if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    this.checkAuthAndRoute(); // Initial check
 
-    this.authService
-      .getAuthErrors()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((error) => {
-        this.errorHandler.handleAuthError(error);
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.checkAuthAndRoute();
+        //load chat only on scheduler component
+        if (this.router.url == "/scheduler") {
+          this.chatService
+            .getUserChats()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((data) => {
+              this.previousChats = data;
+            });
+        }
       });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private checkAuthAndRoute(): void {
+    if (
+      !this.authService.isAuthenticated() &&
+      !this.publicRoutes.includes(this.router.url)
+    ) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (
+      !this.authService.isAuthenticated() &&
+      !this.publicRoutes.includes(this.router.url)
+    ) {
+      this.authService
+        .getAuthErrors()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((error) => {
+          this.errorHandler.handleAuthError(error);
+        });
+    }
   }
 
   toggleDrawer() {
@@ -92,6 +122,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   onLogoutClick(e: any): void {
     const item = e?.itemData;
+    console.log(item);
+
     if (item?.action === 'logout') {
       this.authService.logout();
       this.router.navigate(['/home']);

@@ -12,7 +12,7 @@ import notify  from 'devextreme/ui/notify';
   standalone: true,
   imports: [CommonModule, DxListModule],
   template: `
-    <div class="notification-panel" *ngIf="showNotifications">
+    <!-- <div class="notification-panel" *ngIf="showNotifications">
       <dx-list [items]="notifications">
         <div *dxTemplate="let item of 'item'">
           <div class="flex items-center p-2">
@@ -24,20 +24,20 @@ import notify  from 'devextreme/ui/notify';
           </div>
         </div>
       </dx-list>
-    </div>
+    </div> -->
   `,
   styles: [
     `
-      .notification-panel {
-        position: fixed;
-        top: 60px;
-        right: calc(50% - 200px);
-        width: 400px;
-        background: #090730;
-        border: 2px solid var(--border-color);
-        border-radius: 8px;
-        z-index: 1000;
-      }
+      /* .notification-panel {
+         position: fixed;
+         top: 60px;
+         right: calc(50% - 200px);
+         width: 400px;
+         background: #090730;
+         border: 2px solid var(--border-color);
+         border-radius: 8px;
+         z-index: 1000;
+      }*/
     `,
   ],
 })

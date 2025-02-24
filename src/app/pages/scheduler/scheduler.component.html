@@ -1,5 +1,4 @@
-<div class="flex w-screen h-screen">
-  <app-sidebar></app-sidebar>
+<div class="flex h-full w-full">
   <div class="scheduler-container">
     <dx-scheduler
       timeZone="Europe/Berlin"
@@ -19,13 +18,11 @@
         allowUpdating: true,
         allowDragging: true
       }"
-      dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
       appointmentTemplate="appointmentTemplate"
       appointmentTooltipTemplate="tooltipTemplate"
       (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
       (onAppointmentAdded)="onAppointmentAdded($event)"
       (onAppointmentUpdated)="onAppointmentUpdated($event)"
-      (onAppointmentDeleted)="onAppointmentDeleted($event)"
       (onOptionChanged)="onOptionChanged($event)"
     >
       <dxi-resource
@@ -44,29 +41,44 @@
         [class]="getAppointmentClass(data)"
       >
         <!-- *Custom Template for Agenda view -->
-        <div *ngIf="currentView === 'agenda'" class="flex items-center justify-between w-full px-4 py-2 space-x-4">
-          <div class="flex-1 font-semibold truncate">{{ data.appointmentData.text }}</div>
+        <div
+          *ngIf="currentView === 'agenda'"
+          class="flex items-center justify-between w-full px-4 py-2 space-x-4"
+        >
+          <div class="flex-1 font-semibold truncate">
+            {{ data.appointmentData.text }}
+          </div>
           <div class="flex-none text-sm text-gray-200">
             {{ formatAppointmentDate(data.appointmentData.startDate) }} -
             {{ formatAppointmentDate(data.appointmentData.endDate) }}
           </div>
-          <div class="flex-none text-sm"
-               [ngClass]="{'text-green-500': data.appointmentData.isCompleted, 'text-red-500': !data.appointmentData.isCompleted}">
-            {{ data.appointmentData.isCompleted ? "Completed" : "Not Completed" }}
+          <div
+            class="flex-none text-sm"
+            [ngClass]="{
+              'text-green-500': data.appointmentData.isCompleted,
+              'text-red-500': !data.appointmentData.isCompleted
+            }"
+          >
+            {{
+              data.appointmentData.isCompleted ? "Completed" : "Not Completed"
+            }}
           </div>
         </div>
         <!-- ********************************************************* -->
 
-
         <!-- *Custom Template for Month view -->
         <div *ngIf="currentView === 'month'" class="appointment">
-          <div class="flex-1 font-semibold truncate">{{ data.appointmentData.text }}</div>
+          <div class="flex-1 font-semibold truncate">
+            {{ data.appointmentData.text }}
+          </div>
         </div>
         <!-- ********************************************************* -->
 
-
         <!-- *Custom Template for Regular Scheduler view -->
-        <div *ngIf="currentView !== 'agenda' && currentView !== 'month'" class="appointment">
+        <div
+          *ngIf="currentView !== 'agenda' && currentView !== 'month'"
+          class="appointment"
+        >
           <div class="appointment-title">{{ data.appointmentData.text }}</div>
           <div class="appointment-time">
             {{ formatAppointmentDate(data.appointmentData.startDate) }} -
@@ -84,24 +96,46 @@
       <!-- * Toolbar Custom -->
       <div *dxTemplate="let data of 'tooltipTemplate'" class="custom-tooltip">
         <div class="tooltip-header">
-          <div class="tooltip-title">{{data.appointmentData.text}}</div>
-          <div class="tooltip-status"
-               [class.completed]="data.appointmentData.isCompleted"
-               [class.not-completed]="!data.appointmentData.isCompleted">
-            {{data.appointmentData.isCompleted ? 'Completed' : 'Not Completed'}}
+          <div class="tooltip-title">{{ data.appointmentData.text }}</div>
+          <div
+            class="tooltip-status"
+            [class.completed]="data.appointmentData.isCompleted"
+            [class.not-completed]="!data.appointmentData.isCompleted"
+          >
+            {{
+              data.appointmentData.isCompleted ? "Completed" : "Not Completed"
+            }}
           </div>
         </div>
         <div class="tooltip-time">
           <i class="fas fa-clock"></i>
-          {{formatAppointmentDate(data.appointmentData.startDate)}} -
-          {{formatAppointmentDate(data.appointmentData.endDate)}}
+          {{ formatAppointmentDate(data.appointmentData.startDate) }} -
+          {{ formatAppointmentDate(data.appointmentData.endDate) }}
         </div>
-        <dx-button
-          class="tooltip-toggle-btn"
-          [text]="data.appointmentData.isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'"
-          [type]="data.appointmentData.isCompleted ? 'danger' : 'default'"
-          (onClick)="toggleAppointmentCompletion(data.appointmentData, $event)"
-        ></dx-button>
+        <div>
+          <dx-button
+            [icon]="data.appointmentData.isCompleted ? 'unpin' : 'pin'"
+            class="tooltip-toggle-btn"
+            [text]="
+              data.appointmentData.isCompleted
+                ? 'Mark as Incomplete'
+                : 'Mark as Complete'
+            "
+            [type]="data.appointmentData.isCompleted ? 'warning' : 'default'"
+            (onClick)="
+              toggleAppointmentCompletion(data.appointmentData, $event)
+            "
+          ></dx-button>
+        </div>
+        <div class="mt-2">
+          <dx-button
+            icon="trash"
+            class="tooltip-toggle-btn"
+            text="Delete Appointment"
+            type="danger"
+            (onClick)="onAppointmentDeleted($event, data)"
+          ></dx-button>
+        </div>
       </div>
       <!-- ********************************************************* -->
     </dx-scheduler>

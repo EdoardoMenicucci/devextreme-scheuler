@@ -85,10 +85,9 @@ Vedi [DashboardService](../../../../d:/Edoardo/Scheduler/devextreme-scheuler/src
 ## Guardie e Interceptor
 
 Nel progetto sono presenti guardie e interceptor per proteggere le rotte e gestire gli errori di chiamate HTTP:
-- **AuthGuard (se implementato)**: Protegge le rotte che richiedono autenticazione, reindirizzando l’utente alla pagina di login se non autenticato. (La logica può essere estesa in futuro.)
+- **AuthGuard**: Protegge le rotte che richiedono autenticazione, reindirizzando l’utente alla pagina di login se non autenticato. (La logica può essere estesa in futuro.)
 - **Interceptor HTTP**: Gestisce l’aggiunta del token JWT agli header delle richieste e il parsing degli errori, utilizzando il [ErrorHandlerService](../../../../d:/Edoardo/Scheduler/devextreme-scheuler/src/app/auth/error-handler.service.ts).
 
-*(Nota: Se il progetto non include un AuthGuard esplicito, si consiglia di implementarlo per migliorare la sicurezza.)*
 
 ---
 
@@ -118,12 +117,9 @@ Gli stili per i componenti personalizzati (ad es. form di appuntamenti e sidebar
 
 ---
 
-## Future Migliorìe
+## Future Migliorie
 
-- **Implementazione di AuthGuard** per proteggere ulteriormente le rotte.
-- **Ottimizzazione degli Interceptor HTTP** per gestire automaticamente il rinnovo del token.
 - Migliorare la gestione delle chat e la sincronizzazione in tempo reale.
-- Refactoring e cleanup delle subscription nei servizi per evitare memory leak.
 
 ---
 

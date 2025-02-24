@@ -118,9 +118,9 @@
   color: white;
 }
 
-.tooltip-toggle-btn:hover {
+/* .tooltip-toggle-btn:hover {
   background-color: #4B5563;
-}
+} */
 
 .tooltip-toggle-btn.completed {
   background-color: #DC2626;

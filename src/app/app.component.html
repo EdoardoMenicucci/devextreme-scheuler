@@ -1,8 +1,7 @@
-
-<div class="w-full">
-<router-outlet></router-outlet>
-<app-notification></app-notification>
+<div class="w-full h-screen flex">
+  <app-sidebar *ngIf="shouldShowSidebar"></app-sidebar>
+  <div class="h-full w-full">
+    <router-outlet></router-outlet>
+  </div>
+  <app-notification></app-notification>
 </div>
-
-
-

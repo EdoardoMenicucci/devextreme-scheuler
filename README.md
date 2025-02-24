@@ -85,9 +85,9 @@ ng serve
 - [x] Use status instead of isCompleted on backend and adapt all logic with api / gemini response
 - [x] Share appointments between users
 - [x] Cleanup subscription only for "long lived" observable - not HTTP Req
-- [x] Scheduler / Agenda View (Appointemnts Box and Form) Customiziation
+- [x] Scheduler / Agenda View (Appointments Box and Form) Customization
 - [ ] Add Appointment Priority Feature
-- [ ] Move Sidebar to Template whit router-outlet (then remove it from home - login - register view)
+- [ ] Move Sidebar to Template with router-outlet (then remove it from home - login - register view)
 
 
 

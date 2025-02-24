@@ -1,9 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { DxSchedulerModule, DxButtonModule, DxSelectBoxModule, DxSchedulerComponent } from 'devextreme-angular';
+import {
+  DxSchedulerModule,
+  DxButtonModule,
+  DxSelectBoxModule,
+  DxSchedulerComponent,
+} from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { ChatComponent } from '../../components/chat/chat.component';
 import { AppointmentService } from './appointment.service';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { Status } from '../../models/d.interface';
 import { Subject, takeUntil } from 'rxjs';
 import { ContactService } from '../contact/contact.service';
@@ -17,7 +21,6 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     DxSchedulerModule,
     ChatComponent,
-    SidebarComponent,
     DxButtonModule,
     DxSelectBoxModule,
   ],
@@ -26,12 +29,10 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./scheduler.component.css'],
 })
 export class SchedulerComponent implements OnDestroy, OnInit {
-
   //*Usato per avere riferimento del componente Scheduler
   // *ViewChild decorator to get a reference to the DxSchedulerComponent instance
   @ViewChild(DxSchedulerComponent, { static: false })
   scheduler!: DxSchedulerComponent;
-
 
   currentView = 'week';
   currentDate = new Date();
@@ -39,30 +40,29 @@ export class SchedulerComponent implements OnDestroy, OnInit {
 
   private readonly destroy$ = new Subject<void>();
 
-  status: Status[] = [
-    { id: 1, text: 'New' },
-    { id: 2, text: 'Completed' },
-    { id: 3, text: 'In Progress' },
-    { id: 4, text: 'Missed' },
-  ];
+  // status: Status[] = [
+  //   { id: 1, text: 'New' },
+  //   { id: 2, text: 'Completed' },
+  //   { id: 3, text: 'In Progress' },
+  //   { id: 4, text: 'Missed' },
+  // ];
 
   isCompleted = [
     { id: true, text: 'Completed' },
     { id: false, text: 'Not Completed' },
   ];
 
-  shareAppointment = {
-    username: '',
-    isShared: false,
-  };
+  // shareAppointment = {
+  //   username: '',
+  //   isShared: false,
+  // };
 
   friends: any[] = [];
 
   constructor(
     private appointmentService: AppointmentService,
     private authService: AuthService,
-    private contactService: ContactService,
-    private router: Router
+    private contactService: ContactService
   ) {}
 
   //life cycle hook
@@ -213,6 +213,54 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       },
     ]);
 
+    e.popup.option('toolbarItems', [
+      {
+        widget: 'dxButton',
+        location: 'after',
+        toolbar: 'bottom',
+        options: {
+          text: 'Save',
+          type: 'default',
+          stylingMode: 'contained',
+          onClick: () => {
+            form.validate().then((result: boolean) => {
+              if (result) {
+                form.updateData();
+                e.popup.hide();
+              }
+            });
+          },
+        },
+      },
+      {
+        widget: 'dxButton',
+        location: 'after',
+        toolbar: 'bottom',
+        options: {
+          text: 'Cancel',
+          type: 'normal',
+          stylingMode: 'contained',
+          onClick: () => {
+            e.popup.hide();
+          },
+        },
+      },
+      {
+        widget: 'dxButton',
+        location: 'before',
+        toolbar: 'bottom',
+        options: {
+          text: 'Delete',
+          type: 'danger',
+          stylingMode: 'contained',
+          onClick: () => {
+            console.log('Delete button clicked', e);
+            this.onAppointmentDeleted(e, e);
+            e.popup.hide();
+          },
+        },
+      },
+    ]);
     // To prevent the default items from being shown
     e.popup.option('showTitle', true);
     e.popup.option(
@@ -225,7 +273,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   async onAppointmentAdded(e: any) {
     // debugg
     console.log('onAppointmentUpdated', e.appointmentData);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
     //
     this.appointmentService
       .createAppointment(e.appointmentData)
@@ -243,7 +291,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   async onAppointmentUpdated(e: any) {
     // debugg
     console.log('onAppointmentUpdated', e.appointmentData);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
     //
 
     this.appointmentService
@@ -259,17 +307,22 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       });
   }
 
-  onAppointmentDeleted(e: any) {
+  onAppointmentDeleted(e: any, data: any) {
     // debugg
-    console.log('onAppointmentUpdated', e.appointmentData);
+    console.log('onAppointmentDeleted', data);
     //
 
+    if (e.event) {
+      e.event.stopPropagation();
+      this.scheduler.instance.hideAppointmentTooltip();
+    }
+
     this.appointmentService
-      .deleteAppointment(e.appointmentData.id)
+      .deleteAppointment(data.appointmentData.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          notify('Appointment deleted successfully', 'success', 3000);
+          notify('Appointment deleted successfully', 'warning', 3000);
         },
         error: (error) => {
           notify('Failed to delete appointment', 'error', 3000);
@@ -278,7 +331,6 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   }
 
   toggleAppointmentCompletion(appointmentData: any, e: any) {
-
     //* Prevent the default behavior of the event (open the form)
     if (e) {
       e.event.stopPropagation();
