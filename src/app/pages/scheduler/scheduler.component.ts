@@ -14,6 +14,7 @@ import { ContactService } from '../contact/contact.service';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { getFormItems, getToolbarItems } from './scheduler.config';
 
 @Component({
   standalone: true,
@@ -124,150 +125,31 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   // * Scheduler Customizations
   onAppointmentFormOpening(e: any) {
     const form = e.form;
+    const popup = e.popup;
 
     // Forms Options
     e.popup.option({
-      closeOnOutsideClick: true,
+      hideOnOutsideClick: true,
       wrapperAttr: { class: 'custom-appointment-form' },
     });
 
+    // Pass the component instance and required references
+    const componentContext = {
+      component: this,
+      form: form,
+      popup: popup,
+      friends: this.friends,
+      isCompleted: this.isCompleted,
+      onAppointmentFormSharing: (username: string, appointmentData: any) => {
+        this.onAppointmentFormSharing(username, appointmentData);
+      }
+    };
+
     // Customize the form layout
-    form.option('items', [
-      {
-        dataField: 'text',
-        colSpan: 2, // Occupa tutta la larghezza
-        label: { text: 'Subject' },
-        editorType: 'dxTextBox',
-        editorOptions: {
-          width: '100%',
-        },
-      },
-      {
-        dataField: 'startDate',
-        label: { text: 'Start Date' },
-        editorType: 'dxDateBox',
-        editorOptions: {
-          width: '100%',
-          type: 'datetime',
-        },
-      },
-      {
-        dataField: 'endDate',
-        label: { text: 'End Date' },
-        editorType: 'dxDateBox',
-        editorOptions: {
-          width: '100%',
-          type: 'datetime',
-        },
-      },
-      {
-        dataField: 'allDay',
-        label: { text: 'All Day' },
-        editorType: 'dxSwitch',
-        cssClass: 'custom-switch-container',
-        editorOptions: {
-          width: '100%',
-          switchedOnText: 'Yes',
-          switchedOffText: 'No',
-        },
-      },
-      {
-        dataField: 'isCompleted',
-        label: { text: 'Completion Status' },
-        editorType: 'dxSelectBox',
-        editorOptions: {
-          items: this.isCompleted,
-          displayExpr: 'text',
-          valueExpr: 'id',
-          width: '100%',
-        },
-      },
-      {
-        dataField: 'sharedWith',
-        colSpan: 1, // Occupa tutta la larghezza
-        label: { text: 'Share with friend' },
-        editorType: 'dxSelectBox',
-        editorOptions: {
-          dataSource: this.friends,
-          displayExpr: 'friendUsername',
-          valueExpr: 'friendUsername',
-          width: '100%',
-          placeholder: 'Select a friend to share with',
-        },
-      },
-      {
-        itemType: 'button',
-        colSpan: 1, // Occupa tutta la larghezza
-        horizontalAlignment: 'left',
-        cssClass: 'mt-4',
-        buttonOptions: {
-          text: 'Share',
-          type: 'default',
-          width: '100%', // Bottone largo quanto il form
-          onClick: () => {
-            const formData = form.option('formData');
-            if (formData.sharedWith) {
-              this.onAppointmentFormSharing(formData.sharedWith, formData);
-            }
-          },
-        },
-      },
-    ]);
+    form.option('items', getFormItems(componentContext));
 
     // Customize the form bottom toolbar
-    e.popup.option('toolbarItems', [
-      {
-        widget: 'dxButton',
-        location: 'after',
-        toolbar: 'bottom',
-        options: {
-          text: 'Save',
-          type: 'default',
-          stylingMode: 'contained',
-          onClick: () => {
-             const formData = form.option('formData');
-             if (formData) {
-               if (formData.id) {
-                 // Update existing appointment
-                 this.onAppointmentUpdated({ appointmentData: formData });
-               } else {
-                 // Create new appointment
-                 this.onAppointmentAdded({ appointmentData: formData });
-               }
-               e.popup.hide();
-             }
-          },
-        },
-      },
-      {
-        widget: 'dxButton',
-        location: 'after',
-        toolbar: 'bottom',
-        options: {
-          text: 'Cancel',
-          type: 'normal',
-          stylingMode: 'contained',
-          onClick: () => {
-            e.popup.hide();
-          },
-        },
-      },
-      {
-        widget: 'dxButton',
-        location: 'before',
-        toolbar: 'bottom',
-        options: {
-          text: 'Delete',
-          type: 'danger',
-          stylingMode: 'contained',
-          onClick: () => {
-            console.log('Delete button clicked', e);
-            this.onAppointmentDeleted(e, e);
-            e.popup.hide();
-          },
-        },
-      },
-    ]);
+    e.popup.option('toolbarItems', getToolbarItems(componentContext));
     // Custom Form Title
     e.popup.option('showTitle', true);
     e.popup.option(
