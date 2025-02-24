@@ -223,12 +223,17 @@ export class SchedulerComponent implements OnDestroy, OnInit {
           type: 'default',
           stylingMode: 'contained',
           onClick: () => {
-            form.validate().then((result: boolean) => {
-              if (result) {
-                form.updateData();
-                e.popup.hide();
-              }
-            });
+             const formData = form.option('formData');
+             if (formData) {
+               if (formData.id) {
+                 // Update existing appointment
+                 this.onAppointmentUpdated({ appointmentData: formData });
+               } else {
+                 // Create new appointment
+                 this.onAppointmentAdded({ appointmentData: formData });
+               }
+               e.popup.hide();
+             }
           },
         },
       },
