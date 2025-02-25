@@ -8,13 +8,12 @@ import {
 import notify from 'devextreme/ui/notify';
 import { ChatComponent } from '../../components/chat/chat.component';
 import { AppointmentService } from './appointment.service';
-import { Status } from '../../models/d.interface';
 import { Subject, takeUntil } from 'rxjs';
 import { ContactService } from '../contact/contact.service';
 import { AuthService } from '../../auth/auth.service';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { getFormItems, getToolbarItems } from './scheduler.config';
+import { confirm } from 'devextreme/ui/dialog';
 
 @Component({
   standalone: true,
@@ -142,7 +141,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       isCompleted: this.isCompleted,
       onAppointmentFormSharing: (username: string, appointmentData: any) => {
         this.onAppointmentFormSharing(username, appointmentData);
-      }
+      },
     };
 
     // Customize the form layout
@@ -206,17 +205,25 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       this.scheduler.instance.hideAppointmentTooltip();
     }
 
-    this.appointmentService
-      .deleteAppointment(data.appointmentData.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          notify('Appointment deleted successfully', 'warning', 3000);
-        },
-        error: (error) => {
-          notify('Failed to delete appointment', 'error', 3000);
-        },
-      });
+    const result = confirm(
+      'Are you sure you want to delete this appointment?',
+      'Delete Appointment'
+    );
+    result.then((dialogResult: boolean) => {
+      if (dialogResult) {
+        this.appointmentService
+          .deleteAppointment(data.appointmentData.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              notify('Appointment deleted successfully', 'warning', 3000);
+            },
+            error: (error) => {
+              notify('Failed to delete appointment', 'error', 3000);
+            },
+          });
+      }
+    });
   }
 
   toggleAppointmentCompletion(appointmentData: any, e: any) {

@@ -124,9 +124,13 @@ export function getToolbarItems(context: ComponentContext) {
 
           if (formData) {
             if (formData.id) {
-              context.component.onAppointmentUpdated({ appointmentData: formData });
+              context.component.onAppointmentUpdated({
+                appointmentData: formData,
+              });
             } else {
-              context.component.onAppointmentAdded({ appointmentData: formData });
+              context.component.onAppointmentAdded({
+                appointmentData: formData,
+              });
             }
             context.popup.hide();
           }
