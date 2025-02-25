@@ -88,16 +88,15 @@
             {{ formatAppointmentDate(data.appointmentData.startDate) }} -
             {{ formatAppointmentDate(data.appointmentData.endDate) }}
           </div>
-          <!-- <div class="appointment-status">
-            {{
-              data.appointmentData.isCompleted ? "Completed" : "Not Completed"
-            }}
-          </div> -->
-          <div class="appointment-priority">
-            <span [style.color]="getPriorityColor(data.appointmentData.priority)"
-            class="font-medium">{{ data.appointmentData.priority }}</span> Priority
+          <div
+            class="font-bold w-24 text-center rounded px-2 ms-1"
+            [class]="'priority-box-' + data.appointmentData.priority.toLowerCase()"
+          >
+            {{ data.appointmentData.priority }}
           </div>
         </div>
+        <!-- ********************************************************* -->
+
       </div>
       <!-- ********************************************************* -->
 
