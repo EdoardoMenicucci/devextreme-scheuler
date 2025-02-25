@@ -1,5 +1,5 @@
-<div class="p-6 w-full overflow-auto max-h-screen">
-  <div class="flex justify-between items-center">
+<div class="w-full">
+  <div class="w-full flex justify-between items-center px-6 pt-6">
     <h1 class="text-3xl text-accent-light font-bold mb-9">
       {{ title }} - {{ formatUserName(username) }}
     </h1>
@@ -19,34 +19,36 @@
     </div>
   </div>
 
-  <div class="border-2 border-border p-2 rounded-xl bg-bg-secondary">
-    <!-- Grafico a barre per le statistiche -->
-    <dx-chart
-      [dataSource]="statisticsData"
-      [title]="{ text: 'Appointments Statistics', font: { size: 24 } }"
-      [palette]="palette"
-    >
-      <dxi-series argumentField="category" valueField="value" type="bar">
-      </dxi-series>
-      <dxo-tooltip [enabled]="true"></dxo-tooltip>
-      <dxo-common-series-settings
-        argumentField="category"
-        type="bar"
-        valueField="value"
-        [ignoreEmptyPoints]="true"
+  <div class="px-6">
+    <div class="border-2 border-border p-2 rounded-xl bg-bg-secondary">
+      <dx-chart
+        class="w-[90%] mx-auto"
+        [dataSource]="statisticsData"
+        [title]="{ text: 'Appointments Statistics', font: { size: 24 } }"
+        [palette]="palette"
       >
-      </dxo-common-series-settings>
-      <dxo-series-template nameField="category"></dxo-series-template>
-      <dxo-legend
-        verticalAlignment="bottom"
-        horizontalAlignment="center"
-        itemTextPosition="bottom"
-      >
-      </dxo-legend>
-    </dx-chart>
+        <dxi-series argumentField="category" valueField="value" type="bar">
+        </dxi-series>
+        <dxo-tooltip [enabled]="true"></dxo-tooltip>
+        <dxo-common-series-settings
+          argumentField="category"
+          type="bar"
+          valueField="value"
+          [ignoreEmptyPoints]="true"
+        >
+        </dxo-common-series-settings>
+        <dxo-series-template nameField="category"></dxo-series-template>
+        <dxo-legend
+          verticalAlignment="bottom"
+          horizontalAlignment="center"
+          itemTextPosition="bottom"
+        >
+        </dxo-legend>
+      </dx-chart>
+    </div>
   </div>
 
-  <div class="flex justify-between space-x-4">
+  <div class="w-full flex flex-1 justify-between space-x-4 px-6 pb-6">
     <!-- Grafico a cerchio per la percentuale di cancellation rate -->
     <div
       class="mt-5 w-1/2 border-2 border-border p-2 rounded-xl bg-bg-secondary"
