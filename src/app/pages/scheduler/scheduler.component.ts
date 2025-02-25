@@ -12,7 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ContactService } from '../contact/contact.service';
 import { AuthService } from '../../auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { getFormItems, getToolbarItems } from './scheduler.config';
+import { getFormItems, getToolbarItems, PRIORITY_LEVELS, PriorityLevel } from './scheduler.config';
 import { custom } from 'devextreme/ui/dialog';
 
 @Component({
@@ -44,6 +44,8 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     { id: true, text: 'Completed' },
     { id: false, text: 'Not Completed' },
   ];
+
+  priority = PRIORITY_LEVELS;
 
   friends: any[] = [];
 
@@ -127,6 +129,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       popup: popup,
       friends: this.friends,
       isCompleted: this.isCompleted,
+      priority: this.priority,
       onAppointmentFormSharing: (username: string, appointmentData: any) => {
         this.onAppointmentFormSharing(username, appointmentData);
       },
@@ -271,6 +274,34 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       ? 'appointment-completed'
       : 'appointment-not-completed';
     return `${baseClass} ${statusClass}`;
+  }
+
+  getPriorityClass(priority: string, isCompleted : any): string {
+    if (isCompleted) {
+      console.log('isCompleted', isCompleted);
+
+      return 'appointment-completed';
+    }
+    switch (priority) {
+      case 'Critical':
+        return 'priority-critical';
+      case 'High':
+        return 'priority-high';
+      case 'Medium':
+        return 'priority-medium';
+      case 'Low':
+        return 'priority-low';
+      default:
+        return 'priority-medium';
+    }
+  }
+
+  getPriorityColor(priority: string): string {
+    if (priority === 'Medium') {
+      return '#d4d4d4'; // light gray for better visibility
+    }
+    const priorityLevel = PRIORITY_LEVELS.find(p => p.text === priority);
+    return priorityLevel ? priorityLevel.color : '#d4d4d4';
   }
 
   formatAppointmentDate(date: Date): string {

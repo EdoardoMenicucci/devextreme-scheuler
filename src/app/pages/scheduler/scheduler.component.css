@@ -14,7 +14,7 @@
 }
 
 .appointment-completed {
-  border-left: 4px solid #4BB543;
+  border-left: 4px solid #065e00 !important;
   position: relative;
   background-image: repeating-linear-gradient(
     45deg,
@@ -33,8 +33,22 @@
   opacity: 0.7;
 }
 
-.appointment-not-completed {
+/* .appointment-not-completed {
   border-left: 4px solid #FF9500;
+} */
+
+/* *Appointments Priority Colors */
+.priority-critical {
+  border-left: 4px solid #DC2626;
+}
+.priority-high {
+  border-left: 4px solid #F97316;
+}
+.priority-medium {
+  border-left: 4px solid #4F46E5;
+}
+.priority-low {
+  border-left: 4px solid #22C55E;
 }
 
 .appointment-title {
@@ -105,6 +119,12 @@
   color: #d4d4d4;
   font-size: 0.9em;
   margin-bottom: 12px;
+}
+
+.tooltip-priority {
+  font-size: 0.9em;
+  margin: 8px 0;
+  font-weight: 500;
 }
 
 .tooltip-toggle-btn {

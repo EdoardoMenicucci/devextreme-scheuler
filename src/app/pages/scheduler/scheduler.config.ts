@@ -16,7 +16,21 @@ export interface ComponentContext {
   popup: any;
   friends: any[];
   isCompleted: any[];
+  priority: PriorityLevel[];
   onAppointmentFormSharing: (username: string, appointmentData: any) => void;
+}
+
+export const PRIORITY_LEVELS = [
+  { id: 1, text: 'Critical', color: '#DC2626' }, // Red
+  { id: 2, text: 'High', color: '#F97316' }, // Orange
+  { id: 3, text: 'Medium', color: '#4F46E5' }, // Accent (Regular Priority)
+  { id: 4, text: 'Low', color: '#22C55E' }, // Green
+];
+
+export interface PriorityLevel {
+  id: number;
+  text: string;
+  color: string;
 }
 
 // * Scheduler Form Customization Fields
@@ -72,6 +86,18 @@ export function getFormItems(
         displayExpr: 'text',
         valueExpr: 'id',
         width: '100%',
+      },
+    },
+    {
+      dataField: 'priority',
+      label: { text: 'Priority Level' },
+      colSpan: 2,
+      editorType: 'dxSelectBox',
+      editorOptions: {
+        items: context.priority,
+        displayExpr: 'text',
+        valueExpr: 'text',
+        width: '50%',
       },
     },
     {

@@ -25,43 +25,47 @@
       (onAppointmentUpdated)="onAppointmentUpdated($event)"
       (onOptionChanged)="onOptionChanged($event)"
     >
-      <dxi-resource
-        fieldExpr="isCompleted"
-        label="Completion Status"
-        [dataSource]="isCompleted"
-        displayExpr="text"
-        valueExpr="id"
-        [useColorAsDefault]="true"
-      >
-      </dxi-resource>
-
       <!-- * Template Della Box dell'appuntamneto nello Schedulers -->
       <div
         *dxTemplate="let data of 'appointmentTemplate'"
-        [class]="getAppointmentClass(data)"
+        [class]="
+          getPriorityClass(data.appointmentData.priority, data.isCompleted) +
+          ' ' +
+          getAppointmentClass(data)
+        "
       >
         <!-- *Custom Template for Agenda view -->
         <div
           *ngIf="currentView === 'agenda'"
           class="flex items-center justify-between w-full px-4 py-2 space-x-4"
         >
-          <div class="flex-1 font-semibold truncate">
+          <div class="flex-1 font-semibold truncate max-w-[60%] border border-red-500">
             {{ data.appointmentData.text }}
           </div>
-          <div class="flex-none text-sm text-gray-200">
+
+          <div class="flex-none text-sm text-gray-200 w-[15%] border border-blue-500">
             {{ formatAppointmentDate(data.appointmentData.startDate) }} -
             {{ formatAppointmentDate(data.appointmentData.endDate) }}
           </div>
-          <div
-            class="flex-none text-sm"
-            [ngClass]="{
-              'text-green-500': data.appointmentData.isCompleted,
-              'text-red-500': !data.appointmentData.isCompleted
-            }"
-          >
-            {{
-              data.appointmentData.isCompleted ? "Completed" : "Not Completed"
-            }}
+
+          <div class="flex items-center space-x-4">
+            <span
+              [style.color]="getPriorityColor(data.appointmentData.priority)"
+              class="text-sm "
+            >
+              {{ data.appointmentData.priority }}
+            </span>
+            <div
+              class="text-sm"
+              [ngClass]="{
+                'text-green-500': data.appointmentData.isCompleted,
+                'text-red-500': !data.appointmentData.isCompleted
+              }"
+            >
+              {{
+                data.appointmentData.isCompleted ? "Completed" : "Not Completed"
+              }}
+            </div>
           </div>
         </div>
         <!-- ********************************************************* -->
@@ -89,22 +93,37 @@
               data.appointmentData.isCompleted ? "Completed" : "Not Completed"
             }}
           </div>
+          <div class="appointment-priority">
+            <span [style.color]="getPriorityColor(data.appointmentData.priority)"
+            class="font-medium">{{ data.appointmentData.priority }}</span> Priority
+          </div>
         </div>
       </div>
       <!-- ********************************************************* -->
 
-      <!-- * Toolbar Custom -->
+      <!-- * Tooltip Custom -->
       <div *dxTemplate="let data of 'tooltipTemplate'" class="custom-tooltip">
         <div class="tooltip-header">
           <div class="tooltip-title">{{ data.appointmentData.text }}</div>
-          <div
-            class="tooltip-status"
-            [class.completed]="data.appointmentData.isCompleted"
-            [class.not-completed]="!data.appointmentData.isCompleted"
-          >
-            {{
-              data.appointmentData.isCompleted ? "Completed" : "Not Completed"
-            }}
+          <div>
+            <div
+              class="tooltip-status"
+              [class.completed]="data.appointmentData.isCompleted"
+              [class.not-completed]="!data.appointmentData.isCompleted"
+            >
+              {{
+                data.appointmentData.isCompleted ? "Completed" : "Not Completed"
+              }}
+            </div>
+            <div class="tooltip-priority">
+              <span
+                [style.color]="getPriorityColor(data.appointmentData.priority)"
+                class="font-bold"
+              >
+                {{ data.appointmentData.priority }}</span
+              >
+              Priority
+            </div>
           </div>
         </div>
         <div class="tooltip-time">
@@ -112,6 +131,7 @@
           {{ formatAppointmentDate(data.appointmentData.startDate) }} -
           {{ formatAppointmentDate(data.appointmentData.endDate) }}
         </div>
+
         <div>
           <dx-button
             [icon]="data.appointmentData.isCompleted ? 'unpin' : 'pin'"
