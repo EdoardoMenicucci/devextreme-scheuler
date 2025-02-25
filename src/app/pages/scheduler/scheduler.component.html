@@ -49,13 +49,13 @@
           </div>
 
           <div class="flex items-center space-x-4">
-            <span
-              [style.color]="getPriorityColor(data.appointmentData.priority)"
-              class="text-sm "
-            >
-              {{ data.appointmentData.priority }}
-            </span>
             <div
+              [class]="'priority-box-' + data.appointmentData.priority.toLowerCase()"
+              class="text-sm px-2 py-1 rounded-lg"
+            >
+              {{ data.appointmentData.priority }} Priority
+          </div>
+            <!-- <div
               class="text-sm"
               [ngClass]="{
                 'text-green-500': data.appointmentData.isCompleted,
@@ -65,7 +65,7 @@
               {{
                 data.appointmentData.isCompleted ? "Completed" : "Not Completed"
               }}
-            </div>
+            </div> -->
           </div>
         </div>
         <!-- ********************************************************* -->
