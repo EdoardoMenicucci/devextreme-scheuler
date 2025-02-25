@@ -13,6 +13,12 @@
   overflow: auto;
 }
 
+.appointment {
+  display: flex;
+  flex-direction: column;
+  /* height: 100%; */
+}
+
 .appointment-completed {
   border-left: 4px solid #065e00 !important;
   position: relative;
@@ -54,17 +60,18 @@
 .appointment-title {
   font-weight: bold;
   margin-bottom: 4px;
-  white-space: normal; /* Changed from nowrap to normal */
-  overflow: visible; /* Changed from hidden */
+  white-space: normal;
   word-wrap: break-word;
   line-height: 1.2;
-  max-height: 2.4em; /* Allows for 2 lines of text */
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Show maximum of 2 lines */
+  -webkit-line-clamp: 12;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 14.4em; /* 1.2 line-height × 12 lines */
 }
 
 .appointment-time {
+  margin-top: auto;  /* Spinge l'orario verso il basso */
   font-size: 0.85em;
   color: #d4d4d4;
   margin-bottom: 2px;
@@ -75,6 +82,10 @@
   font-style: italic;
 }
 
+.appointment-priority {
+  font-size: 0.85em;
+  margin-bottom: 2px;
+}
 
 /* * Custom Tooltip */
 .custom-tooltip {
@@ -97,6 +108,10 @@
   font-size: 1.1em;
   color: white;
   margin-right: 12px;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 200px;
+  line-height: 1.2;
 }
 
 .tooltip-status {
@@ -119,6 +134,34 @@
   color: #d4d4d4;
   font-size: 0.9em;
   margin-bottom: 12px;
+}
+
+.tooltip-priority {
+  font-size: 0.8em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+/* *Priority Box */
+.priority-box-critical {
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #DC2626;
+}
+
+.priority-box-high {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: #F97316;
+}
+
+.priority-box-medium {
+  background-color: rgba(79, 70, 229, 0.2);
+  color: #818CF8;
+}
+
+.priority-box-low {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #22C55E;
 }
 
 .tooltip-priority {

@@ -8,7 +8,7 @@
       [currentView]="currentView"
       [currentDate]="currentDate"
       [firstDayOfWeek]="1"
-      [startDayHour]="8"
+      [startDayHour]="7"
       [endDayHour]="20"
       [showAllDayPanel]="true"
       [height]="'100vh'"
@@ -39,11 +39,11 @@
           *ngIf="currentView === 'agenda'"
           class="flex items-center justify-between w-full px-4 py-2 space-x-4"
         >
-          <div class="flex-1 font-semibold truncate max-w-[60%] border border-red-500">
+          <div class="flex-1 font-semibold truncate max-w-[60%]">
             {{ data.appointmentData.text }}
           </div>
 
-          <div class="flex-none text-sm text-gray-200 w-[15%] border border-blue-500">
+          <div class="flex-none text-sm text-gray-200 w-[15%]">
             {{ formatAppointmentDate(data.appointmentData.startDate) }} -
             {{ formatAppointmentDate(data.appointmentData.endDate) }}
           </div>
@@ -88,11 +88,11 @@
             {{ formatAppointmentDate(data.appointmentData.startDate) }} -
             {{ formatAppointmentDate(data.appointmentData.endDate) }}
           </div>
-          <div class="appointment-status">
+          <!-- <div class="appointment-status">
             {{
               data.appointmentData.isCompleted ? "Completed" : "Not Completed"
             }}
-          </div>
+          </div> -->
           <div class="appointment-priority">
             <span [style.color]="getPriorityColor(data.appointmentData.priority)"
             class="font-medium">{{ data.appointmentData.priority }}</span> Priority
@@ -105,7 +105,7 @@
       <div *dxTemplate="let data of 'tooltipTemplate'" class="custom-tooltip">
         <div class="tooltip-header">
           <div class="tooltip-title">{{ data.appointmentData.text }}</div>
-          <div>
+          <div class="flex flex-col gap-1 flex-shrink-0">
             <div
               class="tooltip-status"
               [class.completed]="data.appointmentData.isCompleted"
@@ -115,14 +115,11 @@
                 data.appointmentData.isCompleted ? "Completed" : "Not Completed"
               }}
             </div>
-            <div class="tooltip-priority">
-              <span
-                [style.color]="getPriorityColor(data.appointmentData.priority)"
-                class="font-bold"
-              >
-                {{ data.appointmentData.priority }}</span
-              >
-              Priority
+            <div
+              class="tooltip-priority"
+              [class]="'priority-box-' + data.appointmentData.priority.toLowerCase()"
+            >
+              {{ data.appointmentData.priority }}
             </div>
           </div>
         </div>
@@ -132,10 +129,12 @@
           {{ formatAppointmentDate(data.appointmentData.endDate) }}
         </div>
 
-        <div>
+        <!-- *Action Buttons -->
+        <div class="w-full flex justify-between">
           <dx-button
             [icon]="data.appointmentData.isCompleted ? 'unpin' : 'pin'"
             class="tooltip-toggle-btn"
+            [width]="'48%'"
             [text]="
               data.appointmentData.isCompleted
                 ? 'Mark as Incomplete'
@@ -146,11 +145,10 @@
               toggleAppointmentCompletion(data.appointmentData, $event)
             "
           ></dx-button>
-        </div>
-        <div class="mt-2">
           <dx-button
             icon="trash"
             class="tooltip-toggle-btn"
+            [width]="'48%'"
             text="Delete Appointment"
             type="danger"
             (onClick)="onAppointmentDeleted($event, data)"
