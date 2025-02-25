@@ -13,7 +13,7 @@ import { ContactService } from '../contact/contact.service';
 import { AuthService } from '../../auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { getFormItems, getToolbarItems } from './scheduler.config';
-import { confirm } from 'devextreme/ui/dialog';
+import { custom } from 'devextreme/ui/dialog';
 
 @Component({
   standalone: true,
@@ -40,22 +40,10 @@ export class SchedulerComponent implements OnDestroy, OnInit {
 
   private readonly destroy$ = new Subject<void>();
 
-  // status: Status[] = [
-  //   { id: 1, text: 'New' },
-  //   { id: 2, text: 'Completed' },
-  //   { id: 3, text: 'In Progress' },
-  //   { id: 4, text: 'Missed' },
-  // ];
-
   isCompleted = [
     { id: true, text: 'Completed' },
     { id: false, text: 'Not Completed' },
   ];
-
-  // shareAppointment = {
-  //   username: '',
-  //   isShared: false,
-  // };
 
   friends: any[] = [];
 
@@ -205,12 +193,31 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       this.scheduler.instance.hideAppointmentTooltip();
     }
 
-    const result = confirm(
-      'Are you sure you want to delete this appointment?',
-      'Delete Appointment'
-    );
-    result.then((dialogResult: boolean) => {
-      if (dialogResult) {
+    let customDialog = custom({
+      title: 'Delete Appointment',
+      message: 'Are you sure you want to delete this appointment?',
+      buttons: [
+        {
+          text: 'Delete',
+          type: 'danger',
+          stylingMode: 'contained',
+          onClick: (e) => {
+            return { buttonText: e.component.option('text') };
+          },
+        },
+        {
+          text: 'Cancel',
+          type: 'defalut',
+          stylingMode: 'outlined',
+          onClick: (e) => {
+            return { buttonText: e.component.option('text') };
+          },
+        },
+      ],
+    });
+
+    customDialog.show().then((dialogResult: any) => {
+      if (dialogResult.buttonText === 'Delete') {
         this.appointmentService
           .deleteAppointment(data.appointmentData.id)
           .pipe(takeUntil(this.destroy$))
@@ -224,6 +231,26 @@ export class SchedulerComponent implements OnDestroy, OnInit {
           });
       }
     });
+
+    // const result = confirm(
+    //   'Are you sure you want to delete this appointment?',
+    //   'Delete Appointment'
+    // );
+    // result.then((dialogResult: boolean) => {
+    //   if (dialogResult) {
+    //     this.appointmentService
+    //       .deleteAppointment(data.appointmentData.id)
+    //       .pipe(takeUntil(this.destroy$))
+    //       .subscribe({
+    //         next: () => {
+    //           notify('Appointment deleted successfully', 'warning', 3000);
+    //         },
+    //         error: (error) => {
+    //           notify('Failed to delete appointment', 'error', 3000);
+    //         },
+    //       });
+    //   }
+    // });
   }
 
   toggleAppointmentCompletion(appointmentData: any, e: any) {
