@@ -86,8 +86,9 @@ ng serve
 - [x] Share appointments between users
 - [x] Cleanup subscription only for "long lived" observable - not HTTP Req
 - [x] Scheduler / Agenda View (Appointments Box and Form) Customization
-- [ ] Add Appointment Priority Feature
-- [ ] Move Sidebar to Template with router-outlet (then remove it from home - login - register view)
+- [x] Add Appointment Priority Feature
+- [x] Move Sidebar to Template with router-outlet (then remove it from home - login - register view)
+- [ ] Priority Implementation on Gemini Api Client (Backend)
 
 
 
