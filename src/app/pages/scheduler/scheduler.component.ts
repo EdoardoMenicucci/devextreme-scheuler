@@ -199,6 +199,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       buttons: [
         {
           text: 'Delete',
+          icon: 'trash',
           type: 'danger',
           stylingMode: 'contained',
           onClick: (e) => {
@@ -231,26 +232,6 @@ export class SchedulerComponent implements OnDestroy, OnInit {
           });
       }
     });
-
-    // const result = confirm(
-    //   'Are you sure you want to delete this appointment?',
-    //   'Delete Appointment'
-    // );
-    // result.then((dialogResult: boolean) => {
-    //   if (dialogResult) {
-    //     this.appointmentService
-    //       .deleteAppointment(data.appointmentData.id)
-    //       .pipe(takeUntil(this.destroy$))
-    //       .subscribe({
-    //         next: () => {
-    //           notify('Appointment deleted successfully', 'warning', 3000);
-    //         },
-    //         error: (error) => {
-    //           notify('Failed to delete appointment', 'error', 3000);
-    //         },
-    //       });
-    //   }
-    // });
   }
 
   toggleAppointmentCompletion(appointmentData: any, e: any) {
