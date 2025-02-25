@@ -22,7 +22,7 @@
   <div class="px-6">
     <div class="border-2 border-border p-2 rounded-xl bg-bg-secondary">
       <dx-chart
-        class="w-[97%] mx-auto"
+        class="w-[90%] mx-auto"
         [dataSource]="statisticsData"
         [title]="{ text: 'Appointments Statistics', font: { size: 24 } }"
         [palette]="palette"
@@ -90,12 +90,11 @@
       >
         <div *dxTemplate="let item of 'item'">
           <div class="flex justify-between items-center w-full">
-            <div class="max-w-[75%]">
-              <span class="">{{ item.text }}</span>
+            <div class="max-w-[70%]">
+              <div class="appointment-text truncate block">{{ item.text }}</div>
             </div>
 
             <div class="max-w-[25%]">
-              <!-- Status - Date -->
               <span
                 *ngIf="
                   item.isCompleted == true ||
@@ -116,7 +115,6 @@
                 >On Going Now</span
               >
 
-              <!-- Icons -->
               <span *ngIf="item.isCompleted"
                 ><i class="dx-icon-check ms-2 text-success"></i
               ></span>
