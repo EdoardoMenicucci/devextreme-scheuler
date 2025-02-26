@@ -48,7 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.supportChatTypingUsers$ = this.chatService.supportChatTypingUsers;
   }
 
-  // * LifeCycle
+  // * LifeCycle Hooks
   async ngOnInit(): Promise<void> {
     this.isAuthenticated = await this.authService.isAuthenticated();
   }
@@ -91,13 +91,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   supportChatOnTypingEnd = () => this.chatService.supportChatOnTypingEnd();
 
   // Utility method
-  getFromattedDate(): string {
-    const date = new Date();
-    date.setDate(date.getDate() - 1);
-    return date.toLocaleDateString('it-IT', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-    });
-  }
+  // getFromattedDate(): string {
+  //   const date = new Date();
+  //   date.setDate(date.getDate() - 1);
+  //   return date.toLocaleDateString('it-IT', {
+  //     day: 'numeric',
+  //     month: 'numeric',
+  //     year: 'numeric',
+  //   });
+  // }
 }

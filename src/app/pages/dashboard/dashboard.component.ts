@@ -1,7 +1,8 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { firstLetterToUpperCase, formatDateUtils, formatDateTimeUtils, truncateText } from '../../utils/generic';
+// Remove individual function imports and import the service
+import { FormatService } from '../../services/format.service';
 
 import {
   DxChartModule,
@@ -70,7 +71,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private dashboardService: DashboardService,
-    private authService: AuthService
+    private authService: AuthService,
+    private formatService: FormatService
   ) {}
 
   //life cycle hook
@@ -129,30 +131,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.startDate = e.value[0];
     this.endDate = e.value[1];
 
-    // Format dates to local ISO string without timezone
-    // Helper function to format dates for the query
-    const formatToLocalDate = (date: Date, isEndDate: boolean = false) => {
-      const d = new Date(date.getTime());
-      if (isEndDate) {
-        d.setHours(23, 59, 59);
-      } else {
-        d.setHours(0, 0, 0);
-      }
-      return (
-        d.getFullYear() +
-        '-' +
-        String(d.getMonth() + 1).padStart(2, '0') +
-        '-' +
-        String(d.getDate()).padStart(2, '0') +
-        'T' +
-        String(d.getHours()).padStart(2, '0') +
-        ':' +
-        String(d.getMinutes()).padStart(2, '0') +
-        ':' +
-        String(d.getSeconds()).padStart(2, '0')
-      );
-    };
-
     if (
       (this.startDate && this.endDate) ||
       (!this.startDate && !this.endDate)
@@ -160,8 +138,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       console.log('Date range changed:', this.startDate, this.endDate);
 
       this.dashboardService.loadStatistics(
-        this.startDate ? formatToLocalDate(this.startDate) : undefined,
-        this.endDate ? formatToLocalDate(this.endDate, true) : undefined
+        this.startDate ? this.formatService.formatToLocalDate(this.startDate) : undefined,
+        this.endDate ? this.formatService.formatToLocalDate(this.endDate, true) : undefined
       );
     }
   }
@@ -173,28 +151,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   customizeTooltip = (arg: any) => {
     return {
-      text: `${this.roundToTwo(arg.value)}%`,
+      text: `${this.formatService.roundToTwo(arg.value)}%`,
     };
   };
 
-  // utils
+  // Format Service functions
   roundToTwo(num: number): number {
-    return Math.round(num * 100) / 100;
+    return this.formatService.roundToTwo(num);
   }
 
   formatUserName(username: string | null): string {
-    return firstLetterToUpperCase(username ? username : 'User');
+    return this.formatService.formatUserName(username);
   }
 
   formatDate(dateInput: string | Date | null): string {
-    return formatDateUtils(dateInput);
+    return this.formatService.formatDate(dateInput);
   }
 
   formatDateTime(dateInput: string | Date | null): string {
-    return formatDateTimeUtils(dateInput);
+    return this.formatService.formatDateTime(dateInput);
   }
 
   truncateText(text: string): string {
-    return truncateText(text, 80);
+    return this.formatService.truncateText(text, 80);
   }
 }
