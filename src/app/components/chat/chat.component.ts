@@ -11,6 +11,7 @@ import { PreviousChatsDropdownComponent } from '../previous-chat/previous-chat.c
 import notify from 'devextreme/ui/notify';
 import { takeUntil } from 'rxjs';
 import { ChatToolbarComponent } from '../chat-toolbar/chat-toolbar.component';
+import { locale, loadMessages } from 'devextreme/localization';
 
 /**
  * Component responsible for displaying and managing chat functionality
@@ -63,6 +64,23 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.messages$ = this.chatService.messages$;
     this.userChatTypingUsers$ = this.chatService.userChatTypingUsers;
     this.supportChatTypingUsers$ = this.chatService.supportChatTypingUsers;
+
+    // Load custom messages for chat localization
+    loadMessages(this.getDictionary());
+    locale('en');
+  }
+
+  /**
+   * Returns localization dictionary for chat messages
+   */
+  getDictionary() {
+    return {
+      en: {
+        'dxChat-emptyListMessage': 'Chat is Empty',
+        'dxChat-emptyListPrompt': 'AI Assistant is ready to help you whit you\'r scheduling.',
+        'dxChat-textareaPlaceholder': 'Ask AI Assistant...',
+      }
+    };
   }
 
   /**
