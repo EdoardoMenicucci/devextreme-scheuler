@@ -132,13 +132,12 @@
         <!-- *Action Buttons -->
         <div class="w-full flex justify-between">
           <dx-button
-            [icon]="data.appointmentData.isCompleted ? 'unpin' : 'pin'"
             class="tooltip-toggle-btn"
             [width]="'48%'"
             [text]="
               data.appointmentData.isCompleted
-                ? 'Mark as Incomplete'
-                : 'Mark as Complete'
+                ? 'Mark Incomplete'
+                : 'Mark Complete'
             "
             [type]="data.appointmentData.isCompleted ? 'warning' : 'default'"
             (onClick)="
@@ -149,7 +148,7 @@
             icon="trash"
             class="tooltip-toggle-btn"
             [width]="'48%'"
-            text="Delete Appointment"
+            text="Delete"
             type="danger"
             (onClick)="onAppointmentDeleted($event, data)"
           ></dx-button>

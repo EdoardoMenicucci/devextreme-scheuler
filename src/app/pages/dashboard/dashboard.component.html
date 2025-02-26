@@ -91,7 +91,7 @@
         <div *dxTemplate="let item of 'item'">
           <div class="flex justify-between items-center w-full">
             <div class="max-w-[70%]">
-              <div class="appointment-text truncate block">{{ item.text }}</div>
+              <div>{{ truncateText(item.text) }}</div>
             </div>
 
             <div class="max-w-[25%]">

@@ -1,7 +1,7 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { firstLetterToUpperCase, formatDateUtils, formatDateTimeUtils } from '../../utils/generic';
+import { firstLetterToUpperCase, formatDateUtils, formatDateTimeUtils, truncateText } from '../../utils/generic';
 
 import {
   DxChartModule,
@@ -192,5 +192,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   formatDateTime(dateInput: string | Date | null): string {
     return formatDateTimeUtils(dateInput);
+  }
+
+  truncateText(text: string): string {
+    return truncateText(text, 80);
   }
 }

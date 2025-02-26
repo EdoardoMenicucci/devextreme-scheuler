@@ -49,3 +49,8 @@ export function formatDateTimeUtils(dateInput: string | Date | null): string {
 export function firstLetterToUpperCase(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
+
+export function truncateText(text: string, maxLength: number = 30): string {
+  if (!text) return '';
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+}
