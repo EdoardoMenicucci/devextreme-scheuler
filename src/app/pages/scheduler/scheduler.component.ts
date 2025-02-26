@@ -15,6 +15,11 @@ import { CommonModule } from '@angular/common';
 import { getFormItems, getToolbarItems, PRIORITY_LEVELS, PriorityLevel } from './scheduler.config';
 import { custom } from 'devextreme/ui/dialog';
 
+/**
+ * Scheduler Component
+ * Provides a calendar interface for managing appointments and events
+ * @implements OnInit, OnDestroy
+ */
 @Component({
   standalone: true,
   imports: [
@@ -29,33 +34,53 @@ import { custom } from 'devextreme/ui/dialog';
   styleUrls: ['./scheduler.component.css'],
 })
 export class SchedulerComponent implements OnDestroy, OnInit {
-  //*Usato per avere riferimento del componente Scheduler
-  // *ViewChild decorator to get a reference to the DxSchedulerComponent instance
+  /**
+   * Reference to the DevExtreme Scheduler component
+   * Used to directly interact with the scheduler instance
+   */
   @ViewChild(DxSchedulerComponent, { static: false })
   scheduler!: DxSchedulerComponent;
 
+  /** Current view mode of the scheduler ('day', 'week', 'month', etc.) */
   currentView = 'week';
+
+  /** Current date shown in the scheduler */
   currentDate = new Date();
+
+  /** Collection of appointments to display */
   appointments: any[] = [];
 
+  /** Subject used for handling unsubscription from observables */
   private readonly destroy$ = new Subject<void>();
 
+  /** Completion status options for appointments */
   isCompleted = [
     { id: true, text: 'Completed' },
     { id: false, text: 'Not Completed' },
   ];
 
+  /** Priority level options for appointments */
   priority = PRIORITY_LEVELS;
 
+  /** Collection of user's friends for appointment sharing */
   friends: any[] = [];
 
+  /**
+   * Creates an instance of SchedulerComponent
+   * @param {AppointmentService} appointmentService - Service for managing appointments
+   * @param {AuthService} authService - Service for authentication
+   * @param {ContactService} contactService - Service for managing contacts
+   */
   constructor(
     private appointmentService: AppointmentService,
     private authService: AuthService,
     private contactService: ContactService
   ) {}
 
-  //life cycle hook
+  /**
+   * Lifecycle hook that is executed when component is initialized
+   * Subscribes to appointments, auth state, and friends data
+   */
   ngOnInit(): void {
     this.appointmentService.appointments$
       .pipe(takeUntil(this.destroy$))
@@ -78,13 +103,19 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       });
   }
 
+  /**
+   * Lifecycle hook that is executed before component is destroyed
+   * Unsubscribes from all observables to prevent memory leaks
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  // * Hold tracks of the current view type of the scheduler
-  //* To Customize the Scheduler based on the view type
+  /**
+   * Handles changes to scheduler options, especially view type changes
+   * @param {any} e - Event data containing changed options
+   */
   onOptionChanged(e: any) {
     console.log(e);
     if (e.name === 'currentView') {
@@ -92,7 +123,11 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     }
   }
 
-  // Add this method to handle sharing
+  /**
+   * Handles appointment sharing with another user
+   * @param {string} username - Username of the user to share with
+   * @param {any} appointmentData - Appointment data to be shared
+   */
   onAppointmentFormSharing(username: string, appointmentData: any) {
     if (username) {
       // Call your service to share the appointment
@@ -111,7 +146,10 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     }
   }
 
-  // * Scheduler Customizations
+  /**
+   * Customizes the appointment form when it opens
+   * @param {any} e - Event data containing form and popup references
+   */
   onAppointmentFormOpening(e: any) {
     const form = e.form;
     const popup = e.popup;
@@ -148,7 +186,10 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     );
   }
 
-  //actions
+  /**
+   * Handles the creation of a new appointment
+   * @param {any} e - Event data containing appointment details
+   */
   async onAppointmentAdded(e: any) {
     // debugg
     console.log('onAppointmentUpdated', e.appointmentData);
@@ -167,6 +208,10 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       });
   }
 
+  /**
+   * Handles updates to existing appointments
+   * @param {any} e - Event data containing updated appointment details
+   */
   async onAppointmentUpdated(e: any) {
     // debugg
     console.log('onAppointmentUpdated', e.appointmentData);
@@ -186,6 +231,11 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       });
   }
 
+  /**
+   * Handles deletion of appointments with confirmation dialog
+   * @param {any} e - Original event that triggered deletion
+   * @param {any} data - Data containing appointment details
+   */
   onAppointmentDeleted(e: any, data: any) {
     // debugg
     console.log('onAppointmentDeleted', data);
@@ -237,6 +287,11 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     });
   }
 
+  /**
+   * Toggles the completion status of an appointment
+   * @param {any} appointmentData - Appointment to toggle
+   * @param {any} e - Event object to stop propagation (optional)
+   */
   toggleAppointmentCompletion(appointmentData: any, e: any) {
     //* Prevent the default behavior of the event (open the form)
     if (e) {
@@ -268,6 +323,11 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       });
   }
 
+  /**
+   * Determines CSS class for appointment based on completion status
+   * @param {any} data - Appointment data
+   * @returns {string} CSS class names
+   */
   getAppointmentClass(data: any): string {
     const baseClass = 'appointment-container';
     const statusClass = data.appointmentData.isCompleted
@@ -276,6 +336,12 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     return `${baseClass} ${statusClass}`;
   }
 
+  /**
+   * Determines CSS class for appointment based on priority level and completion status
+   * @param {string} priority - Priority level text
+   * @param {boolean} isCompleted - Completion status
+   * @returns {string} CSS class name
+   */
   getPriorityClass(priority: string, isCompleted : any): string {
     if (isCompleted) {
       console.log('isCompleted', isCompleted);
@@ -296,6 +362,11 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     }
   }
 
+  /**
+   * Gets the color associated with a priority level
+   * @param {string} priority - Priority level text
+   * @returns {string} Color hex code
+   */
   getPriorityColor(priority: string): string {
     if (priority === 'Medium') {
       return '#d4d4d4'; // light gray for better visibility
@@ -304,6 +375,11 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     return priorityLevel ? priorityLevel.color : '#d4d4d4';
   }
 
+  /**
+   * Formats appointment date to display time only
+   * @param {Date} date - Date to format
+   * @returns {string} Formatted time string
+   */
   formatAppointmentDate(date: Date): string {
     return new Date(date).toLocaleTimeString([], {
       hour: '2-digit',

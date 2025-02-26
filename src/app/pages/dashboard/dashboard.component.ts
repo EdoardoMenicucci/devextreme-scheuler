@@ -14,6 +14,10 @@ import { DashboardService } from './dashboard.service';
 import { AuthService } from '../../auth/auth.service';
 import {  Subject, takeUntil } from 'rxjs';
 
+/**
+ * Dashboard component displaying user statistics, appointment metrics,
+ * success rates, and upcoming appointments
+ */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -29,25 +33,38 @@ import {  Subject, takeUntil } from 'rxjs';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  /** Title displayed in the dashboard header */
   title = 'Dashboard';
 
+  /** Statistics data for charts and metrics */
   statisticsData: any[] = [];
+
+  /** Success rate percentage for gauge visualization */
   successRate = 0;
+
+  /** List of upcoming appointments */
   upcomingAppointments: any[] = [];
+
+  /** Current date used for appointment status determination */
   currentDate = new Date();
+
+  /** Username of the currently logged-in user */
   username: string | null = null;
 
-  //subscription
+  /** Subject for managing subscription cleanup */
   private readonly destroy$ = new Subject<void>();
 
-  //filter options
+  /** Start date for filtering dashboard data */
   startDate: Date | null = null;
+
+  /** End date for filtering dashboard data */
   endDate: Date | null = null;
 
+  /** Minimum selectable date in the date range filter */
   minDate: Date = new Date(2021, 0, 1);
 
+  /** Color palette for chart visualizations */
   palette: string[] = [
-    // '#818CF8', // accent-light
     '#4F46E5', // accent - TotalColor
     '#4F46E5', // accent - CreatedColor : TODO: remove
     '#4F46E5', // accent - UpdatedColor
@@ -57,25 +74,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     '#DC2626', // accent-dark -MissedColor
   ];
 
-  userData: Object[] = [
-    { age: '13-17', number: 6869661 },
-    { age: '18-24', number: 40277957 },
-    { age: '25-34', number: 53481235 },
-    { age: '35-44', number: 40890002 },
-    { age: '45-54', number: 31916371 },
-    { age: '55-64', number: 13725406 },
-    { age: '65+', number: 16732183 },
-  ];
-
+  /** Color palette for gauge visualization */
   gaugePalette: string[] = ['#DC2626', '#fde300', '#059669'];
 
+  /**
+   * Creates an instance of DashboardComponent
+   * @param dashboardService - Service for fetching dashboard statistics
+   * @param authService - Service providing authentication and user details
+   * @param formatService - Service for formatting text and dates
+   */
   constructor(
     private dashboardService: DashboardService,
     private authService: AuthService,
     private formatService: FormatService
   ) {}
 
-  //life cycle hook
+  /**
+   * Lifecycle hook that initializes the component
+   * Subscribes to statistics data and processes appointment information
+   */
   ngOnInit(): void {
     // prepara i dati per il grafico
     this.dashboardService.statistics$
@@ -120,11 +137,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Lifecycle hook for cleanup when the component is destroyed
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  /**
+   * Handles date range selection changes and updates dashboard data
+   * @param e - Event object containing selected date range values
+   */
   onDateRangeChanged(e: any) {
     // Only fetch if both dates are selected or both are cleared
     console.log(e.value[0], e.value[1]);
@@ -144,34 +168,67 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  //Gauge customization
+  /**
+   * Custom text formatter for gauge visualization
+   * @param args - Arguments containing value and valueText
+   * @returns Formatted percentage text
+   */
   customizeText = (args: { value?: number; valueText?: string }): string => {
     return `${args.valueText}%`;
   };
 
+  /**
+   * Custom tooltip formatter for data visualizations
+   * @param arg - Argument containing the value to display in tooltip
+   * @returns Tooltip configuration object with formatted text
+   */
   customizeTooltip = (arg: any) => {
     return {
       text: `${this.formatService.roundToTwo(arg.value)}%`,
     };
   };
 
-  // Format Service functions
+  /**
+   * Rounds a number to two decimal places
+   * @param num - Number to round
+   * @returns Number rounded to two decimal places
+   */
   roundToTwo(num: number): number {
     return this.formatService.roundToTwo(num);
   }
 
+  /**
+   * Formats username for display
+   * @param username - Username to format
+   * @returns Formatted username
+   */
   formatUserName(username: string | null): string {
     return this.formatService.formatUserName(username);
   }
 
+  /**
+   * Formats a date to display date only
+   * @param dateInput - Date to format (string or Date object)
+   * @returns Formatted date string
+   */
   formatDate(dateInput: string | Date | null): string {
     return this.formatService.formatDate(dateInput);
   }
 
+  /**
+   * Formats a date to display both date and time
+   * @param dateInput - Date to format (string or Date object)
+   * @returns Formatted date and time string
+   */
   formatDateTime(dateInput: string | Date | null): string {
     return this.formatService.formatDateTime(dateInput);
   }
 
+  /**
+   * Truncates text to a specified length
+   * @param text - Text to truncate
+   * @returns Truncated text
+   */
   truncateText(text: string): string {
     return this.formatService.truncateText(text, 80);
   }

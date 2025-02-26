@@ -10,30 +10,50 @@ import { firstLetterToUpperCase } from '../../utils/generic';
 
 import notify from 'devextreme/ui/notify';
 
+/**
+ * Service responsible for handling chat functionality including sending messages
+ * and integrating with AI assistant functionality.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService implements OnDestroy {
+  /** Base API URL for chat-related operations */
   private readonly apiUrl = 'http://localhost:5000';
+  /** Subject to signal component destruction */
   private readonly destroy$ = new Subject<void>();
+  /** Subject containing chat messages */
   private readonly messagesSubject$ = new BehaviorSubject<Message[]>([]);
+  /** Subject containing users currently typing in user chat */
   private readonly userChatTypingUsers$ = new BehaviorSubject<User[]>([]);
+  /** Subject containing support chat typing status */
   private readonly supportChatTypingUsers$ = new BehaviorSubject<Message[]>([]);
 
+  /** Array of current chat messages */
   public messages: Message[] = [];
+  /** Array of user chats */
   private chats: any[] = [];
+  /** Current date reference */
   private date: Date;
 
+  /** Current user information */
   currentUser: User = {
     id: 1,
     name: 'Err',
   };
 
+  /** Support agent information */
   supportAgent: User = {
     id: 'gemini-api',
     name: 'Scheduler Support Agent',
   };
 
+  /**
+   * Creates an instance of ChatService
+   * @param appointmentService - Service to manage appointments
+   * @param http - Angular HttpClient for API requests
+   * @param authService - Service to manage authentication
+   */
   constructor(
     private appointmentService: AppointmentService,
     private http: HttpClient,
@@ -43,6 +63,9 @@ export class ChatService implements OnDestroy {
     this.onInit();
   }
 
+  /**
+   * Cleanup on component destruction
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -51,6 +74,9 @@ export class ChatService implements OnDestroy {
     this.supportChatTypingUsers$.complete();
   }
 
+  /**
+   * Initialize chat service state
+   */
   onInit() {
     this.date.setHours(0, 0, 0, 0);
     this.currentUser.id = this.authService.userId ?? 0;
@@ -62,9 +88,12 @@ export class ChatService implements OnDestroy {
     this.supportChatTypingUsers$.next([]);
   }
 
-  //Main functions
+  /**
+   * Sends a message to the AI assistant
+   * @param message - Text message to be sent to AI
+   * @returns Observable with AI response
+   */
   sendMessageToAI(message: string): Observable<any> {
-
     const payload = {
       text: message,
     };
@@ -103,6 +132,11 @@ export class ChatService implements OnDestroy {
     );
   }
 
+  /**
+   * Handles errors from HTTP requests
+   * @param error - The error object
+   * @returns Empty observable to maintain stream
+   */
   private handleError(error: any): Observable<never> {
     this.supportChatOnTypingEnd();
     console.error('Error:', error);
@@ -119,6 +153,10 @@ export class ChatService implements OnDestroy {
     return new Observable<never>();
   }
 
+  /**
+   * Retrieves all chats for the current user
+   * @returns Observable with chats data
+   */
   getUserChats(): Observable<any> {
     return this.http
       .get(`${this.apiUrl}/chat/user/${this.authService.userId}/chats`)
@@ -133,6 +171,11 @@ export class ChatService implements OnDestroy {
       );
   }
 
+  /**
+   * Retrieves messages for a specific chat
+   * @param chatId - ID of the chat to retrieve messages for
+   * @returns Observable with chat messages
+   */
   getUserChatMessages(chatId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/chat/chat/${chatId}/messages`).pipe(
       tap((response: any) => {
@@ -143,6 +186,10 @@ export class ChatService implements OnDestroy {
     );
   }
 
+  /**
+   * Loads messages for a specific chat and formats them
+   * @param chatId - ID of the chat to load messages for
+   */
   async loadChatMessages(chatId: number): Promise<void> {
     try {
       const response = (await firstValueFrom(
@@ -171,6 +218,10 @@ export class ChatService implements OnDestroy {
     }
   }
 
+  /**
+   * Handles message entered event from chat component
+   * @param event - The message entered event
+   */
   async onMessageEntered(event: MessageEnteredEvent) {
     // this.sendMessageToAI(event.message!.text || '');
     if (event.message) {
@@ -179,50 +230,91 @@ export class ChatService implements OnDestroy {
     }
   }
 
+  /**
+   * Clears all messages in the chat
+   */
   clearMessages(): void {
     this.messages = [];
     this.messagesSubject$.next(this.messages);
   }
 
-  //utilities
+  /**
+   * Gets users currently typing in the user chat
+   * @returns Observable of users currently typing
+   */
   get userChatTypingUsers(): Observable<User[]> {
     return this.userChatTypingUsers$.asObservable();
   }
 
+  /**
+   * Gets users currently typing in the support chat
+   * @returns Observable of messages indicating typing status
+   */
   get supportChatTypingUsers(): Observable<Message[]> {
     return this.supportChatTypingUsers$.asObservable();
   }
 
+  /**
+   * Gets the messages observable
+   * @returns Observable of chat messages
+   */
   get messages$(): Observable<Message[]> {
     return this.messagesSubject$.asObservable();
   }
 
+  /**
+   * Gets list of users in the chat
+   * @returns Array of users in the chat
+   */
   getUsers(): User[] {
     return [this.currentUser, this.supportAgent];
   }
 
+  /**
+   * Generates a timestamp with optional offset
+   * @param date - Base date for timestamp
+   * @param offsetMinutes - Optional offset in minutes
+   * @returns Timestamp in milliseconds
+   */
   getTimestamp(date: Date, offsetMinutes = 0): number {
     return date.getTime() + offsetMinutes * 60000;
   }
 
+  /**
+   * Converts first letter of text to uppercase
+   * @param text - The input text
+   * @returns Text with first letter capitalized
+   */
   firstLetterToUpperCase(text: string): string {
     return firstLetterToUpperCase(text);
   }
 
+  /**
+   * Sets current user as typing in user chat
+   */
   userChatOnTypingStart() {
     this.userChatTypingUsers$.next([this.currentUser]);
     // console.log('userChatOnTypingStart', this.supportChatTypingUsers$);
   }
 
+  /**
+   * Clears typing status in user chat
+   */
   userChatOnTypingEnd() {
     this.supportChatTypingUsers$.next([]);
     // console.log('userChatOnTypingEnd', this.supportChatTypingUsers$);
   }
 
+  /**
+   * Sets support agent as typing in support chat
+   */
   supportChatOnTypingStart() {
     this.userChatTypingUsers$.next([this.supportAgent]);
   }
 
+  /**
+   * Clears typing status in support chat
+   */
   supportChatOnTypingEnd() {
     this.userChatTypingUsers$.next([]);
   }

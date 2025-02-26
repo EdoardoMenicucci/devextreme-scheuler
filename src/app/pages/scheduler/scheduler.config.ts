@@ -1,25 +1,54 @@
+/**
+ * Represents a form field configuration for the appointment editor
+ * @interface AppointmentFormField
+ */
 export interface AppointmentFormField {
+  /** Field name in the data model */
   dataField?: string;
+  /** Type of form item (e.g., 'simple', 'button', etc.) */
   itemType?: string;
+  /** Number of columns the field spans in the form layout */
   colSpan?: number;
+  /** Label configuration for the field */
   label?: { text: string };
+  /** Type of editor to use for this field */
   editorType?: string;
+  /** Configuration options for the editor component */
   editorOptions?: any;
+  /** CSS class to apply to this field container */
   cssClass?: string;
+  /** Horizontal alignment of the item */
   horizontalAlignment?: string;
+  /** Configuration for button items */
   buttonOptions?: any;
 }
 
+/**
+ * Context object passed to form configuration functions
+ * @interface ComponentContext
+ */
 export interface ComponentContext {
+  /** Reference to the scheduler component */
   component: any;
+  /** Reference to the form instance */
   form: any;
+  /** Reference to the popup containing the form */
   popup: any;
+  /** List of users that appointments can be shared with */
   friends: any[];
+  /** Available completion status options */
   isCompleted: any[];
+  /** Available priority levels */
   priority: PriorityLevel[];
+  /** Callback function to handle appointment sharing */
   onAppointmentFormSharing: (username: string, appointmentData: any) => void;
 }
 
+/**
+ * Predefined priority levels for appointments
+ * Each level has an ID, display text, and associated color
+ * @constant {PriorityLevel[]}
+ */
 export const PRIORITY_LEVELS = [
   { id: 1, text: 'Critical', color: '#DC2626' }, // Red
   { id: 2, text: 'High', color: '#F97316' }, // Orange
@@ -27,14 +56,26 @@ export const PRIORITY_LEVELS = [
   { id: 4, text: 'Low', color: '#22C55E' }, // Green
 ];
 
+/**
+ * Represents a priority level with its attributes
+ * @interface PriorityLevel
+ */
 export interface PriorityLevel {
+  /** Unique identifier for the priority level */
   id: number;
+  /** Display text for the priority level */
   text: string;
+  /** Color code for visual representation */
   color: string;
 }
 
 // * Scheduler Form Customization Fields
 
+/**
+ * Generates the form items configuration for the appointment editor
+ * @param {ComponentContext} context - The component context containing references and data
+ * @returns {AppointmentFormField[]} Array of form field configurations
+ */
 export function getFormItems(
   context: ComponentContext
 ): AppointmentFormField[] {
@@ -135,6 +176,11 @@ export function getFormItems(
   ];
 }
 
+/**
+ * Generates the toolbar items configuration for the appointment form popup
+ * @param {ComponentContext} context - The component context containing references and data
+ * @returns {Array} Array of toolbar item configurations
+ */
 export function getToolbarItems(context: ComponentContext) {
   return [
     {
