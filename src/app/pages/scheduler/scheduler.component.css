@@ -1,7 +1,12 @@
+/* ! TO BE HANDLED BETTER */
 .scheduler-container {
-    width:200%;
+    width:1300px;
 }
 
+.chat-container{
+    width: calc(100% - 1300px);
+}
+/* ! ======= */
 
 /* *Custom Appointment Box */
 .appointment-container {
