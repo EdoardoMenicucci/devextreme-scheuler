@@ -19,7 +19,7 @@ export class ContactComponent implements OnInit {
   sharedAppointments: any[] = [];
   currentDate: Date = new Date();
 
-  constructor(private contactService: ContactService) { }
+  constructor(private contactService: ContactService) {}
 
   ngOnInit() {
     this.loadFriends();
@@ -28,15 +28,16 @@ export class ContactComponent implements OnInit {
   }
 
   loadFriends() {
-    this.contactService.getFriends().subscribe(
-      (friends) =>{ this.friends = friends; console.log('Friends:', this.friends);}
-    );
+    this.contactService.getFriends().subscribe((friends) => {
+      this.friends = friends;
+      console.log('Friends:', this.friends);
+    });
   }
 
   loadPendingRequests() {
-    this.contactService.getPendingFriendRequests().subscribe(
-      requests => this.pendingRequests = requests
-    );
+    this.contactService
+      .getPendingFriendRequests()
+      .subscribe((requests) => (this.pendingRequests = requests));
   }
 
   acceptRequest(senderId: string) {
@@ -62,7 +63,7 @@ export class ContactComponent implements OnInit {
         error: (error) => {
           notify('Failed to send friend request', 'error', 3000);
           console.error('Error sending friend request:', error);
-        }
+        },
       });
     }
   }
@@ -76,7 +77,7 @@ export class ContactComponent implements OnInit {
       error: (error) => {
         console.error('Error loading shared appointments:', error);
         notify('Failed to load shared appointments', 'error', 3000);
-      }
+      },
     });
   }
 

@@ -29,7 +29,6 @@ export class AppointmentService implements OnDestroy {
    * @param {HttpClient} http - Angular HTTP client for making API requests
    */
   constructor(private http: HttpClient) {
-    // this.loadAppointments();
   }
 
   /**
