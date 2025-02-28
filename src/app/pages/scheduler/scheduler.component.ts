@@ -12,7 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ContactService } from '../contact/contact.service';
 import { AuthService } from '../../auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { getFormItems, getToolbarItems, PRIORITY_LEVELS, PriorityLevel } from './scheduler.config';
+import { getFormItems, getToolbarItems, PRIORITY_LEVELS } from './scheduler.config';
 import { custom } from 'devextreme/ui/dialog';
 
 /**
@@ -74,7 +74,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private authService: AuthService,
-    private contactService: ContactService
+    private contactService: ContactService,
   ) {}
 
   /**
@@ -82,11 +82,11 @@ export class SchedulerComponent implements OnDestroy, OnInit {
    * Subscribes to appointments, auth state, and friends data
    */
   ngOnInit(): void {
-    this.appointmentService.appointments$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.appointments = data;
-      });
+    // this.appointmentService.appointments$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((data) => {
+    //     this.appointments = data;
+    //   });
 
     this.authService
       .getAuthState()
@@ -100,6 +100,19 @@ export class SchedulerComponent implements OnDestroy, OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((friends) => {
         this.friends = friends;
+      });
+  }
+
+  /**
+   * Lifecycle hook that is executed after Angular initializes the component's views
+   * Reloads appointments after the view is initialized
+   */
+  ngAfterViewInit(): void {
+    // Refresh appointments after view initialization
+    this.appointmentService.appointments$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.appointments = data;
       });
   }
 
@@ -342,7 +355,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
    * @param {boolean} isCompleted - Completion status
    * @returns {string} CSS class name
    */
-  getPriorityClass(priority: string, isCompleted : any): string {
+  getPriorityClass(priority: string, isCompleted: any): string {
     if (isCompleted) {
       console.log('isCompleted', isCompleted);
 
@@ -371,7 +384,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
     if (priority === 'Medium') {
       return '#d4d4d4'; // light gray for better visibility
     }
-    const priorityLevel = PRIORITY_LEVELS.find(p => p.text === priority);
+    const priorityLevel = PRIORITY_LEVELS.find((p) => p.text === priority);
     return priorityLevel ? priorityLevel.color : '#d4d4d4';
   }
 

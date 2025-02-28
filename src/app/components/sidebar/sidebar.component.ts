@@ -38,7 +38,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     },
   ];
 
-  logout = [{ id: 1, text: 'Logout', icon: 'runner', path: '/home' }];
+  logout = [{ id: 1, text: 'Logout', icon: 'runner', path: '/home', action: 'logout' }];
 
   previousChats = [];
   selectedRoute: any = null;
