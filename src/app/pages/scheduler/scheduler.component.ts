@@ -130,7 +130,7 @@ export class SchedulerComponent implements OnDestroy, OnInit {
    * @param {any} e - Event data containing changed options
    */
   onOptionChanged(e: any) {
-    console.log(e);
+    // console.log(e);
     if (e.name === 'currentView') {
       this.currentView = e.value;
     }

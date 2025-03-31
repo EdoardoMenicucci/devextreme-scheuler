@@ -1,0 +1,104 @@
+/* Dashboard component styles */
+
+/* Base styles for the dashboard */
+:host {
+  display: block;
+  height: 100%;
+}
+
+/* Enhanced fluent card design */
+.rounded-2xl {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.rounded-2xl:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom styling for the date range box */
+::ng-deep .dx-daterangebox {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--bg-primary) !important;
+}
+
+::ng-deep .dx-daterangebox.dx-state-focused {
+  border-color: var(--accent-light, #4f46e5);
+  box-shadow: 0 0 0 1px var(--accent-light, #4f46e5);
+}
+
+/* Styling for the upcoming appointments list */
+::ng-deep .upcoming-appointments-list .dx-list-item {
+  border: none !important;
+  padding: 0 !important;
+  margin-bottom: 8px;
+}
+
+::ng-deep .upcoming-appointments-list .dx-list-item-content {
+  padding: 0 !important;
+}
+
+/* Item hover effects */
+::ng-deep .dx-list-item .hover\:bg-bg-primary {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+::ng-deep .dx-list-item .hover\:bg-bg-primary:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Custom styling for DevExtreme charts */
+::ng-deep .dx-chart {
+  height: 360px !important;
+  border-radius: 12px;
+}
+
+::ng-deep .dx-circular-gauge {
+  height: 300px !important;
+}
+
+/* Value indicator styling */
+::ng-deep .dx-circular-gauge .dxg-value-indicator {
+  filter: drop-shadow(0 2px 5px rgba(79, 70, 229, 0.5));
+}
+
+/* Enhance tooltips */
+::ng-deep .dx-tooltip-wrapper .dx-overlay-content {
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  background-color: rgba(30, 30, 40, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Status badge styling */
+.bg-\[\#DC2626\].bg-opacity-20.rounded-full {
+  box-shadow: 0 0 8px rgba(220, 38, 38, 0.4);
+}
+
+/* Scroll styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
