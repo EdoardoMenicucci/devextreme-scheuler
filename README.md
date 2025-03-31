@@ -44,7 +44,7 @@ A modern appointment management system built with DevExtreme Scheduler component
 
 1. Clone the repository
 ```bash
-git clone [repository-url]
+git clone https://github.com/EdoardoMenicucci/devextreme-scheuler
 cd devextreme-scheduler
 ```
 
