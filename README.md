@@ -43,12 +43,14 @@ A modern appointment management system built with DevExtreme Scheduler component
 ### Installation
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/EdoardoMenicucci/devextreme-scheuler
 cd devextreme-scheduler
 ```
 
 2. Frontend Setup
+
 ```bash
 cd ClientApp
 npm install
@@ -56,6 +58,7 @@ ng serve
 ```
 
 3. Backend Setup
+
 ```bash
 # Open the solution in Visual Studio 2022
 # Restore NuGet packages
@@ -74,9 +77,9 @@ ng serve
 4. Use AI suggestions for optimal scheduling
 5. View your statistics in the dashboard
 
-## TODO: 
+## TODO:
 
-- [ ] Handling previous chat / design feature 
+- [ ] Handling previous chat / design feature
 - [x] Logout handling
 - [x] Icons
 - [x] Login flow minor fixes
@@ -89,7 +92,4 @@ ng serve
 - [x] Add Appointment Priority Feature
 - [x] Move Sidebar to Template with router-outlet (then remove it from home - login - register view)
 - [ ] Priority Implementation on Gemini Api Client (Backend)
-
-
-
-
+- [ ] Gemini not recognising current date correctly (Backend)
